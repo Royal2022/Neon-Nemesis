@@ -99,9 +99,18 @@ public class Player : MonoBehaviour
         moveImput = Input.GetAxis("Horizontal");
         rb.velocity = new Vector2(moveImput * Speed, rb.velocity.y);
 
+        /*
         if (Input.GetKey("left shift"))
         {
             rb.velocity = new Vector2(moveImput * Speed * 2, rb.velocity.y);
+        }*/
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            Speed = 8f;
+        }
+        else
+        {
+            Speed = 4f;
         }
 
         //sr.flipX = moveImput < 0 ? true : false;
@@ -122,10 +131,14 @@ public class Player : MonoBehaviour
         if (facingRight == false && moveImput > 0)
         {
             Flip();
+            Gun.sr.flipX = false;
+            Gun.sr.flipY = false;
         }
         else if (facingRight == true && moveImput < 0)
         {
             Flip();
+            Gun.sr.flipX = true;
+            Gun.sr.flipY = true;
         }
     }
     void Flip()
