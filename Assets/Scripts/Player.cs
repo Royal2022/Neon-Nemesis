@@ -82,14 +82,13 @@ public class Player : MonoBehaviour
     private Animator anim;
     private float moveInput;
 
-    private bool facingRight = true;
+    public static bool facingRight = true;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
         anim = GetComponent<Animator>();
-
     }
 
 
@@ -130,23 +129,21 @@ public class Player : MonoBehaviour
 
         if (facingRight == false && moveImput > 0)
         {
-            Flip();
-            Gun.sr.flipX = false;
-            Gun.sr.flipY = false;
+            Flip();        
         }
         else if (facingRight == true && moveImput < 0)
         {
             Flip();
-            Gun.sr.flipX = true;
-            Gun.sr.flipY = true;
         }
     }
     void Flip()
     {
         facingRight = !facingRight;
+        
         Vector3 Scaler = transform.localScale;
         Scaler.x *= -1;
         transform.localScale = Scaler;
+        /*transform.Rotate(0f, 180f, 0f);*/
     }
 
     void Update()
