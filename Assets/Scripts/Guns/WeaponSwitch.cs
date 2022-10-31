@@ -53,7 +53,7 @@ public class WeaponSwitch : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.Alpha3) && akPickeUp == true)
         {
-            weaponSwitch = 1;
+            weaponSwitch = 2;
         }
 
         if (currentWeapon != weaponSwitch)
