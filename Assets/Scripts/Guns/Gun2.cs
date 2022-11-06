@@ -23,9 +23,9 @@ public class Gun2 : MonoBehaviour
     public GameObject ammo;
 
 
-    public int currentAmmo = 15;
+    public int currentAmmo = 35;
     public static int allAmmo = 0;
-    public int full = 45;
+    public int full = 35;
 
     [SerializeField]
     private Text ammoCount;
@@ -40,6 +40,7 @@ public class Gun2 : MonoBehaviour
 
     void Update()
     {
+        /*
         Vector3 difference = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
         float rotZ = Mathf.Atan2(difference.y, difference.x) * Mathf.Rad2Deg;
 
@@ -61,7 +62,7 @@ public class Gun2 : MonoBehaviour
                 transform.rotation = Quaternion.Euler(0f, 0f, rotZ + offset);
             }
         }
-
+        */
 
 
         if (timeBtwShots <= 0 && currentAmmo > 0)
@@ -95,11 +96,11 @@ public class Gun2 : MonoBehaviour
 
     public void Reload()
     {
-        int reason = 15 - currentAmmo;
+        int reason = 35 - currentAmmo;
         if (allAmmo >= reason)
         {
             allAmmo -= reason;
-            currentAmmo = 15;
+            currentAmmo = 35;
         }
         else
         {

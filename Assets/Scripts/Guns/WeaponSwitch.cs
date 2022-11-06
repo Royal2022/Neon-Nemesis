@@ -6,7 +6,7 @@ public class WeaponSwitch : MonoBehaviour
 {
     public int weaponSwitch = 0;
 
-
+    
     public int weaponOpened = 2;
     public bool akPickeUp = false;
 
@@ -14,10 +14,12 @@ public class WeaponSwitch : MonoBehaviour
     void Start()
     {
         SelectWeapon();
+
     }
 
     void Update()
     {
+
         int currentWeapon = weaponSwitch;
 
         if (Input.GetAxis("Mouse ScrollWheel") > 0f)
@@ -62,22 +64,27 @@ public class WeaponSwitch : MonoBehaviour
         }
     }
 
-     void SelectWeapon()
+    [SerializeField] private hands Hands;
+
+    void SelectWeapon()
     {
         int i = 0;
         foreach (Transform weapon in transform)
         {
             if (i == weaponSwitch)
             {            
-             weapon.gameObject.SetActive(true);
-             }
+             weapon.gameObject.SetActive(true); 
+            }
             else
             {
-                weapon.gameObject.SetActive(false);
+             weapon.gameObject.SetActive(false);
             }
             i++;
-
         }
+        //hands.tf = true;
+
+        Hands = FindObjectOfType<hands>();
+        Hands.res();
     }
 
     public void OnTriggerEnter2D(Collider2D collision)

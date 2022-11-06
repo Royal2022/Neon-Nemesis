@@ -70,7 +70,6 @@ public class Player : MonoBehaviour
     private Rigidbody2D rb;
     public float Speed;
     public float jumpForce;
-    public float moveImput;
 
     private bool isGrounded; 
     public Transform feetPos; 
@@ -79,29 +78,32 @@ public class Player : MonoBehaviour
 
     SpriteRenderer sr;
 
-    private Animator anim;
+    public static Animator anim;
     private float moveInput;
 
     public static bool facingRight = true;
+
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
         anim = GetComponent<Animator>();
+
     }
+
 
 
 
     public void FixedUpdate()
     {
-        moveImput = Input.GetAxis("Horizontal");
-        rb.velocity = new Vector2(moveImput * Speed, rb.velocity.y);
+        moveInput = Input.GetAxis("Horizontal");
+        rb.velocity = new Vector2(moveInput * Speed, rb.velocity.y);
 
         /*
         if (Input.GetKey("left shift"))
         {
-            rb.velocity = new Vector2(moveImput * Speed * 2, rb.velocity.y);
+            rb.velocity = new Vector2(moveInput * Speed * 2, rb.velocity.y);
         }*/
         if (Input.GetKey(KeyCode.LeftShift))
         {
@@ -112,7 +114,7 @@ public class Player : MonoBehaviour
             Speed = 4f;
         }
 
-        //sr.flipX = moveImput < 0 ? true : false;
+        //sr.flipX = moveInput < 0 ? true : false;
 
 
         moveInput = Input.GetAxis("Horizontal");
@@ -127,11 +129,11 @@ public class Player : MonoBehaviour
         }
 
 
-        if (facingRight == false && moveImput > 0)
+        if (facingRight == false && moveInput > 0)
         {
             Flip();        
         }
-        else if (facingRight == true && moveImput < 0)
+        else if (facingRight == true && moveInput < 0)
         {
             Flip();
         }
@@ -162,10 +164,17 @@ public class Player : MonoBehaviour
         if (isGrounded == true)
         {
             anim.SetBool("player_jump", false);
+
+            /*==== Ladder =====*/
+            //rb.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeRotation;
+            //Player.anim.SetBool("touched_ground", true);
+            /*=================*/
+
         }
         else
         {
             anim.SetBool("player_jump", true);
+            //Player.anim.SetBool("touched_ground", false);
 
         }
     }
