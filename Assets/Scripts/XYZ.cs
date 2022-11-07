@@ -4,7 +4,15 @@ using UnityEngine;
 
 public class XYZ : MonoBehaviour
 {
-    public GameObject weaponswitch;
+    [SerializeField] private WeaponSwitch ws;
+
+    //public GameObject weaponswitch;
+    public GameObject arm;
+
+    public void Start()
+    {
+        ws = FindObjectOfType<WeaponSwitch>();
+    }
 
     private void OnTriggerStay2D(Collider2D collision)
     {
@@ -17,7 +25,8 @@ public class XYZ : MonoBehaviour
             {
                 Player.anim.Play("ladder_up");
                 Player.anim.SetBool("ladder_up", false);
-                weaponswitch.SetActive(false);
+                ws.gameObject.SetActive(false);
+                arm.SetActive(false);
             }
             else
             {
@@ -26,15 +35,25 @@ public class XYZ : MonoBehaviour
         }
     }
 
+
+
     private void OnTriggerExit2D(Collider2D collision)
     {
 
         Player.anim.SetBool("touched_ground", true);
         Player.anim.SetBool("ladder_up", false);
-
-        if (weaponswitch.gameObject.activeSelf == false)
+        
+        if (ws.gameObject.activeSelf == false)
         {
-            weaponswitch.SetActive(true);
+            ws.gameObject.SetActive(true);
         }
+        if (ws.weaponSwitch != 3)
+        {
+            arm.SetActive(true);
+        }
+
+
+
+
     }
 }

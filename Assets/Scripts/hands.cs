@@ -49,7 +49,6 @@ public class hands : MonoBehaviour
     public void res()
     {
         GetComponent<Transform>().rotation = Quaternion.Euler(0f, 0f, 0f);
-        Debug.Log("Robit");
     }
 
 

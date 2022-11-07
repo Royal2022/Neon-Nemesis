@@ -4,17 +4,28 @@ using UnityEngine;
 
 public class WeaponSwitch : MonoBehaviour
 {
+    [SerializeField] private hands Hands;
+    [SerializeField] private XYZ xyz;
+    [SerializeField] private Player player;
+
+    public GameObject game_object;
+
     public int weaponSwitch = 0;
 
     
     public int weaponOpened = 2;
     public bool akPickeUp = false;
 
+    public RuntimeAnimatorController nogunanim;
+    public RuntimeAnimatorController gunanim;
+
+
 
     void Start()
     {
-        SelectWeapon();
+        Hands = FindObjectOfType<hands>();
 
+        SelectWeapon();
     }
 
     void Update()
@@ -45,6 +56,7 @@ public class WeaponSwitch : MonoBehaviour
             }
         }
 
+
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             weaponSwitch = 0;
@@ -62,9 +74,35 @@ public class WeaponSwitch : MonoBehaviour
         {
             SelectWeapon();
         }
+
+
+        if (weaponSwitch == 3 || weaponSwitch == 0)
+        {
+            xyz = FindObjectOfType<XYZ>();
+            xyz.arm.SetActive(false);
+        }
+        else if (weaponSwitch != 3 || weaponSwitch != 0)
+        {
+            xyz = FindObjectOfType<XYZ>();
+            xyz.arm.SetActive(true);
+        }
+
+        //FindObjectOfType<Player>().GetComponent<Animator>().runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>("Player");
+
+
+        if (weaponSwitch == 0)
+        {
+            FindObjectOfType<Player>().GetComponent<Animator>().runtimeAnimatorController = nogunanim;
+            FindObjectOfType<Player>().GetComponent<Animator>().applyRootMotion = false;
+        }
+        else if(weaponSwitch != 0)
+        {
+            FindObjectOfType<Player>().GetComponent<Animator>().runtimeAnimatorController = gunanim;
+            FindObjectOfType<Player>().GetComponent<Animator>().applyRootMotion = true;
+        }
     }
 
-    [SerializeField] private hands Hands;
+
 
     void SelectWeapon()
     {
@@ -83,7 +121,6 @@ public class WeaponSwitch : MonoBehaviour
         }
         //hands.tf = true;
 
-        Hands = FindObjectOfType<hands>();
         Hands.res();
     }
 

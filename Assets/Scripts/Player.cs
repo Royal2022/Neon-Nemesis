@@ -84,12 +84,12 @@ public class Player : MonoBehaviour
     public static bool facingRight = true;
 
 
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
         anim = GetComponent<Animator>();
-
     }
 
 
