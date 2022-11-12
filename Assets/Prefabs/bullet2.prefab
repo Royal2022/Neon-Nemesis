@@ -95,7 +95,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1669126192366538561}
-  m_BodyType: 0
+  m_BodyType: 1
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
@@ -152,4 +152,5 @@ MonoBehaviour:
   distance: 0
   whatIsSolid:
     serializedVersion: 2
-    m_Bits: 320
+    m_Bits: 4416
+  enemy: {fileID: 0}

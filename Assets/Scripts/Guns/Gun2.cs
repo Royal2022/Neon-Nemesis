@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -40,6 +41,7 @@ public class Gun2 : MonoBehaviour
 
     void Update()
     {
+
         /*
         Vector3 difference = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
         float rotZ = Mathf.Atan2(difference.y, difference.x) * Mathf.Rad2Deg;
@@ -78,7 +80,6 @@ public class Gun2 : MonoBehaviour
         {
             timeBtwShots -= Time.deltaTime;
         }
-
 
 
 
@@ -125,4 +126,6 @@ public class Gun2 : MonoBehaviour
 
     }
     // ==============================================================
+
+
 }

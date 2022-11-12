@@ -79,10 +79,14 @@ public class Bullet : MonoBehaviour
 
     SpriteRenderer sr;
 
+    [SerializeField] private Enemy enemy;
+
 
     private void Start()
     {
         sr = GetComponent<SpriteRenderer>();
+
+        enemy = FindObjectOfType<Enemy>();
 
 
         if (Player.facingRight == true)
@@ -112,6 +116,11 @@ public class Bullet : MonoBehaviour
             if (hitInfo.collider.CompareTag("Enemy"))
             {
                 hitInfo.collider.GetComponent<Enemy>().TakeDamage(damage);
+                Destroy(gameObject);
+            }
+            if (hitInfo.collider.CompareTag("EnemyHead"))
+            {
+                enemy.TakeDamage(damage * 2);
                 Destroy(gameObject);
             }
             Destroy(gameObject);

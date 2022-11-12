@@ -138,7 +138,7 @@ public class Player : MonoBehaviour
             Flip();
         }
     }
-    void Flip()
+    public void Flip()
     {
         facingRight = !facingRight;
         

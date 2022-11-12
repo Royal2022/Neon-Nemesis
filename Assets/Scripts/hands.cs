@@ -1,37 +1,32 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class hands : MonoBehaviour
 {
-
+    [SerializeField] private Player player;
     public float offset;
 
 
     void Start()
     {
-        
+        player = FindObjectOfType<Player>();
     }
-    //public static bool tf = false;
 
     void Update()
     {
-        /*
-        if (tf)
-        {
-            res();
-            tf = false;
-        }*/        
-
+    
         Vector3 difference = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
         float rotZ = Mathf.Atan2(difference.y, difference.x) * Mathf.Rad2Deg;
+        float r = difference.y * 20;
 
+        /*
         transform.Rotate(0f, 0f, 0f);
-
         if (Player.facingRight == true)
         {
-            offset = 0f;
+            offset = -2f;
             if (rotZ < 30 && rotZ > -45)
             {
                 transform.rotation = Quaternion.Euler(0f, 0f, rotZ + offset);
@@ -43,6 +38,22 @@ public class hands : MonoBehaviour
             if (rotZ < -135 || rotZ > 150)
             {
                 transform.rotation = Quaternion.Euler(0f, 0f, rotZ + offset);
+            }
+        }*/
+
+        Debug.Log(difference);
+
+
+
+        if (difference.y < 1 && difference.y > -2)
+        {
+            if (Player.facingRight)
+            {
+                transform.rotation = Quaternion.Euler(0f, 0f, r + offset);
+            }
+            else if (!Player.facingRight)
+            {
+                transform.rotation = Quaternion.Euler(0f, 0f, -r + offset);
             }
         }
     }

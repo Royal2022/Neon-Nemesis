@@ -6,7 +6,6 @@ using UnityEngine;
 
 public class Bullet2 : MonoBehaviour
 {
-
     public float speed = 25f;
     public int damage = 1;
     public Rigidbody2D rb;
@@ -16,11 +15,14 @@ public class Bullet2 : MonoBehaviour
     public LayerMask whatIsSolid;
 
      SpriteRenderer sr;
+    [SerializeField] private Enemy enemy;
 
 
     private void Start()
     {
         sr = GetComponent<SpriteRenderer>();
+
+        enemy = FindObjectOfType<Enemy>();
 
 
         if (Player.facingRight == true)
@@ -52,6 +54,11 @@ public class Bullet2 : MonoBehaviour
                 hitInfo.collider.GetComponent<Enemy>().TakeDamage(damage);
                 Destroy(gameObject);
             }
+            if (hitInfo.collider.CompareTag("EnemyHead"))
+            {
+                enemy.TakeDamage(damage*2);
+                Destroy(gameObject);
+            }
             Destroy(gameObject);
         }
     }
@@ -66,5 +73,6 @@ public class Bullet2 : MonoBehaviour
             sr.flipX = true;
         }
     }
+
 
 }

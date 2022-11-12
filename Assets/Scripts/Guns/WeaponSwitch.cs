@@ -13,12 +13,12 @@ public class WeaponSwitch : MonoBehaviour
     public int weaponSwitch = 0;
 
     
-    public int weaponOpened = 2;
-    public bool akPickeUp = false;
+    public int weaponOpened = 1;
+    //public bool akPickeUp = false;
 
     public RuntimeAnimatorController nogunanim;
     public RuntimeAnimatorController gunanim;
-
+        
 
 
     void Start()
@@ -60,15 +60,19 @@ public class WeaponSwitch : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             weaponSwitch = 0;
+            Hands.res();
         }
         if (Input.GetKeyDown(KeyCode.Alpha2) && transform.childCount >= 2)
         {
             weaponSwitch = 1;
+            Hands.res();
         }
-        if (Input.GetKeyDown(KeyCode.Alpha3) && akPickeUp == true)
+        if (Input.GetKeyDown(KeyCode.Alpha3) /*&& akPickeUp == true*/)
         {
             weaponSwitch = 2;
+            Hands.res();
         }
+
 
         if (currentWeapon != weaponSwitch)
         {
@@ -106,6 +110,7 @@ public class WeaponSwitch : MonoBehaviour
 
     void SelectWeapon()
     {
+        Hands.res();
         int i = 0;
         foreach (Transform weapon in transform)
         {
@@ -119,11 +124,12 @@ public class WeaponSwitch : MonoBehaviour
             }
             i++;
         }
-        //hands.tf = true;
 
-        Hands.res();
+        
+        Debug.Log("Smena!");
     }
 
+    /*
     public void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "AK")
@@ -132,5 +138,5 @@ public class WeaponSwitch : MonoBehaviour
             akPickeUp = true;
             Destroy(collision.gameObject);
         }
-    }
+    }*/
 }

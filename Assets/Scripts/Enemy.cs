@@ -8,6 +8,8 @@ public class Enemy : MonoBehaviour
     public int health;
     public float speed;
 
+
+
     private void Update()
     {
         if (health <= 0)
@@ -21,7 +23,7 @@ public class Enemy : MonoBehaviour
     public void TakeDamage(int damage)
     {
         health -= damage;
-
+        Debug.Log(damage);
     }
 
 
