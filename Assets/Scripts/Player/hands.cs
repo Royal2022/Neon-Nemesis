@@ -41,7 +41,6 @@ public class hands : MonoBehaviour
             }
         }*/
 
-        Debug.Log(difference);
 
 
 

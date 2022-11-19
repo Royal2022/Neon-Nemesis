@@ -24,7 +24,6 @@ public class Bullet2 : MonoBehaviour
 
         enemy = FindObjectOfType<Enemy>();
 
-
         if (Player.facingRight == true)
         {
             rb.velocity = transform.right * speed;
@@ -34,6 +33,7 @@ public class Bullet2 : MonoBehaviour
             rb.velocity = (transform.right * -1) * speed;
         }
         Invoke("DestroyBullet", 2f);
+
     }
 
     /*
@@ -45,6 +45,7 @@ public class Bullet2 : MonoBehaviour
     */
     void Update()
     {
+
         RaycastHit2D hitInfo = Physics2D.Raycast(transform.position, transform.up, distance, whatIsSolid);
 
         if (hitInfo.collider != null)
@@ -74,5 +75,9 @@ public class Bullet2 : MonoBehaviour
         }
     }
 
-
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawLine(transform.position, transform.position + Vector3.right * transform.localScale.x * distance);
+    }
 }

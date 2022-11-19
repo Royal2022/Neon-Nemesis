@@ -126,7 +126,6 @@ public class WeaponSwitch : MonoBehaviour
         }
 
         
-        Debug.Log("Smena!");
     }
 
     /*

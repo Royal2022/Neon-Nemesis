@@ -67,7 +67,7 @@ public class Pistol : MonoBehaviour
 
         if (timeBtwShots <= 0 && currentAmmo > 0)
         {
-            if (Input.GetMouseButtonDown(0))
+            if (Input.GetMouseButtonDown(0) && gameObject.transform.parent != null)
             {
                 Instantiate(bullet, shotPoint.position, transform.rotation);
                 timeBtwShots = startTimeBtwShots;
@@ -112,6 +112,7 @@ public class Pistol : MonoBehaviour
 
     }
 
+    /*
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("pistol1"))
@@ -121,11 +122,11 @@ public class Pistol : MonoBehaviour
         }
         else if (collision.CompareTag("pistol2"))
         {
-            Gun2.allAmmo += 15;
+            AutomaticGun.allAmmo += 15;
             Destroy(collision.gameObject);
         }
 
-    }
+    }*/
     // ==============================================================
 
 

@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
-public class Gun2 : MonoBehaviour
+public class AutomaticGun : MonoBehaviour
 {
     public float offset;
     public GameObject bullet;
@@ -69,8 +69,8 @@ public class Gun2 : MonoBehaviour
 
         if (timeBtwShots <= 0 && currentAmmo > 0)
         {
-            if (Input.GetMouseButton(0))
-            {
+            if (Input.GetMouseButton(0) && gameObject.transform.parent != null)
+            {    
                 Instantiate(bullet, shotPoint.position, transform.rotation);
                 timeBtwShots = startTimeBtwShots;
                 currentAmmo -= 1;
@@ -111,6 +111,7 @@ public class Gun2 : MonoBehaviour
 
     }
 
+    /*
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("pistol2"))
@@ -124,7 +125,7 @@ public class Gun2 : MonoBehaviour
             Destroy(collision.gameObject);
         }
 
-    }
+    }*/
     // ==============================================================
 
 

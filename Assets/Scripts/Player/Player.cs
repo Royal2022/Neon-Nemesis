@@ -1,7 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
+//using UnityEngine.UIElements;
+using UnityEngine.UI;
+
+
 
 public class Player : MonoBehaviour
 
@@ -67,7 +70,7 @@ public class Player : MonoBehaviour
     */
 
     
-    private Rigidbody2D rb;
+    public Rigidbody2D rb;
     public float Speed;
     public float jumpForce;
 
@@ -83,13 +86,17 @@ public class Player : MonoBehaviour
 
     public static bool facingRight = true;
 
+    public int health = 10;
+    public Text healthDisplay;
 
+    public Slider stamine;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
         anim = GetComponent<Animator>();
+        healthDisplay.text = "" + health;
     }
 
 
@@ -105,18 +112,33 @@ public class Player : MonoBehaviour
         {
             rb.velocity = new Vector2(moveInput * Speed * 2, rb.velocity.y);
         }*/
-        if (Input.GetKey(KeyCode.LeftShift))
+        if (Input.GetKey(KeyCode.LeftShift) && stamine.value > 0 && (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D)))
         {
-            Speed = 8f;
+            stamine.value -= 0.8f;
         }
-        else
+        if (!Input.GetKey(KeyCode.LeftShift))
         {
-            Speed = 4f;
+            stamine.value += 0.2f;
         }
+        if (!Input.GetKey(KeyCode.LeftShift) && !Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D))
+        {
+            stamine.value += 0.5f;
+        }
+        if (Input.GetKey(KeyCode.LeftShift) && (!Input.GetKey(KeyCode.A) || !Input.GetKey(KeyCode.D)))
+        {
+            stamine.value += 0.5f;
+        }
+
+           
+        /*
+        else    
+        {    
+        Speed = 4f;           
+        }*/
 
         //sr.flipX = moveInput < 0 ? true : false;
 
-
+            
         moveInput = Input.GetAxis("Horizontal");
 
         if (moveInput == 0)
@@ -131,11 +153,14 @@ public class Player : MonoBehaviour
 
         if (facingRight == false && moveInput > 0)
         {
-            Flip();        
+            Flip();
+            Debug.Log("right");
+
         }
         else if (facingRight == true && moveInput < 0)
         {
             Flip();
+            Debug.Log("left");
         }
     }
     public void Flip()
@@ -150,6 +175,14 @@ public class Player : MonoBehaviour
 
     void Update()
     {
+        if (Input.GetKey(KeyCode.LeftShift) && stamine.value > 10)
+        {
+            Speed = 6f;
+        }
+        else
+        {
+            Speed = 4f;
+        }
 
         isGrounded = Physics2D.OverlapCircle(feetPos.position, checkRaduis, whatIsGround);
 
@@ -178,9 +211,24 @@ public class Player : MonoBehaviour
 
         }
     }
-    
 
-                    
-    
-    
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("pistol2"))
+        {
+            Destroy(collision.gameObject);
+            AutomaticGun.allAmmo += 35;
+        }
+        else if (collision.CompareTag("pistol1"))
+        {
+            Destroy(collision.gameObject);
+            Pistol.allAmmo += 15;
+        }
+
+    }
+
+
+
+
+
 }
