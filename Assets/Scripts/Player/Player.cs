@@ -9,65 +9,9 @@ using UnityEngine.UI;
 public class Player : MonoBehaviour
 
 {
-    /*
-    public float speed = 1f;
-    public float jumpForce = 5f;
-    Rigidbody2D rb;
-    SpriteRenderer sr;
 
-    private Animator anim;
-    private float moveInput;
-    private float moveInput2;
-
-    void Start()
-    {
-        rb = GetComponent<Rigidbody2D>();
-        sr = GetComponent<SpriteRenderer>();
-        anim = GetComponent<Animator>();
-    }
-
-    private void FixedUpdate()
-    {
-        moveInput = Input.GetAxis("Horizontal");
-
-        if(moveInput == 0)
-        {
-            anim.SetBool("player_run", false);
-        }
-        else
-        {
-            anim.SetBool("player_run", true);
-        }
-
-        moveInput2 = Input.GetAxis("Vertical");
-
-        if (Input.GetKeyDown(KeyCode.Space) == true)
-        {
-            anim.SetBool("player_jump", true);
-        }
-        else
-        {
-            anim.SetBool("player_jump", false);
-        }
-    }
-
-
-
-    void Update()
-    {
-        float movement = Input.GetAxis("Horizontal");
-
-        transform.position += new Vector3(movement, 0, 0) * speed * Time.deltaTime;
-
-        if (Input.GetKeyDown(KeyCode.Space) && Mathf.Abs(rb.velocity.y) < 0.05f)
-            rb.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
-
-        sr.flipX = movement < 0 ? true : false;
-
-
-
-    }
-    */
+    public static int pistol_ammo = 0;
+    public static int automaticGun_ammo = 0;
 
     
     public Rigidbody2D rb;
@@ -107,34 +51,8 @@ public class Player : MonoBehaviour
         moveInput = Input.GetAxis("Horizontal");
         rb.velocity = new Vector2(moveInput * Speed, rb.velocity.y);
 
-        /*
-        if (Input.GetKey("left shift"))
-        {
-            rb.velocity = new Vector2(moveInput * Speed * 2, rb.velocity.y);
-        }*/
-        if (Input.GetKey(KeyCode.LeftShift) && stamine.value > 0 && (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D)))
-        {
-            stamine.value -= 0.8f;
-        }
-        if (!Input.GetKey(KeyCode.LeftShift))
-        {
-            stamine.value += 0.2f;
-        }
-        if (!Input.GetKey(KeyCode.LeftShift) && !Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D))
-        {
-            stamine.value += 0.5f;
-        }
-        if (Input.GetKey(KeyCode.LeftShift) && (!Input.GetKey(KeyCode.A) || !Input.GetKey(KeyCode.D)))
-        {
-            stamine.value += 0.5f;
-        }
+        StaminFunc();
 
-           
-        /*
-        else    
-        {    
-        Speed = 4f;           
-        }*/
 
         //sr.flipX = moveInput < 0 ? true : false;
 
@@ -154,13 +72,13 @@ public class Player : MonoBehaviour
         if (facingRight == false && moveInput > 0)
         {
             Flip();
-            Debug.Log("right");
+            //Debug.Log("right");
 
         }
         else if (facingRight == true && moveInput < 0)
         {
             Flip();
-            Debug.Log("left");
+            //Debug.Log("left");
         }
     }
     public void Flip()
@@ -212,21 +130,93 @@ public class Player : MonoBehaviour
         }
     }
 
+    
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("pistol2"))
         {
             Destroy(collision.gameObject);
-            AutomaticGun.allAmmo += 35;
+            automaticGun_ammo += 35;
+            //Debug.Log("gun");   
         }
         else if (collision.CompareTag("pistol1"))
         {
             Destroy(collision.gameObject);
-            Pistol.allAmmo += 15;
+            pistol_ammo += 15;
+            //Debug.Log("pistol");
         }
 
     }
+    
 
+    public void StaminFunc()
+    {
+        /*
+        if (Input.GetKey(KeyCode.LeftShift) && stamine.value > 0 && (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D)))
+        {
+            stamine.value -= 0.8f;
+        }
+        if (!Input.GetKey(KeyCode.LeftShift))
+        {
+            stamine.value += 0.1f;
+        }
+        if (!Input.GetKey(KeyCode.LeftShift) && !Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D))
+        {
+            stamine.value += 0.3f;
+        }
+        if (Input.GetKey(KeyCode.LeftShift) && (!Input.GetKey(KeyCode.A) || !Input.GetKey(KeyCode.D)))
+        {
+            stamine.value += 0.3f;
+        }
+        if (!Input.GetKey(KeyCode.LeftShift) && (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S)))
+        {
+            stamine.value += 0.2f;
+        }
+
+        if (Input.GetKey(KeyCode.LeftShift) && stamine.value > 0 && (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S)))
+        {
+            stamine.value -= 0.8f;
+        }
+        if (!Input.GetKey(KeyCode.LeftShift))
+        {
+            stamine.value += 0.1f;
+        }
+        if (!Input.GetKey(KeyCode.LeftShift) && !Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.S))
+        {
+            stamine.value += 0.3f;
+        }
+        if (Input.GetKey(KeyCode.LeftShift) && (!Input.GetKey(KeyCode.W) || !Input.GetKey(KeyCode.S)))
+        {
+            stamine.value += 0.3f;
+        }
+        if (!Input.GetKey(KeyCode.LeftShift) && (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S)))
+        {
+            stamine.value += 0.2f;
+        }*/
+
+        if (Input.GetKey(KeyCode.LeftShift) && stamine.value > 0 && (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D)))
+        {
+            stamine.value -= 0.6f;
+        }
+        if (!Input.GetKey(KeyCode.LeftShift) && (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S)))
+        {
+            stamine.value += 0.2f;
+        }
+        if (!Input.GetKey(KeyCode.LeftShift) && !Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D) && !Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.S))
+        {
+            stamine.value += 0.3f;
+        }
+        if (Input.GetKey(KeyCode.LeftShift) && (!Input.GetKey(KeyCode.A) || !Input.GetKey(KeyCode.D) || !Input.GetKey(KeyCode.W) || !Input.GetKey(KeyCode.S)))
+        {
+            stamine.value += 0.3f;
+        }
+
+        
+        if (Input.GetKey(KeyCode.LeftShift) && stamine.value > 0 && (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S)) && FindObjectOfType<Ladder>().isTrigger == true)
+        {
+            stamine.value -= 0.6f;
+        }
+    }
 
 
 

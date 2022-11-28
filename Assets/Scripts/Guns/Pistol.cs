@@ -22,20 +22,20 @@ public class Pistol : MonoBehaviour
     public GameObject ammo;
 
     public int currentAmmo = 15;
-    public static int allAmmo = 0;
+    //public static int Player.pistol_ammo = 0;
     public int full = 45;
 
-    [SerializeField]
-    private Text ammoCount;
-
+    public Text ammoCount;
+    [SerializeField] private WeaponSwitch ws;
 
     // ==============================================================
 
 
 
     private void Start()
-    {
-            sr = GetComponent<SpriteRenderer>();
+    {        
+        sr = GetComponent<SpriteRenderer>();
+        ws = FindObjectOfType<WeaponSwitch>();
     }
 
     void Update()
@@ -64,6 +64,16 @@ public class Pistol : MonoBehaviour
         }
         */
 
+        
+        if (gameObject.transform.parent)
+        {
+            OutText();
+        }
+
+        //OutText();
+
+        //Debug.Log(gameObject.transform.parent.ToString());
+
 
         if (timeBtwShots <= 0 && currentAmmo > 0)
         {
@@ -72,6 +82,7 @@ public class Pistol : MonoBehaviour
                 Instantiate(bullet, shotPoint.position, transform.rotation);
                 timeBtwShots = startTimeBtwShots;
                 currentAmmo -= 1;
+                OutText();
             }
         }
         else
@@ -86,9 +97,7 @@ public class Pistol : MonoBehaviour
 
     // ======================== Ammo ================================
 
-        ammoCount.text = currentAmmo + "/" + allAmmo;
-
-        if (Input.GetKeyDown(KeyCode.R) && allAmmo > 0)
+        if (Input.GetKeyDown(KeyCode.R) && Player.pistol_ammo > 0)
         {
             Reload();
         }
@@ -99,16 +108,23 @@ public class Pistol : MonoBehaviour
     public void Reload()
     {
         int reason = 15 - currentAmmo;
-        if (allAmmo >= reason)
+        if (Player.pistol_ammo >= reason)
         {
-            allAmmo -= reason;
+            Player.pistol_ammo -= reason;
             currentAmmo = 15;
         }
         else
         {
-            currentAmmo = currentAmmo + allAmmo;
-            allAmmo = 0;
+            currentAmmo = currentAmmo + Player.pistol_ammo;
+            Player.pistol_ammo = 0;
         }
+
+    }
+
+    public void OutText()
+    {
+        ammoCount.text = currentAmmo + "/" + Player.pistol_ammo;
+        //Debug.Log("cock");
 
     }
 
@@ -117,17 +133,18 @@ public class Pistol : MonoBehaviour
     {
         if (collision.CompareTag("pistol1"))
         {
-            allAmmo += 15;
+            Player.pistol_ammo += 15;
             Destroy(collision.gameObject);
         }
         else if (collision.CompareTag("pistol2"))
         {
-            AutomaticGun.allAmmo += 15;
+            AutomaticGun.Player.pistol_ammo += 15;
             Destroy(collision.gameObject);
         }
 
     }*/
     // ==============================================================
+
 
 
 

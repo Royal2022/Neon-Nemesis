@@ -15,4 +15,20 @@ public class Ammo : MonoBehaviour
     {
         
     }
+
+    /*
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Player") && gameObject.tag == "pistol2")
+        {
+            Destroy(gameObject);
+            AutomaticGun.allAmmo += 35;
+        }
+        else if (collision.CompareTag("Player") && gameObject.tag == "pistol1")
+        {
+            Destroy(gameObject);
+            Pistol.allAmmo += 15;
+            Debug.Log("C");
+        }
+    }*/
 }

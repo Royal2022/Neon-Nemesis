@@ -1,34 +1,38 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.SceneManagement;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.Playables;
 
 public class WeaponHold : MonoBehaviour
 {
 
-    //[SerializeField] private hands Handss;
+    //[SerializeField] private hands _Hands;
 
 
 
     public bool hold;
     public float distance = 1f;
     RaycastHit2D hit;
-    public Transform holdPoint;
+    public Transform holdPointPistol;
+    public Transform holdPointAutomaticGun;
     public float throwobject = 1;
 
 
-    
+
+
+    [SerializeField] private WeaponSwitch wp;
 
     void Start()
     {
-        //Handss = FindObjectOfType<hands>();
+        //_Hands = FindObjectOfType<hands>();
+        wp = FindObjectOfType<WeaponSwitch>();
     }
 
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.F))
         {
-
             if (!hold)
             {
                 Physics2D.queriesStartInColliders = false;
@@ -36,23 +40,47 @@ public class WeaponHold : MonoBehaviour
                 hit = Physics2D.Raycast(transform.position, Vector2.right * transform.localScale.x, distance);
 
 
-                if (hit.collider != null && hit.collider.tag == "Weapon" && holdPoint.GetChild(0).gameObject)
+                if (hit.collider != null && hit.collider.tag == "Weapon" && holdPointPistol.GetChild(0).gameObject)
                 {
+                    if (wp.transform.GetChild(1).gameObject.activeSelf == false)
+                    {
+                        wp.weaponSwitch = 1;
+                        wp.SelectWeapon();
+                    }
                     hold = true;
                     //Destroy(holdPoint.GetChild(0).gameObject);
 
-                    //holdPoint.GetChild(0).GetComponent<Pistol>().enabled = false;
-                    holdPoint.GetChild(0).transform.rotation = Quaternion.Euler(0f, 0f, 0.64f);
-                    holdPoint.GetChild(0).transform.position = hit.collider.gameObject.transform.position;
-                    holdPoint.GetChild(0).parent = null;
+                    holdPointPistol.GetChild(0).transform.rotation = Quaternion.Euler(0f, 0f, 0.64f);
+                    holdPointPistol.GetChild(0).transform.position = hit.collider.gameObject.transform.position;
+                    holdPointPistol.GetChild(0).parent = null;
 
 
-                    //hit.collider.gameObject.GetComponent<AutomaticGun>().enabled = true;
                     FindObjectOfType<hands>().res();
                     hit.collider.gameObject.transform.rotation = Quaternion.Euler(0f, 0f, 0.64f);
-                    hit.collider.gameObject.transform.position = holdPoint.gameObject.transform.position;
-                    hit.transform.parent = holdPoint;
+                    hit.collider.gameObject.transform.position = holdPointPistol.gameObject.transform.position;
+                    hit.transform.parent = holdPointPistol;
+                }          
+                
+                if (hit.collider != null && hit.collider.tag == "AK" && holdPointAutomaticGun.GetChild(0).gameObject)
+                {
+                    Debug.Log(0);
+                    if (wp.transform.GetChild(2).gameObject.activeSelf == false)
+                    {
+                        wp.weaponSwitch = 2;
+                        wp.SelectWeapon();
+                    }
+                    hold = true;
+                    //Destroy(holdPoint.GetChild(0).gameObject);
 
+                    holdPointAutomaticGun.GetChild(0).transform.rotation = Quaternion.Euler(0f, 0f, 0.64f);
+                    holdPointAutomaticGun.GetChild(0).transform.position = hit.collider.gameObject.transform.position;
+                    holdPointAutomaticGun.GetChild(0).parent = null;
+
+
+                    FindObjectOfType<hands>().res();
+                    hit.collider.gameObject.transform.rotation = Quaternion.Euler(0f, 0f, 0.64f);
+                    hit.collider.gameObject.transform.position = holdPointAutomaticGun.gameObject.transform.position;
+                    hit.transform.parent = holdPointAutomaticGun;
                 }
             }
             else
@@ -64,7 +92,7 @@ public class WeaponHold : MonoBehaviour
         }
         if (hold)
         {
-            if (holdPoint.position.x > transform.position.x && hold == true)
+            if (holdPointPistol.position.x > transform.position.x && hold == true)
             {
                 if (hit.collider.transform.localScale.x > 0)
                 {
@@ -75,7 +103,7 @@ public class WeaponHold : MonoBehaviour
                     hit.collider.gameObject.transform.localScale = new Vector2(-hit.collider.transform.localScale.x, hit.collider.transform.localScale.y);
                 }
             }
-            else if (holdPoint.position.x < transform.position.x && hold == true)
+            else if (holdPointPistol.position.x < transform.position.x && hold == true)
             {
                 if (hit.collider.transform.localScale.x > 0)
                 {
@@ -87,7 +115,6 @@ public class WeaponHold : MonoBehaviour
                 }
             }
             hold = false;
-
         }
     }
 

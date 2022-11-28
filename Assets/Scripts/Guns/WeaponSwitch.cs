@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class WeaponSwitch : MonoBehaviour
 {
@@ -18,7 +19,8 @@ public class WeaponSwitch : MonoBehaviour
 
     public RuntimeAnimatorController nogunanim;
     public RuntimeAnimatorController gunanim;
-        
+
+    public Text ammoCount;
 
 
     void Start()
@@ -28,10 +30,11 @@ public class WeaponSwitch : MonoBehaviour
         SelectWeapon();
     }
 
-    void Update()
+    public void Update()
     {
 
         int currentWeapon = weaponSwitch;
+
 
         if (Input.GetAxis("Mouse ScrollWheel") > 0f)
         {
@@ -58,7 +61,7 @@ public class WeaponSwitch : MonoBehaviour
 
 
         if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
+        {   
             weaponSwitch = 0;
             Hands.res();
         }
@@ -80,18 +83,19 @@ public class WeaponSwitch : MonoBehaviour
         }
 
 
-        if (weaponSwitch == 3 || weaponSwitch == 0)
+        if (weaponSwitch == 2 || weaponSwitch == 0)
         {
             xyz = FindObjectOfType<XYZ>();
             xyz.arm.SetActive(false);
         }
-        else if (weaponSwitch != 3 || weaponSwitch != 0)
+        else if (weaponSwitch != 2 || weaponSwitch != 0)
         {
             xyz = FindObjectOfType<XYZ>();
             xyz.arm.SetActive(true);
         }
 
         //FindObjectOfType<Player>().GetComponent<Animator>().runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>("Player");
+
 
 
         if (weaponSwitch == 0)
@@ -104,11 +108,13 @@ public class WeaponSwitch : MonoBehaviour
             FindObjectOfType<Player>().GetComponent<Animator>().runtimeAnimatorController = gunanim;
             FindObjectOfType<Player>().GetComponent<Animator>().applyRootMotion = true;
         }
+
+        //Debug.Log(weaponSwitch);
     }
 
 
 
-    void SelectWeapon()
+    public void SelectWeapon()
     {
         Hands.res();
         int i = 0;

@@ -15,12 +15,13 @@ public class FallingCheck : MonoBehaviour
     {
         if (collision.CompareTag("Ground"))
         {
-            if (player.rb.velocity.y < -5)
+            if (player.rb.velocity.y < -8)
             {
-                player.health -= (int)((float.Parse(player.rb.velocity.y.ToString()) * -1)/2.5);
+                player.health -= (int)((float.Parse(player.rb.velocity.y.ToString()) * -1)/3);
                 player.healthDisplay.text = "" + player.health;
             }
             
         }
     }
+
 }

@@ -74,10 +74,4 @@ public class Bullet2 : MonoBehaviour
             sr.flipX = true;
         }
     }
-
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawLine(transform.position, transform.position + Vector3.right * transform.localScale.x * distance);
-    }
 }
