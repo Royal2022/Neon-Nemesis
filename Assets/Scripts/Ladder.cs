@@ -7,7 +7,6 @@ using UnityEngine;
 public class Ladder : MonoBehaviour
 {
 
-    [SerializeField]
 
     float speed = 5;
 
@@ -19,7 +18,7 @@ public class Ladder : MonoBehaviour
 
     public bool isTrigger = false;
 
-    public bool m = false;
+    public bool touchedLadder = false;
 
 
     /*
@@ -47,9 +46,10 @@ public class Ladder : MonoBehaviour
         {
             //Player.anim.SetBool("player_jump", false);
 
-
-            if (Input.GetKey(KeyCode.W) && !(Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D)))
+            if (Input.GetKey(KeyCode.W) && (!(Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D)) || touchedLadder))
             {
+                other.GetComponent<SpriteRenderer>().sortingOrder = 7;
+
                 //FindObjectOfType<Player>().StaminFunc();
                 //Player.anim.SetBool("ladder_up", true);
                 tf = true;
@@ -62,8 +62,10 @@ public class Ladder : MonoBehaviour
                 other.GetComponent<Transform>().position = new Vector3(XYZ.position.x, other.transform.position.y, other.transform.position.z);
                 isTrigger = true;
             }
-            else if (Input.GetKey(KeyCode.S) && !(Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D)))
+            else if (Input.GetKey(KeyCode.S) && (!(Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D)) || touchedLadder))
             {
+                other.GetComponent<SpriteRenderer>().sortingOrder = 7;
+
                 //FindObjectOfType<Player>().StaminFunc();
                 tf = true;
                 other.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
@@ -95,15 +97,20 @@ public class Ladder : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        isTrigger = false;
-       
-        player.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeRotation;
+        if (other.gameObject.CompareTag("Player"))
+        {
+            isTrigger = false;
+
+            player.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeRotation;
 
 
-        //Player.anim.SetBool("ladder_up", false);
+            //Player.anim.SetBool("ladder_up", false);
 
-        player.GetComponent<Rigidbody2D>().gravityScale = 1;
-        player.GetComponent<CapsuleCollider2D>().isTrigger = false;
+            player.GetComponent<Rigidbody2D>().gravityScale = 1;
+            player.GetComponent<CapsuleCollider2D>().isTrigger = false;
+
+            other.GetComponent<SpriteRenderer>().sortingOrder = 9;
+        }
     }
 
     private void Update()

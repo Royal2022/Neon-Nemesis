@@ -12,7 +12,7 @@ public class Enemy : MonoBehaviour
     public float speed;
     public float distance = 6f;
     public float distanceBack = 1.5f;
-    RaycastHit2D hit, hitBack;
+    RaycastHit2D hit, hitBack, hitattack;
     public Rigidbody2D rb;
     bool facingRight = true;
     public bool playerNoticed = false;
@@ -43,6 +43,10 @@ public class Enemy : MonoBehaviour
     //[SerializeField] private feetPosEnemy fPE;
 
     public bool trigger = false;
+
+    public bool triggerDeath = false;
+
+    public int damege = 1;
 
 
     private void Start()
@@ -95,6 +99,22 @@ public class Enemy : MonoBehaviour
                 hold = true;
             }
 
+            /*
+            hitattack = Physics2D.Raycast(transform.position, Vector3.right * transform.localScale.x, 2f, SeePlayer);
+            if (hitattack.collider != null && hitattack.collider.gameObject.tag == "Player")
+            {
+                if (!anim.GetCurrentAnimatorStateInfo(0).IsName("attack"))
+                {
+                    anim.SetBool("attack_enemy", true);
+                    Debug.Log("Udar!");
+                }
+            }
+            else if (hitattack.collider == null)
+            {
+                anim.SetBool("attack_enemy", false);
+            }*/
+
+
         }
         else
         {
@@ -105,17 +125,23 @@ public class Enemy : MonoBehaviour
 
 
 
-        if (health <= 0)
+        if (health <= 0 && isGrounded)
         {
-            Destroy(gameObject);
-        }
-        
+            anim.Play("death");
+            triggerDeath = true;
 
-        if (transform.localScale.x > 0)
+            /*if (!anim.GetCurrentAnimatorStateInfo(0).IsName("death"))
+            {
+                Destroy(gameObject);
+            }*/
+        }
+
+
+        if (transform.localScale.x > 0 && !triggerDeath)
         {
             transform.Translate(Vector2.left * -1 * speed * Time.deltaTime);
         }
-        else if (transform.localScale.x < 0)
+        else if (transform.localScale.x < 0 && !triggerDeath)
         {
             transform.Translate(Vector2.left * 1 * speed * Time.deltaTime);
         }
@@ -164,7 +190,7 @@ public class Enemy : MonoBehaviour
 
 
             
-            if ((Vector2.Distance(transform.position, target.position) > 1f && !Patrol.gameObject.GetComponent<Patrol>().ground))
+            if ((Vector2.Distance(transform.position, target.position) > 1f && !Patrol.gameObject.GetComponent<Patrol>().ground) && !triggerDeath)
             {
                 //transform.position = Vector3.MoveTowards(transform.position, target.position, speed * Time.deltaTime * 2);
 
@@ -173,17 +199,23 @@ public class Enemy : MonoBehaviour
                 //transform.position = newPos;
                 speed = 4;
                 Vector2.Distance(transform.position, target.transform.position);
+                anim.SetBool("attack_enemy", false);
             }
-            else if(Vector2.Distance(transform.position, target.position) <= 1f) {
+            else if(Vector2.Distance(transform.position, target.position) <= 1f && !triggerDeath) {
                 speed = 0;
                 trigger = false;
+                if (!anim.GetCurrentAnimatorStateInfo(0).IsName("attack_enemy"))
+                {
+                    anim.SetBool("attack_enemy", true);
+                }
             }
             
         }
-        else
+        else if (!trigger)
         {
             speed = 3;
         }
+
     }
 
 
@@ -219,4 +251,14 @@ public class Enemy : MonoBehaviour
         rb.velocity = Vector2.up * jumpForce;
     }
 
+
+    public void death()
+    {
+        Destroy(gameObject);
+    }
+
+    public void OnEnemyAttack()
+    {
+        FindObjectOfType<Player>().health -= damege;
+    }
 }

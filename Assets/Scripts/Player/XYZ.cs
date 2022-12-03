@@ -22,6 +22,7 @@ public class XYZ : MonoBehaviour
 
         if (collision.CompareTag("Player"))
         {
+            FindObjectOfType<Ladder>().touchedLadder = true;
             if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S))
             {
                 player.anim.Play("ladder_up");
@@ -42,7 +43,7 @@ public class XYZ : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-
+        FindObjectOfType<Ladder>().touchedLadder = false;
         player.anim.SetBool("touched_ground", true);
         player.anim.SetBool("ladder_up", false);
 

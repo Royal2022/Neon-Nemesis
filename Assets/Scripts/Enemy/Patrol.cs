@@ -51,9 +51,12 @@ public class Patrol : MonoBehaviour
                 //Debug.Log(hit.collider.gameObject.tag);
                 //enemy.gameObject.GetComponent<Transform>().localScale = new Vector3(enemy.transform.localScale.x, enemy.transform.localScale.y, enemy.transform.localScale.z);
             }
-            if (enemy.gameObject.GetComponent<Enemy>().playerNoticed == true && hit.collider == null && enemy.gameObject.GetComponent<Enemy>().isGrounded == true|| (enemy.gameObject.GetComponent<Enemy>().trigger && hit.collider == null && enemy.gameObject.GetComponent<Enemy>().isGrounded == true))
+            if (enemy.gameObject.GetComponent<Enemy>().playerNoticed == true && hit.collider == null && enemy.gameObject.GetComponent<Enemy>().isGrounded == true || (enemy.gameObject.GetComponent<Enemy>().trigger && hit.collider == null && enemy.gameObject.GetComponent<Enemy>().isGrounded == true))
             {
-                enemy.gameObject.GetComponent<Enemy>().JumpEnemy();
+                if (!enemy.gameObject.GetComponent<Enemy>().triggerDeath)
+                {                
+                    enemy.gameObject.GetComponent<Enemy>().JumpEnemy();
+                }
                 //enemy.gameObject.GetComponent<Enemy>().speed = 3;
             }
             if (hit.collider == null && enemy.gameObject.GetComponent<Enemy>().isGrounded == true && !enemy.gameObject.GetComponent<Enemy>().playerNoticed && !enemy.gameObject.GetComponent<Enemy>().trigger)
@@ -67,7 +70,7 @@ public class Patrol : MonoBehaviour
                 ground = true;
                 hold = true;
                 //Debug.Log(hit.collider.gameObject.tag);
-                if (enemy.gameObject.GetComponent<Enemy>().playerNoticed == true || enemy.gameObject.GetComponent<Enemy>().trigger)
+                if ((enemy.gameObject.GetComponent<Enemy>().playerNoticed == true || enemy.gameObject.GetComponent<Enemy>().trigger) && !enemy.gameObject.GetComponent<Enemy>().triggerDeath)
                 {
                     //enemy.gameObject.GetComponent<Enemy>().JumpEnemy();
                     enemy.gameObject.GetComponent<Enemy>().JumpEnemy();

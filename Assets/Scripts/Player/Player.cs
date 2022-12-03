@@ -105,6 +105,7 @@ public class Player : MonoBehaviour
 
     void Update()
     {
+        healthDisplay.text = "" + health;
 
         if (GetComponent<Animator>().runtimeAnimatorController == WS.nogunanim)
         {
