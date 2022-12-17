@@ -72,8 +72,6 @@ public class Pistol : MonoBehaviour
 
         //OutText();
 
-        //Debug.Log(gameObject.transform.parent.ToString());
-
 
         if (timeBtwShots <= 0 && currentAmmo > 0)
         {
@@ -124,8 +122,6 @@ public class Pistol : MonoBehaviour
     public void OutText()
     {
         ammoCount.text = currentAmmo + "/" + Player.pistol_ammo;
-        //Debug.Log("cock");
-
     }
 
     /*

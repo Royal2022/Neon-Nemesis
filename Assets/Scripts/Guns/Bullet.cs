@@ -69,7 +69,8 @@ public class Bullet : MonoBehaviour
         }
     }*/
 
-    public float speed = 30f;
+
+    public float speed = 25f;
     public int damage = 1;
     public Rigidbody2D rb;
 
@@ -78,7 +79,6 @@ public class Bullet : MonoBehaviour
     public LayerMask whatIsSolid;
 
     SpriteRenderer sr;
-
     //[SerializeField] private Enemy enemy;
 
 
@@ -87,7 +87,6 @@ public class Bullet : MonoBehaviour
         sr = GetComponent<SpriteRenderer>();
 
         //enemy = FindObjectOfType<Enemy>();
-
 
         if (Player.facingRight == true)
         {
@@ -98,29 +97,23 @@ public class Bullet : MonoBehaviour
             rb.velocity = (transform.right * -1) * speed;
         }
         Invoke("DestroyBullet", 2f);
+
     }
 
-    /*
-    void OnTriggerEnter2D(Collider2D hitInfo)
-    {
-        Debug.Log(hitInfo.name);
-        Destroy(gameObject);
-    }
-    */
     void Update()
     {
-        RaycastHit2D hitInfo = Physics2D.Raycast(transform.position, transform.up, distance, whatIsSolid);
+        RaycastHit2D hitInfo = Physics2D.Raycast(transform.position, transform.right, distance, whatIsSolid);
 
         if (hitInfo.collider != null)
         {
-            if (hitInfo.collider.CompareTag("Enemy"))
+            if (hitInfo.collider.gameObject.CompareTag("Enemy"))
             {
-                hitInfo.collider.GetComponent<Enemy>().TakeDamage(damage);
+                hitInfo.collider.gameObject.GetComponent<Enemy>().TakeDamage(damage);
                 Destroy(gameObject);
             }
-            if (hitInfo.collider.CompareTag("EnemyHead"))
+            if (hitInfo.collider.gameObject.CompareTag("EnemyHead"))
             {
-                hitInfo.collider.GetComponent<head>().enemy.gameObject.GetComponent<Enemy>().TakeDamage(damage * 2);
+                hitInfo.collider.gameObject.GetComponent<head>().enemy.gameObject.GetComponent<Enemy>().TakeDamage(damage * 2);
                 Destroy(gameObject);
             }
             Destroy(gameObject);
@@ -137,5 +130,6 @@ public class Bullet : MonoBehaviour
             sr.flipX = true;
         }
     }
+
 
 }

@@ -107,12 +107,9 @@ public class head : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        //enemy = FindObjectOfType<Enemy>();
-
         Gizmos.color = Color.blue;
         Gizmos.DrawLine(transform.position, transform.position + Vector3.right * enemy.gameObject.GetComponent<Transform>().localScale.x * distance);
         Gizmos.DrawLine(transform.position, transform.position + Vector3.left * enemy.gameObject.GetComponent<Transform>().localScale.x * distanceBack);
-
     }
 
 }

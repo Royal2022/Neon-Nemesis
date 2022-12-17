@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Burst.CompilerServices;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Playables;
@@ -16,7 +17,7 @@ public class WeaponHold : MonoBehaviour
     RaycastHit2D hit;
     public Transform holdPointPistol;
     public Transform holdPointAutomaticGun;
-    public float throwobject = 1;
+    public float throwobject = 2f;
 
 
 
@@ -53,9 +54,12 @@ public class WeaponHold : MonoBehaviour
                     //Destroy(holdPoint.GetChild(0).gameObject);
 
                     holdPointPistol.GetChild(0).transform.rotation = Quaternion.Euler(0f, 0f, 0.64f);
-                    holdPointPistol.GetChild(0).transform.position = hit.collider.gameObject.transform.position;
+                    //holdPointPistol.GetChild(0).transform.position = hit.collider.gameObject.transform.position;
+                    holdPointPistol.GetChild(0).gameObject.GetComponent<Rigidbody2D>().simulated = true;
+                    holdPointPistol.GetChild(0).gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(transform.localScale.x, 1) * throwobject;
                     holdPointPistol.GetChild(0).parent = null;
 
+                    hit.collider.GetComponent<Rigidbody2D>().simulated = false;
 
                     FindObjectOfType<hands>().res();
                     hit.collider.gameObject.transform.rotation = Quaternion.Euler(0f, 0f, 0.64f);
@@ -74,9 +78,13 @@ public class WeaponHold : MonoBehaviour
                     //Destroy(holdPoint.GetChild(0).gameObject);
 
                     holdPointAutomaticGun.GetChild(0).transform.rotation = Quaternion.Euler(0f, 0f, 0.64f);
-                    holdPointAutomaticGun.GetChild(0).transform.position = hit.collider.gameObject.transform.position;
+                    //holdPointAutomaticGun.GetChild(0).transform.position = hit.collider.gameObject.transform.position;
+                    holdPointAutomaticGun.GetChild(0).gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(transform.localScale.x, 1) * throwobject;
+                    holdPointAutomaticGun.GetChild(0).gameObject.GetComponent<Rigidbody2D>().simulated = true;
                     holdPointAutomaticGun.GetChild(0).parent = null;
 
+
+                    hit.collider.GetComponent<Rigidbody2D>().simulated = false;
 
                     FindObjectOfType<hands>().res();
                     hit.collider.gameObject.transform.rotation = Quaternion.Euler(0f, 0f, 0.64f);

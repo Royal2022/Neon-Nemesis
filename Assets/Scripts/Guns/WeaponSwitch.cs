@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -32,10 +33,9 @@ public class WeaponSwitch : MonoBehaviour
 
     public void Update()
     {
-
         int currentWeapon = weaponSwitch;
 
-
+        
         if (Input.GetAxis("Mouse ScrollWheel") > 0f)
         {
             if (weaponSwitch >= transform.childCount - weaponOpened)
@@ -134,14 +134,15 @@ public class WeaponSwitch : MonoBehaviour
         
     }
 
-    /*
-    public void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.gameObject.tag == "AK")
+
+        /*
+        public void OnTriggerEnter2D(Collider2D collision)
         {
-            weaponOpened -= 1;
-            akPickeUp = true;
-            Destroy(collision.gameObject);
-        }
-    }*/
-}
+            if (collision.gameObject.tag == "AK")
+            {
+                weaponOpened -= 1;
+                akPickeUp = true;
+                Destroy(collision.gameObject);
+            }
+        }*/
+    }

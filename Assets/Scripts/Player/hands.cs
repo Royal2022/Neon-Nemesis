@@ -9,6 +9,7 @@ public class hands : MonoBehaviour
     [SerializeField] private Player player;
     public float offset;
 
+    public int sensitivity = 20;
 
     void Start()
     {
@@ -20,7 +21,7 @@ public class hands : MonoBehaviour
     
         Vector3 difference = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
         float rotZ = Mathf.Atan2(difference.y, difference.x) * Mathf.Rad2Deg;
-        float r = difference.y * 20;
+        float r = difference.y * sensitivity;
 
         /*
         transform.Rotate(0f, 0f, 0f);

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Unity.Burst.CompilerServices;
 using Unity.VisualScripting;
 using UnityEngine;
-using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class Enemy : MonoBehaviour
 {
@@ -190,7 +189,7 @@ public class Enemy : MonoBehaviour
 
 
             
-            if ((Vector2.Distance(transform.position, target.position) > 1f && !Patrol.gameObject.GetComponent<Patrol>().ground) && !triggerDeath)
+            if ((Vector2.Distance(transform.position, target.position) > 1.5f && !Patrol.gameObject.GetComponent<Patrol>().ground) && !triggerDeath)
             {
                 //transform.position = Vector3.MoveTowards(transform.position, target.position, speed * Time.deltaTime * 2);
 
@@ -201,7 +200,7 @@ public class Enemy : MonoBehaviour
                 Vector2.Distance(transform.position, target.transform.position);
                 anim.SetBool("attack_enemy", false);
             }
-            else if(Vector2.Distance(transform.position, target.position) <= 1f && !triggerDeath) {
+            else if(Vector2.Distance(transform.position, target.position) <= 1.5f && !triggerDeath) {
                 speed = 0;
                 trigger = false;
                 if (!anim.GetCurrentAnimatorStateInfo(0).IsName("attack_enemy"))
@@ -224,7 +223,6 @@ public class Enemy : MonoBehaviour
         Gizmos.color = Color.green;
         Gizmos.DrawLine(transform.position, transform.position + Vector3.right * transform.localScale.x * distance);
         Gizmos.DrawLine(transform.position, transform.position + Vector3.left * transform.localScale.x * distanceBack);
-
     }
 
 

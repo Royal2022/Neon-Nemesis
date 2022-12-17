@@ -82,15 +82,11 @@ public class Ladder : MonoBehaviour
             }
             else if (other.tag == "Player" && tf == true)
             {
-
                 other.GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
                 //Player.anim.SetBool("ladder_up", false);
-                other.GetComponent<Transform>().position = new Vector3(XYZ.position.x, other.transform.position.y, other.transform.position.z);
-
-
+                //other.GetComponent<Transform>().position = new Vector3(XYZ.position.x, other.transform.position.y, other.transform.position.z);
                 tf = false;
             }
-
 
         }
     }
@@ -123,8 +119,6 @@ public class Ladder : MonoBehaviour
         {
             speed = 2f;
         }
-
-
     }
 
 

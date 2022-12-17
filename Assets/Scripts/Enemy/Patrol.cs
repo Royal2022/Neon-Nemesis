@@ -8,7 +8,7 @@ public class Patrol : MonoBehaviour
     public float distance = 3f;
 
 
-    private bool movingRight = true;
+    //private bool movingRight = true;
 
     RaycastHit2D hit;
 
@@ -17,14 +17,7 @@ public class Patrol : MonoBehaviour
     public bool hold;
     public bool ground;
 
-    //public Transform groundDetection;
 
-    /*
-    private bool isGrounded;
-    public LayerMask whatIsGround;
-    public float checkRaduis;
-    public Transform feetPos;
-    public float jumpForce;*/
 
 
     public GameObject enemy;

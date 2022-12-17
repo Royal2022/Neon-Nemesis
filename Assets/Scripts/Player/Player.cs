@@ -42,6 +42,10 @@ public class Player : MonoBehaviour
     public bool doubleJump = false;
 
 
+
+    public Vector3 mousePos;
+    public Vector3 mousePosClick;
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -90,8 +94,10 @@ public class Player : MonoBehaviour
             //Debug.Log("left");
         }
 
+    
 
-    }
+
+}
     public void Flip()
     {
         facingRight = !facingRight;
@@ -215,6 +221,21 @@ public class Player : MonoBehaviour
             //Player.anim.SetBool("touched_ground", false);
 
         }
+
+
+        /*=========== Разворот при клике  ===========*/
+        if (Input.GetMouseButtonDown(0) && !Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D) && !anim.GetBool("player_run"))
+        {
+            if (Camera.main.ScreenToWorldPoint(Input.mousePosition).x < transform.position.x && facingRight)
+            {
+                Flip();
+            }
+            else if (Camera.main.ScreenToWorldPoint(Input.mousePosition).x > transform.position.x && !facingRight)
+            {
+                Flip();
+            }
+        }
+        /*===========================================*/
     }
 
     
@@ -248,7 +269,7 @@ public class Player : MonoBehaviour
         }
         if (!Input.GetKey(KeyCode.LeftShift) && !Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D) && !Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.S))
         {
-            stamine.value += 0.3f;
+            stamine.value += 0.5f;
         }
         if (Input.GetKey(KeyCode.LeftShift) && (!Input.GetKey(KeyCode.A) || !Input.GetKey(KeyCode.D) || !Input.GetKey(KeyCode.W) || !Input.GetKey(KeyCode.S)))
         {

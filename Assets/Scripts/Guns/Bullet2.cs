@@ -46,7 +46,7 @@ public class Bullet2 : MonoBehaviour
     void Update()
     {
 
-        RaycastHit2D hitInfo = Physics2D.Raycast(transform.position, transform.up, distance, whatIsSolid);
+        RaycastHit2D hitInfo = Physics2D.Raycast(transform.position, transform.right, distance, whatIsSolid);
 
         if (hitInfo.collider != null)
         {
@@ -62,8 +62,6 @@ public class Bullet2 : MonoBehaviour
             }
             Destroy(gameObject);
         }
-
-
     }
     void DestroyBullet()
     {
