@@ -1,22 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEditor.PackageManager;
 using UnityEngine;
 
-public class Bullet2 : MonoBehaviour
+public class bulletEnemyLVL2 : MonoBehaviour
 {
     public float speed = 25f;
-    public int damage = 1;
+    public int damage = 2;
     public Rigidbody2D rb;
 
 
     public float distance;
     public LayerMask whatIsSolid;
 
-     SpriteRenderer sr;
+    SpriteRenderer sr;
     //[SerializeField] private Enemy enemy;
 
+    [HideInInspector] public Vector2 Direction;
 
     private void Start()
     {
@@ -24,11 +23,11 @@ public class Bullet2 : MonoBehaviour
 
         //enemy = FindObjectOfType<Enemy>();
 
-        if (Player.facingRight == true)
+        if (Direction.x > 0)
         {
             rb.velocity = transform.right * speed;
         }
-        else if (Player.facingRight == false)
+        else if (Direction.x < 0)
         {
             rb.velocity = (transform.right * -1) * speed;
         }
@@ -36,43 +35,26 @@ public class Bullet2 : MonoBehaviour
 
     }
 
-    /*
-    void OnTriggerEnter2D(Collider2D hitInfo)
-    {
-        Debug.Log(hitInfo.name);
-        Destroy(gameObject);
-    }
-    */
     void Update()
     {
-
         RaycastHit2D hitInfo = Physics2D.Raycast(transform.position, transform.right, distance, whatIsSolid);
 
-        
         if (hitInfo.collider != null)
         {
-            if (hitInfo.collider.CompareTag("Enemy"))
+            if (hitInfo.collider.gameObject.CompareTag("Player"))
             {
-                hitInfo.collider.GetComponent<Enemy>().TakeDamage(damage);
-                Destroy(gameObject);
-            }
-            if (hitInfo.collider.CompareTag("EnemyHead"))
-            {
-                hitInfo.collider.GetComponent<head>().enemy.gameObject.GetComponent<Enemy>().TakeDamage(damage*2);
+                hitInfo.collider.gameObject.GetComponent<Player>().TakeDamage(damage);
                 Destroy(gameObject);
             }
             Destroy(gameObject);
         }
+
     }
     void DestroyBullet()
     {
         Destroy(gameObject);
     }
-    private void FixedUpdate()
-    {
-        if (Player.facingRight == false)
-        {
-            sr.flipX = true;
-        }
-    }
+
+
+
 }

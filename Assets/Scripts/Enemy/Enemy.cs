@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Burst.CompilerServices;
 using Unity.VisualScripting;
+using UnityEditor.PackageManager;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour
@@ -13,7 +14,7 @@ public class Enemy : MonoBehaviour
     public float distanceBack = 1.5f;
     RaycastHit2D hit, hitBack, hitattack;
     public Rigidbody2D rb;
-    bool facingRight = true;
+    public bool facingRight = true;
     public bool playerNoticed = false;
 
 
@@ -29,7 +30,7 @@ public class Enemy : MonoBehaviour
     
 
 
-    private Transform target;
+    public Transform target;
 
 
     //[SerializeField] private head Head;
@@ -47,6 +48,12 @@ public class Enemy : MonoBehaviour
 
     public int damege = 1;
 
+    private Material matBlink;
+    private Material matDefault;
+    private SpriteRenderer spriteRend;
+
+    public float enemyDistance = 1.5f;
+
 
     private void Start()
     {
@@ -60,12 +67,15 @@ public class Enemy : MonoBehaviour
 
         //fPE = FindObjectOfType<feetPosEnemy>();
 
+        spriteRend = GetComponent<SpriteRenderer>();
+
+        matBlink = Resources.Load("EnemyBlink1", typeof(Material)) as Material;
+        matDefault = spriteRend.material;
     }
 
 
     private void Update()
     {
-
         if (Input.GetKeyDown(KeyCode.Z))
         {
             JumpEnemy();
@@ -189,7 +199,7 @@ public class Enemy : MonoBehaviour
 
 
             
-            if ((Vector2.Distance(transform.position, target.position) > 1.5f && !Patrol.gameObject.GetComponent<Patrol>().ground) && !triggerDeath)
+            if ((Vector2.Distance(transform.position, target.position) > 1.5f && !Patrol.gameObject.GetComponent<Patrol>().ground) && !triggerDeath && isGrounded)
             {
                 //transform.position = Vector3.MoveTowards(transform.position, target.position, speed * Time.deltaTime * 2);
 
@@ -200,7 +210,7 @@ public class Enemy : MonoBehaviour
                 Vector2.Distance(transform.position, target.transform.position);
                 anim.SetBool("attack_enemy", false);
             }
-            else if(Vector2.Distance(transform.position, target.position) <= 1.5f && !triggerDeath) {
+            else if(Vector2.Distance(transform.position, target.position) <= 3f && !triggerDeath && isGrounded) {
                 speed = 0;
                 trigger = false;
                 if (!anim.GetCurrentAnimatorStateInfo(0).IsName("attack_enemy"))
@@ -208,7 +218,7 @@ public class Enemy : MonoBehaviour
                     anim.SetBool("attack_enemy", true);
                 }
             }
-            
+
         }
         else if (!trigger)
         {
@@ -226,11 +236,19 @@ public class Enemy : MonoBehaviour
     }
 
 
+
     public void TakeDamage(int damage)
     {
         health -= damage;
         trigger = true;
-        
+
+
+        spriteRend.material = matBlink;
+        Invoke("ResetMaterial", 0.1f);
+    }
+    private void ResetMaterial()
+    {
+        spriteRend.material = matDefault;
     }
 
     public void Flip()
@@ -241,7 +259,6 @@ public class Enemy : MonoBehaviour
         Scaler.x *= -1;
         gameObject.transform.localScale = Scaler;
         //transform.Rotate(0f, 180f, 0f);
-
     }
 
     public void JumpEnemy()

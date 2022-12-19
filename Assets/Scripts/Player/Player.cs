@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Burst.CompilerServices;
 using Unity.VisualScripting;
+using UnityEditor;
 using UnityEditor.PackageManager;
 using UnityEngine;
 //using UnityEngine.UIElements;
@@ -55,7 +56,6 @@ public class Player : MonoBehaviour
         WS = FindObjectOfType<WeaponSwitch>();
 
     }
-
 
 
 
@@ -136,8 +136,24 @@ public class Player : MonoBehaviour
                 anim.SetBool("run_attack", false);
             }
             */
+            if (Input.GetMouseButtonDown(0))
+            {
+                if (anim.GetBool("player_run"))
+                {
+                    anim.SetBool("run_attack", true);
+                }
+                else
+                {
+                    anim.SetBool("attack", true);
+                }
+            }
+            else
+            {
+                anim.SetBool("attack", false);
+                anim.SetBool("run_attack", false);
+            }
 
-
+            /*
             if (Input.GetMouseButtonDown(0) && !anim.GetCurrentAnimatorStateInfo(0).IsName("attack") && !anim.GetCurrentAnimatorStateInfo(0).IsName("run_attack"))
             {
                 HandAttack();
@@ -155,7 +171,7 @@ public class Player : MonoBehaviour
             {
                 anim.SetBool("attack", false);
                 anim.SetBool("run_attack", false);
-            }
+            }*/
         }
 
 
@@ -303,6 +319,11 @@ public class Player : MonoBehaviour
         }
 
     }
+    public void TakeDamage(int damage)
+    {
+        health -= damage;
+    }
+
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.black;
