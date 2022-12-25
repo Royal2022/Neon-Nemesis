@@ -9,35 +9,31 @@ public class bulletEnemyLVL2 : MonoBehaviour
     public Rigidbody2D rb;
 
 
-    public float distance;
+    public float distanceRayCast = 0.1f;
     public LayerMask whatIsSolid;
 
     SpriteRenderer sr;
-    //[SerializeField] private Enemy enemy;
 
-    [HideInInspector] public Vector2 Direction;
+    public int Direction;
 
     private void Start()
     {
         sr = GetComponent<SpriteRenderer>();
 
-        //enemy = FindObjectOfType<Enemy>();
-
-        if (Direction.x > 0)
+        if (Direction > 0)
         {
             rb.velocity = transform.right * speed;
         }
-        else if (Direction.x < 0)
+        else if (Direction < 0)
         {
             rb.velocity = (transform.right * -1) * speed;
         }
         Invoke("DestroyBullet", 2f);
-
     }
 
     void Update()
     {
-        RaycastHit2D hitInfo = Physics2D.Raycast(transform.position, transform.right, distance, whatIsSolid);
+        RaycastHit2D hitInfo = Physics2D.Raycast(transform.position, transform.right, distanceRayCast, whatIsSolid);
 
         if (hitInfo.collider != null)
         {
@@ -46,7 +42,6 @@ public class bulletEnemyLVL2 : MonoBehaviour
                 hitInfo.collider.gameObject.GetComponent<Player>().TakeDamage(damage);
                 Destroy(gameObject);
             }
-            Destroy(gameObject);
         }
 
     }
@@ -54,7 +49,5 @@ public class bulletEnemyLVL2 : MonoBehaviour
     {
         Destroy(gameObject);
     }
-
-
 
 }

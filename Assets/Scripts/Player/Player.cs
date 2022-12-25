@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.Burst.CompilerServices;
 using Unity.VisualScripting;
 using UnityEditor;
-using UnityEditor.PackageManager;
+//using UnityEditor.PackageManager;
 using UnityEngine;
 //using UnityEngine.UIElements;
 using UnityEngine.UI;
@@ -70,7 +70,7 @@ public class Player : MonoBehaviour
         //sr.flipX = moveInput < 0 ? true : false;
 
             
-        moveInput = Input.GetAxis("Horizontal");
+        //moveInput = Input.GetAxis("Horizontal");
 
         if (moveInput == 0)
         {
@@ -110,7 +110,7 @@ public class Player : MonoBehaviour
 
 
     void Update()
-    {
+    {         
         healthDisplay.text = "" + health;
 
         if (GetComponent<Animator>().runtimeAnimatorController == WS.nogunanim)

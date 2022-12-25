@@ -149,7 +149,7 @@ MonoBehaviour:
   speed: 30
   damage: 1
   rb: {fileID: -2017589998821130032}
-  distance: 0.1
+  distanceRayCast: 0.1
   whatIsSolid:
     serializedVersion: 2
     m_Bits: 4416

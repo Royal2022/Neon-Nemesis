@@ -17,7 +17,8 @@ public class FallingCheck : MonoBehaviour
         {
             if (player.rb.velocity.y < -8)
             {
-                player.health -= (int)((float.Parse(player.rb.velocity.y.ToString()) * -1)/3);
+                //player.health -= (int)((float.Parse(player.rb.velocity.y.ToString()) * -1)/3);
+                player.TakeDamage((int)((float.Parse(player.rb.velocity.y.ToString()) * -1) / 3));
                 player.healthDisplay.text = "" + player.health;
             }
             

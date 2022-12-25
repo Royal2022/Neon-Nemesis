@@ -42,10 +42,11 @@ public class AutomaticGun : MonoBehaviour
 
     void Update()
     {
-        if (gameObject.transform.parent)
-        {
-            OutText();
-        }
+        //if (gameObject.transform.parent)
+        //{
+        //    OutText();
+        //}
+
         /*
         Vector3 difference = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
         float rotZ = Mathf.Atan2(difference.y, difference.x) * Mathf.Rad2Deg;
@@ -118,10 +119,10 @@ public class AutomaticGun : MonoBehaviour
 
     }
 
-    public void OutText()
-    {
-        ammoCount.text = currentAmmo + "/" + Player.automaticGun_ammo;
-    }
+    //public void OutText()
+    //{
+    //    ammoCount.text = currentAmmo + "/" + Player.automaticGun_ammo;
+    //}
 
     /*
     private void OnTriggerEnter2D(Collider2D collision)

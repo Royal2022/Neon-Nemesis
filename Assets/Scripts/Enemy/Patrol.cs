@@ -37,7 +37,7 @@ public class Patrol : MonoBehaviour
         {
             Physics2D.queriesStartInColliders = false;
 
-            hit = Physics2D.Raycast(transform.position, Vector3.down * transform.localScale.x, distance);
+            hit = Physics2D.Raycast(transform.position, Vector2.down, distance);
             if (hit.collider != null && hit.collider.tag == "Ground")
             {
                 hold = true;
@@ -57,7 +57,7 @@ public class Patrol : MonoBehaviour
                 enemy.gameObject.GetComponent<Enemy>().Flip();
             }
 
-            hit = Physics2D.Raycast(transform.position, Vector3.left * transform.localScale.x, distance);
+            hit = Physics2D.Raycast(transform.position, Vector3.right * enemy.gameObject.transform.localScale.x, distance);
             if (hit.collider != null && hit.collider.tag == "Ground")
             {
                 ground = true;
@@ -96,7 +96,7 @@ public class Patrol : MonoBehaviour
     {
         Gizmos.color = Color.green;
         Gizmos.DrawLine(transform.position, transform.position + Vector3.down * transform.localScale.x * distance);
-        Gizmos.DrawLine(transform.position, transform.position + Vector3.left * transform.localScale.x * distance);
+        Gizmos.DrawLine(transform.position, transform.position + Vector3.right * enemy.gameObject.transform.localScale.x * distance);
 
     }
 

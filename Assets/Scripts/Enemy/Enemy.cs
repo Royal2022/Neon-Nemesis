@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Burst.CompilerServices;
 using Unity.VisualScripting;
-using UnityEditor.PackageManager;
+//using UnityEditor.PackageManager;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour
@@ -52,7 +52,9 @@ public class Enemy : MonoBehaviour
     private Material matDefault;
     private SpriteRenderer spriteRend;
 
-    public float enemyDistance = 1.5f;
+    public float enemyDistanceAttack = 1.5f;
+
+    //public bool CanJump;
 
 
     private void Start()
@@ -199,7 +201,7 @@ public class Enemy : MonoBehaviour
 
 
             
-            if ((Vector2.Distance(transform.position, target.position) > 1.5f && !Patrol.gameObject.GetComponent<Patrol>().ground) && !triggerDeath && isGrounded)
+            if ((Vector2.Distance(transform.position, target.position) > enemyDistanceAttack && !Patrol.gameObject.GetComponent<Patrol>().ground) && !triggerDeath && isGrounded)
             {
                 //transform.position = Vector3.MoveTowards(transform.position, target.position, speed * Time.deltaTime * 2);
 
@@ -210,7 +212,7 @@ public class Enemy : MonoBehaviour
                 Vector2.Distance(transform.position, target.transform.position);
                 anim.SetBool("attack_enemy", false);
             }
-            else if(Vector2.Distance(transform.position, target.position) <= 3f && !triggerDeath && isGrounded) {
+            else if(Vector2.Distance(transform.position, target.position) <= enemyDistanceAttack && !triggerDeath && isGrounded) {
                 speed = 0;
                 trigger = false;
                 if (!anim.GetCurrentAnimatorStateInfo(0).IsName("attack_enemy"))
@@ -223,7 +225,11 @@ public class Enemy : MonoBehaviour
         else if (!trigger)
         {
             speed = 3;
+            anim.SetBool("attack_enemy", false);
+
         }
+
+
 
     }
 
@@ -264,6 +270,16 @@ public class Enemy : MonoBehaviour
     public void JumpEnemy()
     {
         rb.velocity = Vector2.up * jumpForce;
+
+        /*
+        if (CanJump)
+        {
+            rb.velocity = Vector2.up * jumpForce;
+        }
+        else if (!CanJump)
+        {
+            Flip();
+        }*/
     }
 
 

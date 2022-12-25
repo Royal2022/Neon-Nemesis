@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
-using UnityEditor.PackageManager;
+//using UnityEditor.PackageManager;
 using UnityEngine;
 
 public class Bullet2 : MonoBehaviour
@@ -11,7 +11,7 @@ public class Bullet2 : MonoBehaviour
     public Rigidbody2D rb;
 
 
-    public float distance;
+    public float distanceRayCast = 0.1f;
     public LayerMask whatIsSolid;
 
      SpriteRenderer sr;
@@ -46,7 +46,7 @@ public class Bullet2 : MonoBehaviour
     void Update()
     {
 
-        RaycastHit2D hitInfo = Physics2D.Raycast(transform.position, transform.right, distance, whatIsSolid);
+        RaycastHit2D hitInfo = Physics2D.Raycast(transform.position, transform.right, distanceRayCast, whatIsSolid);
 
         
         if (hitInfo.collider != null)
