@@ -26,4 +26,15 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         base.OnLeftRoom();
     }
+
+
+    //public void LeaveRoom()
+    //{
+    //    PhotonNetwork.LeaveRoom(true);
+    //}
+    //public override void OnLeftRoom()
+    //{
+    //    SceneManager.LoadScene(0);
+    //    base.OnLeftRoom();
+    //}
 }

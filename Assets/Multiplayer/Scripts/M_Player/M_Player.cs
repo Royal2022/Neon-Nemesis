@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.Networking.Types;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using Photon.Pun;
