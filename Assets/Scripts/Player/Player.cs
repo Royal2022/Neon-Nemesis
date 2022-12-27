@@ -23,8 +23,6 @@ public class Player : MonoBehaviour
     public float checkRaduis;
     public LayerMask whatIsGround;
 
-    SpriteRenderer sr;
-
     public Animator anim;
     private float moveInput;
 
@@ -50,7 +48,6 @@ public class Player : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        sr = GetComponent<SpriteRenderer>();
         anim = GetComponent<Animator>();
         healthDisplay.text = "" + health;
         WS = FindObjectOfType<WeaponSwitch>();
@@ -66,8 +63,6 @@ public class Player : MonoBehaviour
 
         StaminFunc();
 
-
-        //sr.flipX = moveInput < 0 ? true : false;
 
             
         //moveInput = Input.GetAxis("Horizontal");
@@ -110,8 +105,14 @@ public class Player : MonoBehaviour
 
 
     void Update()
-    {         
-        healthDisplay.text = "" + health;
+    {
+        if (health <= 0)
+            anim.Play("death");
+
+        if (health >= 0)
+            healthDisplay.text = "" + health;
+        else if (health <= 0)
+            healthDisplay.text = "" + 0;
 
         if (GetComponent<Animator>().runtimeAnimatorController == WS.nogunanim)
         {
@@ -138,11 +139,11 @@ public class Player : MonoBehaviour
             */
             if (Input.GetMouseButtonDown(0))
             {
-                if (anim.GetBool("player_run"))
+                if (anim.GetBool("player_run") && !anim.GetCurrentAnimatorStateInfo(0).IsName("run_attack"))
                 {
                     anim.SetBool("run_attack", true);
                 }
-                else
+                else if (!anim.GetCurrentAnimatorStateInfo(0).IsName("attack"))
                 {
                     anim.SetBool("attack", true);
                 }
@@ -255,22 +256,22 @@ public class Player : MonoBehaviour
     }
 
     
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.CompareTag("pistol2"))
-        {
-            Destroy(collision.gameObject);
-            automaticGun_ammo += 35;
-            //Debug.Log("gun");   
-        }
-        else if (collision.CompareTag("pistol1"))
-        {
-            Destroy(collision.gameObject);
-            pistol_ammo += 15;
-            //Debug.Log("pistol");
-        }
+    //private void OnTriggerEnter2D(Collider2D collision)
+    //{
+    //    if (collision.CompareTag("pistol2"))
+    //    {
+    //        Destroy(collision.gameObject);
+    //        automaticGun_ammo += 35;
+    //        //Debug.Log("gun");   
+    //    }
+    //    else if (collision.CompareTag("pistol1"))
+    //    {
+    //        Destroy(collision.gameObject);
+    //        pistol_ammo += 15;
+    //        //Debug.Log("pistol");
+    //    }
 
-    }
+    //}
     
 
     public void StaminFunc()
@@ -321,7 +322,16 @@ public class Player : MonoBehaviour
     }
     public void TakeDamage(int damage)
     {
-        health -= damage;
+        if (health != 0)
+        {
+            health -= damage;
+        }
+    }
+
+    public void Death()
+    {
+        Destroy(gameObject);
+        Time.timeScale = 0;
     }
 
     private void OnDrawGizmos()

@@ -78,11 +78,6 @@ public class Enemy : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Z))
-        {
-            JumpEnemy();
-        }
-
         isGrounded = Physics2D.OverlapCircle(feetPos.position, checkRaduis, whatIsGround);
 
 
@@ -175,10 +170,14 @@ public class Enemy : MonoBehaviour
         }
 
 
-        if (Mathf.Round(target.transform.position.x)  == Mathf.Round(transform.position.x) && trigger)
+        if (target != null)
         {
-            trigger = false;
+            if (Mathf.Round(target.transform.position.x) == Mathf.Round(transform.position.x) && trigger)
+            {
+                trigger = false;
+            }
         }
+
 
     }
     private void FixedUpdate()

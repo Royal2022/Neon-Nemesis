@@ -75,7 +75,7 @@ public class CreateRoomManager : MonoBehaviourPunCallbacks
     public override void OnCreateRoomFailed(short returnCode, string message)
     {
         //base.OnCreateRoomFailed(returnCode, message);
-        Log("Ошибка! Возможно комната с таким имени уже существует.");
+        Log("Ошибка! Возможно комната с таким именем уже существует.");
     }
     public override void OnJoinRoomFailed(short returnCode, string message)
     {

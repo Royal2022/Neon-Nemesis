@@ -4,18 +4,6 @@ using UnityEngine;
 
 public class Ammo : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     /*
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -31,4 +19,37 @@ public class Ammo : MonoBehaviour
             Debug.Log("C");
         }
     }*/
+
+    //private void OnTriggerEnter2D(Collider2D collision)
+    //{
+    //    if (gameObject.tag == "pistol1")
+    //        if (collision.CompareTag("Player"))
+    //        {
+    //            Destroy(gameObject);
+    //            Player.pistol_ammo += 15;
+    //        }
+    //    if (gameObject.tag == "pistol2")
+    //        if (collision.CompareTag("Player"))
+    //        {
+    //            Destroy(gameObject);
+    //            Player.automaticGun_ammo += 35;
+    //        }
+
+    //}
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (gameObject.tag == "pistol1")
+            if (collision.gameObject.CompareTag("Player"))
+            {
+                Destroy(gameObject);
+                Player.pistol_ammo += 15;
+            }
+        if (gameObject.tag == "pistol2")
+            if (collision.gameObject.CompareTag("Player"))
+            {
+                Destroy(gameObject);
+                Player.automaticGun_ammo += 35;
+            }
+    }
 }

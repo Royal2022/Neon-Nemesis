@@ -32,7 +32,7 @@ public class Bullet2 : MonoBehaviour
         {
             rb.velocity = (transform.right * -1) * speed;
         }
-        Invoke("DestroyBullet", 2f);
+        Invoke("DestroyBullet", 1f);
 
     }
 

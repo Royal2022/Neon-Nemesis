@@ -7,10 +7,7 @@ using UnityEngine.UI;
 public class WeaponSwitch : MonoBehaviour
 {
     [SerializeField] private hands Hands;
-    [SerializeField] private XYZ xyz;
     [SerializeField] private Player player;
-
-    public GameObject game_object;
 
     public int weaponSwitch = 0;
 
@@ -33,6 +30,14 @@ public class WeaponSwitch : MonoBehaviour
 
     public void Update()
     {
+        if (weaponSwitch == 1)
+        {
+            gameObject.transform.parent.gameObject.transform.Find("arm").gameObject.SetActive(true);
+        }
+        if (weaponSwitch != 1)
+        {
+            gameObject.transform.parent.gameObject.transform.Find("arm").gameObject.SetActive(false);
+        }
         int currentWeapon = weaponSwitch;
 
         
@@ -83,16 +88,6 @@ public class WeaponSwitch : MonoBehaviour
         }
 
 
-        if (weaponSwitch == 2 || weaponSwitch == 0)
-        {
-            xyz = FindObjectOfType<XYZ>();
-            xyz.arm.SetActive(false);
-        }
-        else if (weaponSwitch != 2 || weaponSwitch != 0)
-        {
-            xyz = FindObjectOfType<XYZ>();
-            xyz.arm.SetActive(true);
-        }
 
         //FindObjectOfType<Player>().GetComponent<Animator>().runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>("Player");
 
@@ -108,6 +103,7 @@ public class WeaponSwitch : MonoBehaviour
             FindObjectOfType<Player>().GetComponent<Animator>().runtimeAnimatorController = gunanim;
             FindObjectOfType<Player>().GetComponent<Animator>().applyRootMotion = true;
         }
+
 
         //Debug.Log(weaponSwitch);
     }
