@@ -87,6 +87,12 @@ public class M_Player : MonoBehaviourPun
     private void Update()
     {
 
+        if (Health <= 0)
+        {
+            //Death();
+            gameObject.GetPhotonView().RPC("Death", RpcTarget.All);
+        }
+
         if (!photonView.IsMine) return;
         if (Input.GetKeyDown(KeyCode.Z))
         {
@@ -238,6 +244,13 @@ public class M_Player : MonoBehaviourPun
         OutText.HealthInfo(Health);
     }
 
+    [PunRPC]
+    public void Death()
+    {
+        if (!photonView.IsMine) return;
+        PhotonNetwork.Destroy(gameObject);
+    }
+
     //public float distance = 0.7f;
     //public LayerMask whatIsSolid;
     //public int hand_damage = 1;
@@ -246,9 +259,9 @@ public class M_Player : MonoBehaviourPun
     //public void HandAttack()
     //{      
     //    Physics2D.queriesStartInColliders = false;
-            
+
     //    RaycastHit2D hitInfo = Physics2D.Raycast(transform.position, Vector2.right * transform.localScale.x, distance, whatIsSolid);    
-            
+
     //    if (hitInfo.collider != null && hitInfo.collider.tag == "Player")    
     //    {           
     //        //if (hitInfo.collider.CompareTag("Player"))        
@@ -257,7 +270,7 @@ public class M_Player : MonoBehaviourPun
     //    }
     //    Physics2D.queriesStartInColliders = true;
 
-    
+
     //}
 
     //private void OnDrawGizmos()

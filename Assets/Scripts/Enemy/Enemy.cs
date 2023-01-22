@@ -21,7 +21,7 @@ public class Enemy : MonoBehaviour
     public bool hold = false;
 
 
-    public bool isGrounded;
+    public bool isGround;
     public LayerMask whatIsGround;
     public float checkRaduis;
     public Transform feetPos;
@@ -33,14 +33,12 @@ public class Enemy : MonoBehaviour
     public Transform target;
 
 
-    //[SerializeField] private head Head;
     public GameObject Head;
     public GameObject fPE;
     public GameObject Patrol;
 
     public Animator anim;
 
-    //[SerializeField] private feetPosEnemy fPE;
 
     public bool trigger = false;
 
@@ -52,9 +50,10 @@ public class Enemy : MonoBehaviour
     private Material matDefault;
     private SpriteRenderer spriteRend;
 
-    public float enemyDistanceAttack = 1.5f;
 
-    //public bool CanJump;
+    private float timeBtwShots;
+    public float startTimeBtwShots = 4;
+    public bool IwasHit = false;
 
 
     private void Start()
@@ -65,10 +64,6 @@ public class Enemy : MonoBehaviour
 
         anim = GetComponent<Animator>();
 
-        //Head = FindObjectOfType<head>();
-
-        //fPE = FindObjectOfType<feetPosEnemy>();
-
         spriteRend = GetComponent<SpriteRenderer>();
 
         matBlink = Resources.Load("EnemyBlink1", typeof(Material)) as Material;
@@ -78,7 +73,7 @@ public class Enemy : MonoBehaviour
 
     private void Update()
     {
-        isGrounded = Physics2D.OverlapCircle(feetPos.position, checkRaduis, whatIsGround);
+        isGround = Physics2D.OverlapCircle(feetPos.position, checkRaduis, whatIsGround);
 
 
         if (!hold)
@@ -105,21 +100,6 @@ public class Enemy : MonoBehaviour
                 hold = true;
             }
 
-            /*
-            hitattack = Physics2D.Raycast(transform.position, Vector3.right * transform.localScale.x, 2f, SeePlayer);
-            if (hitattack.collider != null && hitattack.collider.gameObject.tag == "Player")
-            {
-                if (!anim.GetCurrentAnimatorStateInfo(0).IsName("attack"))
-                {
-                    anim.SetBool("attack_enemy", true);
-                    Debug.Log("Udar!");
-                }
-            }
-            else if (hitattack.collider == null)
-            {
-                anim.SetBool("attack_enemy", false);
-            }*/
-
 
         }
         else
@@ -131,15 +111,10 @@ public class Enemy : MonoBehaviour
 
 
 
-        if (health <= 0 && isGrounded)
+        if (health <= 0 && isGround)
         {
             anim.Play("death");
             triggerDeath = true;
-
-            /*if (!anim.GetCurrentAnimatorStateInfo(0).IsName("death"))
-            {
-                Destroy(gameObject);
-            }*/
         }
 
 
@@ -154,7 +129,7 @@ public class Enemy : MonoBehaviour
 
 
 
-        if (speed > 0)
+        if (speed > 0 && !anim.GetBool("attack_enemy"))
         {
             anim.SetBool("run_enemy", true);
         }
@@ -163,7 +138,7 @@ public class Enemy : MonoBehaviour
             anim.SetBool("run_enemy", false);
         }
 
-        
+
         if (!playerNoticed && !Head.gameObject.GetComponent<head>().playerNoticedHead && !fPE.gameObject.GetComponent<feetPosEnemy>().playerNoticedLegs)
         {
             //trigger = false;
@@ -179,68 +154,38 @@ public class Enemy : MonoBehaviour
         }
 
 
-    }
-    private void FixedUpdate()
-    {
-        
-        if (playerNoticed || trigger)
+
+
+        if (trigger)
         {
-            if (target.position.x > transform.position.x && facingRight && trigger)
+            speed = 4;
+            if (target.position.x > transform.position.x && facingRight && !IwasHit)
             {
                 Flip();
-                facingRight = false;
-                //trigger = false;
-            }
-            else if (target.position.x < transform.position.x && !facingRight && trigger)
-            {
-                Flip();
-                facingRight = true;
-                //trigger = false;
-            }
-
-
-            
-            if ((Vector2.Distance(transform.position, target.position) > enemyDistanceAttack && !Patrol.gameObject.GetComponent<Patrol>().ground) && !triggerDeath && isGrounded)
-            {
-                //transform.position = Vector3.MoveTowards(transform.position, target.position, speed * Time.deltaTime * 2);
-
-                //Vector3 newPos = transform.position;
-                //newPos.x = Mathf.MoveTowards(newPos.x, target.position.x, speed * Time.fixedDeltaTime);
-                //transform.position = newPos;
-                speed = 4;
-                Vector2.Distance(transform.position, target.transform.position);
-                anim.SetBool("attack_enemy", false);
-            }
-            else if(Vector2.Distance(transform.position, target.position) <= enemyDistanceAttack && !triggerDeath && isGrounded) {
-                speed = 0;
                 trigger = false;
-                if (!anim.GetCurrentAnimatorStateInfo(0).IsName("attack_enemy"))
-                {
-                    anim.SetBool("attack_enemy", true);
-                }
+                facingRight = false;
             }
-
+            else if (target.position.x < transform.position.x && !facingRight && !IwasHit)
+            {
+                Flip();
+                trigger = false;
+                facingRight = true;
+            }
+            timeBtwShots = startTimeBtwShots;
+            IwasHit = true;
         }
         else if (!trigger)
         {
-            speed = 3;
-            anim.SetBool("attack_enemy", false);
-
+            timeBtwShots -= Time.deltaTime;
         }
 
-
+        if (timeBtwShots <= 0)
+        {
+            speed = 3;
+            IwasHit = false;
+        }
 
     }
-
-
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.green;
-        Gizmos.DrawLine(transform.position, transform.position + Vector3.right * transform.localScale.x * distance);
-        Gizmos.DrawLine(transform.position, transform.position + Vector3.left * transform.localScale.x * distanceBack);
-    }
-
-
 
     public void TakeDamage(int damage)
     {
@@ -263,22 +208,11 @@ public class Enemy : MonoBehaviour
         Vector3 Scaler = gameObject.transform.localScale;
         Scaler.x *= -1;
         gameObject.transform.localScale = Scaler;
-        //transform.Rotate(0f, 180f, 0f);
     }
 
     public void JumpEnemy()
     {
         rb.velocity = Vector2.up * jumpForce;
-
-        /*
-        if (CanJump)
-        {
-            rb.velocity = Vector2.up * jumpForce;
-        }
-        else if (!CanJump)
-        {
-            Flip();
-        }*/
     }
 
 
@@ -290,5 +224,13 @@ public class Enemy : MonoBehaviour
     public void OnEnemyAttack()
     {
         FindObjectOfType<Player>().health -= damege;
+    }
+
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.green;
+        Gizmos.DrawLine(transform.position, transform.position + Vector3.right * transform.localScale.x * distance);
+        Gizmos.DrawLine(transform.position, transform.position + Vector3.left * transform.localScale.x * distanceBack);
     }
 }

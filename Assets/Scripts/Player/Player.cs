@@ -1,3 +1,4 @@
+using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Burst.CompilerServices;
@@ -18,7 +19,7 @@ public class Player : MonoBehaviour
     public float Speed;
     public float jumpForce;
 
-    private bool isGround; 
+    public bool isGround; 
     public Transform feetPos; 
     public float checkRaduis;
     public LayerMask whatIsGround;
@@ -29,9 +30,14 @@ public class Player : MonoBehaviour
     public static bool facingRight = true;
 
     public int health = 10;
-    public Text healthDisplay;
+
+    public int armor;
+    public static int money;
+    public Text MoneyText;
 
     public Slider stamine;
+    public Slider healthSlider;
+    public Slider armorSlider;
 
     [SerializeField] private WeaponSwitch WS;
 
@@ -45,13 +51,14 @@ public class Player : MonoBehaviour
     public Vector3 mousePos;
     public Vector3 mousePosClick;
 
+
+    
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
-        healthDisplay.text = "" + health;
         WS = FindObjectOfType<WeaponSwitch>();
-
     }
 
 
@@ -109,10 +116,21 @@ public class Player : MonoBehaviour
         if (health <= 0)
             anim.Play("death");
 
+        //if (health >= 0)
+        //    healthDisplay.text = "" + health;
+        //else if (health <= 0)
+        //    healthDisplay.text = "" + 0;
         if (health >= 0)
-            healthDisplay.text = "" + health;
+            healthSlider.value = health;
         else if (health <= 0)
-            healthDisplay.text = "" + 0;
+            healthSlider.value = 0;
+
+        if (armor >= 0)
+            armorSlider.value = armor;
+        else if (armor <= 0)
+            armorSlider.value = 0;
+
+        MoneyText.text = "" + money;
 
         if (GetComponent<Animator>().runtimeAnimatorController == WS.nogunanim)
         {
@@ -322,10 +340,16 @@ public class Player : MonoBehaviour
     }
     public void TakeDamage(int damage)
     {
-        if (health != 0)
+        if (armor <= 0)
         {
-            health -= damage;
+            if (health != 0)
+            {
+                health -= damage;
+            }
         }
+        else
+            armor -= damage;
+
     }
 
     public void Death()

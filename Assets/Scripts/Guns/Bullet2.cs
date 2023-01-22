@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class Bullet2 : MonoBehaviour
 {
+    public float flightRange = 1f;
     public float speed = 25f;
     public int damage = 1;
     public Rigidbody2D rb;
@@ -15,14 +16,11 @@ public class Bullet2 : MonoBehaviour
     public LayerMask whatIsSolid;
 
      SpriteRenderer sr;
-    //[SerializeField] private Enemy enemy;
 
 
     private void Start()
     {
         sr = GetComponent<SpriteRenderer>();
-
-        //enemy = FindObjectOfType<Enemy>();
 
         if (Player.facingRight == true)
         {
@@ -32,17 +30,11 @@ public class Bullet2 : MonoBehaviour
         {
             rb.velocity = (transform.right * -1) * speed;
         }
-        Invoke("DestroyBullet", 1f);
+        Invoke("DestroyBullet", flightRange);
 
     }
 
-    /*
-    void OnTriggerEnter2D(Collider2D hitInfo)
-    {
-        Debug.Log(hitInfo.name);
-        Destroy(gameObject);
-    }
-    */
+
     void Update()
     {
 

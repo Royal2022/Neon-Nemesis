@@ -4,21 +4,21 @@ using UnityEngine;
 
 public class FirstAid : MonoBehaviour
 {
-    //private void OnTriggerEnter2D(Collider2D collision)
-    //{
-    //    if (collision.CompareTag("Player"))
-    //    {
-    //        Destroy(gameObject);
-    //        collision.gameObject.GetComponent<Player>().health += 5;
-    //    }
-    //}
+
+    public GameObject EffectFirstAid;
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            Destroy(gameObject);
+            //Instantiate(EffectFirstAid, collision.gameObject.transform.position, Quaternion.identity);
+            Instantiate(EffectFirstAid, collision.gameObject.transform.position, Quaternion.identity).gameObject.transform.SetParent(collision.gameObject.transform);
             collision.gameObject.GetComponent<Player>().health += 5;
+            if (collision.gameObject.GetComponent<Player>().health > collision.gameObject.GetComponent<Player>().healthSlider.maxValue)
+            {
+                collision.gameObject.GetComponent<Player>().health = (int)collision.gameObject.GetComponent<Player>().healthSlider.maxValue; 
+            }
+            Destroy(gameObject);
         }
     }
-
 }

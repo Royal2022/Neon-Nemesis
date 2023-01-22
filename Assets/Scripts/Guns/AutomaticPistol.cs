@@ -50,10 +50,15 @@ public class AutomaticPistol : MonoBehaviour
         {
             if (Input.GetMouseButton(0) && gameObject.transform.parent != null)
             {
+                gameObject.transform.GetChild(1).gameObject.GetComponent<ParticleSystem>().startSpeed = 0.5f;
                 Instantiate(bullet, shotPoint.position, transform.rotation);
                 timeBtwShots = startTimeBtwShots;
                 currentAmmo -= 1;
                 OutText();
+            }
+            else
+            {
+                gameObject.transform.GetChild(1).gameObject.GetComponent<ParticleSystem>().startSpeed = 0;
             }
         }
         else
@@ -61,7 +66,10 @@ public class AutomaticPistol : MonoBehaviour
             timeBtwShots -= Time.deltaTime;
         }
 
-
+        if (currentAmmo == 0)
+        {
+            gameObject.transform.GetChild(1).gameObject.GetComponent<ParticleSystem>().startSpeed = 0;
+        }
 
         // ======================== Ammo ================================
 

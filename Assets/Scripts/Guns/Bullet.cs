@@ -6,70 +6,7 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    /*
-    public float speed;
-    public float lifetime;
-    public float distance;
-    public int damage;
-    public LayerMask whatIsSolid;
-
-    public static Vector2 movement;
-
-    */
-
-    /* !!!!
-    public float startTime;
-    public float endTime;*/
-
-    /*
-    void Start()
-    {
-        Invoke("life", lifetime);
-
-    }
-
-    void Update()
-    {
-        RaycastHit2D hitInfo = Physics2D.Raycast(transform.position, transform.up, distance, whatIsSolid);
-
-        if (hitInfo.collider != null)
-        {
-            if (hitInfo.collider.CompareTag("Enemy"))
-            {
-                hitInfo.collider.GetComponent<Enemy>().TakeDamage(damage);
-            }
-            Destroy(gameObject);
-        }
-
-        if (Player.facingRight == true)
-        {
-            transform.Translate(Vector2.right * speed * Time.deltaTime);
-        }
-        else if (Player.facingRight == false)
-        {
-            transform.Translate(Vector2.left * speed * Time.deltaTime);
-        }
-
-    }
-
-
-    void life()
-    {
-        Destroy(gameObject);
-    }
-    */
-    /* !!!!
-    void FixedUpdate()
-    {
-        startTime += 0.1f;
-
-        if (startTime >= endTime)
-        {
-            Destroy(gameObject);
-        }
-    }*/
-
-
+    public float flightRange = 1f;
     public float speed = 25f;
     public int damage = 1;
     public Rigidbody2D rb;
@@ -79,14 +16,11 @@ public class Bullet : MonoBehaviour
     public LayerMask whatIsSolid;
 
     SpriteRenderer sr;
-    //[SerializeField] private Enemy enemy;
 
 
     private void Start()
     {
         sr = GetComponent<SpriteRenderer>();
-
-        //enemy = FindObjectOfType<Enemy>();
 
         if (Player.facingRight == true)
         {
@@ -96,7 +30,7 @@ public class Bullet : MonoBehaviour
         {
             rb.velocity = (transform.right * -1) * speed;
         }
-        Invoke("DestroyBullet", 1f);
+        Invoke("DestroyBullet", flightRange);
 
     }
 

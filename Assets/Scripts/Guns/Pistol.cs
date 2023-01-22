@@ -10,7 +10,6 @@ public class Pistol : MonoBehaviour
     public GameObject bullet;
     public Transform shotPoint;
 
-
     private float timeBtwShots;
     public float startTimeBtwShots;
 
@@ -40,30 +39,6 @@ public class Pistol : MonoBehaviour
 
     void Update()
     {
-        /*
-        Vector3 difference = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
-        float rotZ = Mathf.Atan2(difference.y, difference.x) * Mathf.Rad2Deg;
-
-        transform.Rotate(0f, 0f, 0f);
-
-        if (Player.facingRight == true)
-        {
-            offset = 0f;
-            if (rotZ < 90 && rotZ > -90)
-            {
-                transform.rotation = Quaternion.Euler(0f, 0f, rotZ + offset);
-            }
-        }
-        else if (Player.facingRight == false)
-        {
-            offset = 180f;            
-            if (rotZ < -90 || rotZ > 90)
-            {
-                transform.rotation = Quaternion.Euler(0f, 0f, rotZ + offset);
-            }
-        }
-        */
-
         
         if (gameObject.transform.parent)
         {
@@ -77,6 +52,7 @@ public class Pistol : MonoBehaviour
         {
             if (Input.GetMouseButtonDown(0) && gameObject.transform.parent != null)
             {
+                gameObject.transform.GetChild(1).gameObject.GetComponent<ParticleSystem>().Play();
                 Instantiate(bullet, shotPoint.position, transform.rotation);
                 timeBtwShots = startTimeBtwShots;
                 currentAmmo -= 1;
@@ -90,10 +66,21 @@ public class Pistol : MonoBehaviour
 
 
 
+        if (Player.facingRight == true)
+        {
+            gameObject.transform.GetChild(1).gameObject.transform.localScale = new Vector3(1, 1, 1);
+            gameObject.transform.GetChild(1).gameObject.GetComponent<ParticleSystemRenderer>().lengthScale = -2;
+        }
+        else if (Player.facingRight == false)
+        {
+            gameObject.transform.GetChild(1).gameObject.transform.localScale = new Vector3(-1, 1, 1);
+            gameObject.transform.GetChild(1).gameObject.GetComponent<ParticleSystemRenderer>().lengthScale = 2;
+        }
 
 
 
-    // ======================== Ammo ================================
+
+        // ======================== Ammo ================================
 
         if (Input.GetKeyDown(KeyCode.R) && Player.pistol_ammo > 0)
         {
@@ -124,21 +111,7 @@ public class Pistol : MonoBehaviour
         ammoCount.text = currentAmmo + "/" + Player.pistol_ammo;
     }
 
-    /*
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.CompareTag("pistol1"))
-        {
-            Player.pistol_ammo += 15;
-            Destroy(collision.gameObject);
-        }
-        else if (collision.CompareTag("pistol2"))
-        {
-            AutomaticGun.Player.pistol_ammo += 15;
-            Destroy(collision.gameObject);
-        }
-
-    }*/
+    
     // ==============================================================
 
 

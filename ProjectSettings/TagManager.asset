@@ -13,6 +13,9 @@ TagManager:
   - Weapon
   - EnemyHead
   - Ground
+  - FirstAid
+  - armor
+  - Money
   layers:
   - Default
   - TransparentFX
@@ -29,9 +32,9 @@ TagManager:
   - Enemy
   - Ammo
   - Gun
-  - 
-  - 
-  - 
+  - armor
+  - FirstAid
+  - Money
   - 
   - 
   - 

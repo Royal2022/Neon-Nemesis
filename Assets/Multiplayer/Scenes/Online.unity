@@ -7290,7 +7290,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   XYZ: {fileID: 1566923087}
-  player: {fileID: 0}
   isTrigger: 0
   touchedLadder: 0
 --- !u!61 &783266092
@@ -15621,9 +15620,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 995123b6cdf1bfb459f1ea722f562df6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ws: {fileID: 0}
-  player: {fileID: 0}
-  arm: {fileID: 0}
 --- !u!61 &1566923089
 BoxCollider2D:
   m_ObjectHideFlags: 0

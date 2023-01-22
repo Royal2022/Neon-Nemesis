@@ -89,16 +89,18 @@ public class PlayerListingsMenu : MonoBehaviourPunCallbacks
     }
 
 
+    public GameObject gm;
 
 
     public void OnClick_StartGame()
     {
-        if (PhotonNetwork.IsMasterClient)
-        {
-            PhotonNetwork.CurrentRoom.IsOpen= false;
-            PhotonNetwork.CurrentRoom.IsVisible = false;
-            PhotonNetwork.LoadLevel(2);
-        }
+        //if (gm.transform.childCount >= 2)
+            if (PhotonNetwork.IsMasterClient)
+            {
+                PhotonNetwork.CurrentRoom.IsOpen= false;
+                PhotonNetwork.CurrentRoom.IsVisible = false;
+                PhotonNetwork.LoadLevel(4);
+            }
     }
 }
 

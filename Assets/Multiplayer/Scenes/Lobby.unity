@@ -170,6 +170,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _content: {fileID: 1440999522}
   _playerListing: {fileID: 4672312835609992110, guid: 0c5432e9506399b4bb1326817dabe59d, type: 3}
+  gm: {fileID: 1440999521}
 --- !u!1 &395225074
 GameObject:
   m_ObjectHideFlags: 0
@@ -253,7 +254,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1284676837}
   m_HandleRect: {fileID: 1284676836}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:

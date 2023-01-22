@@ -13,7 +13,6 @@ public class AutomaticGun : MonoBehaviour
     public Transform shotPoint;
 
 
-
     private float timeBtwShots;
     public float startTimeBtwShots;
 
@@ -47,42 +46,20 @@ public class AutomaticGun : MonoBehaviour
             OutText();
         }
 
-        /*
-        Vector3 difference = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
-        float rotZ = Mathf.Atan2(difference.y, difference.x) * Mathf.Rad2Deg;
-
-        transform.Rotate(0f, 0f, 0f);
-
-        if (Player.facingRight == true)
-        {
-            offset = 0f;
-            if (rotZ < 90 && rotZ > -90)
-            {
-                transform.rotation = Quaternion.Euler(0f, 0f, rotZ + offset);
-            }
-        }
-        else if (Player.facingRight == false)
-        {
-            offset = 180f;            
-            if (rotZ < -90 || rotZ > 90)
-            {
-                transform.rotation = Quaternion.Euler(0f, 0f, rotZ + offset);
-            }
-        }
-        */
-        /*
-        if (ws.weaponSwitch == 2)
-        {
-            ammoCount.text = currentAmmo + "/" + Player.automaticGun_ammo;
-        }*/
 
         if (timeBtwShots <= 0 && currentAmmo > 0)
         {
+
             if (Input.GetMouseButton(0) && gameObject.transform.parent != null)
-            {    
+            {
+                gameObject.transform.GetChild(1).gameObject.GetComponent<ParticleSystem>().startSpeed = 1;
                 Instantiate(bullet, shotPoint.position, transform.rotation);
                 timeBtwShots = startTimeBtwShots;
                 currentAmmo -= 1;
+            }
+            else
+            {
+                gameObject.transform.GetChild(1).gameObject.GetComponent<ParticleSystem>().startSpeed = 0;
             }
         }
         else
@@ -90,7 +67,23 @@ public class AutomaticGun : MonoBehaviour
             timeBtwShots -= Time.deltaTime;
         }
 
+        if (currentAmmo == 0)
+        {
+            gameObject.transform.GetChild(1).gameObject.GetComponent<ParticleSystem>().startSpeed = 0;
+        }
 
+
+
+        if (Player.facingRight == true)
+        {
+            gameObject.transform.GetChild(1).gameObject.transform.localScale = new Vector3(1, 1, 1);
+            gameObject.transform.GetChild(1).gameObject.GetComponent<ParticleSystemRenderer>().lengthScale = -2;
+        }
+        else if (Player.facingRight == false)
+        {
+            gameObject.transform.GetChild(1).gameObject.transform.localScale = new Vector3(-1, 1, 1);
+            gameObject.transform.GetChild(1).gameObject.GetComponent<ParticleSystemRenderer>().lengthScale = 2;
+        }
 
         // ======================== Ammo ================================
 
@@ -124,21 +117,6 @@ public class AutomaticGun : MonoBehaviour
         ammoCount.text = currentAmmo + "/" + Player.automaticGun_ammo;
     }
 
-    /*
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.CompareTag("pistol2"))
-        {
-            Player.automaticGun_ammo += 15;
-            Destroy(collision.gameObject);
-        }
-        else if (collision.CompareTag("pistol1"))
-        {
-            Pistol.Player.automaticGun_ammo += 15;
-            Destroy(collision.gameObject);
-        }
-
-    }*/
     // ==============================================================
 
 
