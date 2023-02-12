@@ -26,12 +26,9 @@ public class M_AutomaticGun : MonoBehaviourPun
 
 
     public int currentAmmo = 35;
-    //public static int AllAmmo = 35;
 
-    //public static int Player.automaticGun_ammo = 0;
     public int full = 35;
 
-    //public Text ammoCount;
     [SerializeField] private WeaponSwitch ws;
 
 
@@ -57,14 +54,12 @@ public class M_AutomaticGun : MonoBehaviourPun
 
         if (timeBtwShots <= 0 && currentAmmo > 0)
         {
-            if (Input.GetMouseButton(0) && gameObject.transform.parent != null && transform.root.gameObject.GetComponent<M_Player>().canShot)
+            if (Input.GetMouseButton(0) && gameObject.transform.parent != null && transform.root.gameObject.GetComponent<M_Player>().IsItYou)
             {
-
                 OutText();
                 PhotonNetwork.Instantiate(bullet.name, shotPoint.position, transform.rotation);
                 timeBtwShots = startTimeBtwShots;
                 currentAmmo -= 1;
-
             }
         }
         else
@@ -72,17 +67,12 @@ public class M_AutomaticGun : MonoBehaviourPun
             timeBtwShots -= Time.deltaTime;
         }
 
-
-
         // ======================== Ammo ================================
-
 
         if (Input.GetKeyDown(KeyCode.R) && M_Player.automaticGun_AllAmmo > 0)
         {
             Reload();
         }
-
-
     }
 
     public void Reload()
@@ -103,9 +93,8 @@ public class M_AutomaticGun : MonoBehaviourPun
 
     public void OutText()
     {
-        //AmmoDisplay.AmmoInfo(currentAmmo, M_Player.pistol_ammo);
         if (!photonView.IsMine) return;
-        FindObjectOfType<OutPlayerInfo>().AmmoInfo(currentAmmo, M_Player.automaticGun_AllAmmo);
+            FindObjectOfType<OutPlayerInfo>().AmmoInfo(currentAmmo, M_Player.automaticGun_AllAmmo);
     }
 
 

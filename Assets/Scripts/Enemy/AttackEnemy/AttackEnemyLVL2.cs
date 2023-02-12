@@ -13,57 +13,29 @@ public class AttackEnemyLVL2 : MonoBehaviour
     private float timeBtwShots;
     public float startTimeBtwShots;
 
-    //[SerializeField] private GameObject _bullet;
-    public GameObject enemy;
-
-    //public GameObject Pref;
-
-    //float timer = 0;
-    //bool timerReached = false;
-
+    private Enemy enemyGetComp;
 
     void Start()
     {
-        //Pref = Resources.Load<GameObject>("bullet(EnemyLVL2)");
+        enemyGetComp = gameObject.GetComponent<Enemy>();
     }
     void Update()
-    {/*
-        if (enemy.gameObject.GetComponent<Enemy>().playerNoticed)
-        {
-            if (!timerReached)
-                timer += Time.deltaTime;
-
-            if (!timerReached && timer > 1.5f)
-            {
-                enemy.gameObject.GetComponent<Enemy>().anim.SetBool("shot", true);
-                timerReached = true;
-            }
-            else if (timerReached)
-            {
-                timer = 0;
-                timerReached = false;
-                enemy.gameObject.GetComponent<Enemy>().anim.SetBool("shot", false);
-            }
-        }*/
-
-
+    {
         if (timeBtwShots <= 0)
         {
-            enemy.gameObject.GetComponent<Enemy>().anim.SetBool("shot", true);
+            enemyGetComp.anim.SetBool("shot", true);
             timeBtwShots = startTimeBtwShots;  
         }
         else
         {
-            enemy.gameObject.GetComponent<Enemy>().anim.SetBool("shot", false);
+            enemyGetComp.anim.SetBool("shot", false);
             timeBtwShots -= Time.deltaTime;
         }
-
-
     }
 
     public void Shot()
     {
-        bullet.gameObject.GetComponent<bullet_Enemy>().Direction = (int)enemy.gameObject.transform.localScale.x;
+        bullet.gameObject.GetComponent<bullet_Enemy>().Direction = (int)gameObject.transform.localScale.x;
 
         Instantiate(bullet, shotPoint1.position, transform.rotation);           
         Instantiate(bullet, shotPoint2.position, transform.rotation);

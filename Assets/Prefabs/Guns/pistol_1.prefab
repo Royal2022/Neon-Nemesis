@@ -46,6 +46,7 @@ GameObject:
   - component: {fileID: 4307300285476689326}
   - component: {fileID: 4307300285476689327}
   - component: {fileID: 4307300285476689320}
+  - component: {fileID: 1317832154591126974}
   m_Layer: 14
   m_Name: pistol_1
   m_TagString: Weapon
@@ -137,6 +138,7 @@ MonoBehaviour:
   bullet: {fileID: 1669126192366538561, guid: 71bc2d0bf4fcf9e4b8383d76259a0af5, type: 3}
   shotPoint: {fileID: 4307300283955776390}
   startTimeBtwShots: 0.4
+  anim: {fileID: 1317832154591126974}
   ammo: {fileID: 0}
   currentAmmo: 15
   full: 45
@@ -275,3 +277,23 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.73333335, y: 0.46666667}
   m_EdgeRadius: 0
+--- !u!95 &1317832154591126974
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4307300285476689322}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 8aaf1697f73106e4ea0fe37b037d4136, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0

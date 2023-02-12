@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,6 +15,8 @@ public class Pistol : MonoBehaviour
     public float startTimeBtwShots;
 
     public static SpriteRenderer sr;
+
+    private Animator anim;
 
 
     // ======================== Ammo ================================
@@ -29,8 +32,6 @@ public class Pistol : MonoBehaviour
 
     // ==============================================================
 
-
-
     private void Start()
     {        
         sr = GetComponent<SpriteRenderer>();
@@ -39,44 +40,50 @@ public class Pistol : MonoBehaviour
 
     void Update()
     {
-        
-        if (gameObject.transform.parent)
+        if (gameObject.transform.parent != null)
         {
-            OutText();
-        }
-
-        //OutText();
+            anim = gameObject.transform.parent.gameObject.transform.parent.gameObject.transform.parent.GetComponent<Animator>();
 
 
-        if (timeBtwShots <= 0 && currentAmmo > 0)
-        {
-            if (Input.GetMouseButtonDown(0) && gameObject.transform.parent != null)
+            if (gameObject.transform.parent)
             {
-                gameObject.transform.GetChild(1).gameObject.GetComponent<ParticleSystem>().Play();
-                Instantiate(bullet, shotPoint.position, transform.rotation);
-                timeBtwShots = startTimeBtwShots;
-                currentAmmo -= 1;
                 OutText();
             }
-        }
-        else
-        {
-            timeBtwShots -= Time.deltaTime;
-        }
+
+            //OutText();
+
+
+            if (timeBtwShots <= 0 && currentAmmo > 0)
+            {
+                if (Input.GetMouseButtonDown(0) && gameObject.transform.parent != null)
+                {
+                    gameObject.transform.GetChild(1).gameObject.GetComponent<ParticleSystem>().Play();
+                    Instantiate(bullet, shotPoint.position, transform.rotation);
+                    timeBtwShots = startTimeBtwShots;
+                    currentAmmo -= 1;
+                    OutText();
+                    anim.SetBool("fire", true);
+                }
+            }
+            else
+            {
+                timeBtwShots -= Time.deltaTime;
+                anim.SetBool("fire", false);
+            }
 
 
 
-        if (Player.facingRight == true)
-        {
-            gameObject.transform.GetChild(1).gameObject.transform.localScale = new Vector3(1, 1, 1);
-            gameObject.transform.GetChild(1).gameObject.GetComponent<ParticleSystemRenderer>().lengthScale = -2;
+            if (Player.facingRight == true)
+            {
+                gameObject.transform.GetChild(1).gameObject.transform.localScale = new Vector3(1, 1, 1);
+                gameObject.transform.GetChild(1).gameObject.GetComponent<ParticleSystemRenderer>().lengthScale = -2;
+            }
+            else if (Player.facingRight == false)
+            {
+                gameObject.transform.GetChild(1).gameObject.transform.localScale = new Vector3(-1, 1, 1);
+                gameObject.transform.GetChild(1).gameObject.GetComponent<ParticleSystemRenderer>().lengthScale = 2;
+            }
         }
-        else if (Player.facingRight == false)
-        {
-            gameObject.transform.GetChild(1).gameObject.transform.localScale = new Vector3(-1, 1, 1);
-            gameObject.transform.GetChild(1).gameObject.GetComponent<ParticleSystemRenderer>().lengthScale = 2;
-        }
-
 
 
 

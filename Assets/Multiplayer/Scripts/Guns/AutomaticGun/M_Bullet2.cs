@@ -1,10 +1,11 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 //using UnityEditor.PackageManager;
 using UnityEngine;
 
-public class M_Bullet2 : MonoBehaviour
+public class M_Bullet2 : MonoBehaviourPun
 {
     public float speed = 25f;
     public int damage = 1;
@@ -15,14 +16,11 @@ public class M_Bullet2 : MonoBehaviour
     public LayerMask whatIsSolid;
 
      SpriteRenderer sr;
-    //[SerializeField] private Enemy enemy;
 
 
     private void Start()
     {
         sr = GetComponent<SpriteRenderer>();
-
-        //enemy = FindObjectOfType<Enemy>();
 
         if (Player.facingRight == true)
         {
@@ -36,13 +34,7 @@ public class M_Bullet2 : MonoBehaviour
 
     }
 
-    /*
-    void OnTriggerEnter2D(Collider2D hitInfo)
-    {
-        Debug.Log(hitInfo.name);
-        Destroy(gameObject);
-    }
-    */
+
     void Update()
     {
 
@@ -54,19 +46,20 @@ public class M_Bullet2 : MonoBehaviour
             if (hitInfo.collider.CompareTag("Enemy"))
             {
                 hitInfo.collider.GetComponent<Enemy>().TakeDamage(damage);
-                Destroy(gameObject);
+                DestroyBullet();
             }
             if (hitInfo.collider.CompareTag("EnemyHead"))
             {
                 hitInfo.collider.GetComponent<head>().enemy.gameObject.GetComponent<Enemy>().TakeDamage(damage*2);
-                Destroy(gameObject);
+                DestroyBullet();
             }
-            Destroy(gameObject);
+            DestroyBullet();        
         }
     }
     void DestroyBullet()
     {
-        Destroy(gameObject);
+        if (!photonView.IsMine) return;
+            PhotonNetwork.Destroy(gameObject);
     }
     private void FixedUpdate()
     {

@@ -18,6 +18,8 @@ public class BomsEffects : MonoBehaviour
 
     private float saveForce;
 
+    public int damage = 5;
+
     private void Start()
     {
         saveForce= force;
@@ -53,6 +55,8 @@ public class BomsEffects : MonoBehaviour
                 }
                 else if (objects[i].GetComponent<Player>().isGround)
                     force = saveForce;
+
+                objects[i].GetComponent<Player>().TakeDamage(damage);
             }
             if (objects[i].tag == "Enemy")
             {
@@ -62,12 +66,22 @@ public class BomsEffects : MonoBehaviour
                 }
                 else if (objects[i].GetComponent<Enemy>().isGround)
                     force = saveForce;
+
+                objects[i].GetComponent<Enemy>().TakeDamage(damage);
             }
 
             if (objects[i].GetComponent<Rigidbody2D>())
             {
                 Vector2 direction = objects[i].transform.position - transform.position;
-                objects[i].GetComponent<Rigidbody2D>().AddForce(direction * (force * 15));
+
+                if (objects[i].tag == "Enemy" || objects[i].tag == "Player")
+                {
+                    objects[i].GetComponent<Rigidbody2D>().AddForce(direction * (force * 15));
+                }
+                else
+                {
+                    objects[i].GetComponent<Rigidbody2D>().AddForce(direction * 250);
+                }
             }
         }
     }

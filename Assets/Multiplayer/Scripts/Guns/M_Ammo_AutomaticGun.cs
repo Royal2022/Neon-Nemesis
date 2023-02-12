@@ -10,12 +10,12 @@ public class M_Ammo_AutomaticGun : MonoBehaviourPun
     {
         if (collision.CompareTag("Player"))
         {
-            if (collision.transform.root.gameObject.GetComponent<M_Player>().canShot)
+            if (collision.transform.root.gameObject.GetComponent<M_Player>().IsItYou)
             {
                 M_Player.automaticGun_AllAmmo += quantityAmmo;
             }
             if (!photonView.IsMine) return;
-            PhotonNetwork.Destroy(gameObject);
+                PhotonNetwork.Destroy(gameObject);
         }
     }
 }

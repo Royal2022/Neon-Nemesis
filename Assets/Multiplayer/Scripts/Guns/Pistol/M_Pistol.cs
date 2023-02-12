@@ -53,7 +53,7 @@ public class M_Pistol : MonoBehaviourPun
 
         if (timeBtwShots <= 0 && currentAmmo > 0)
         {
-            if (Input.GetMouseButtonDown(0) && gameObject.transform.parent != null && transform.root.gameObject.GetComponent<M_Player>().canShot)
+            if (Input.GetMouseButtonDown(0) && gameObject.transform.parent != null && transform.root.gameObject.GetComponent<M_Player>().IsItYou)
             {
 
                 OutText();

@@ -24,29 +24,6 @@ public class AI_Patrol : MonoBehaviour
 
     private void Update()
     {
-        //hit_down = Physics2D.Raycast(transform.position, Vector2.down, distance, whatIsGround);
-        //if (hit_down.collider == null && enemy.gameObject.GetComponent<Enemy>().isGrounded && !enemy.gameObject.GetComponent<Enemy>().playerNoticed && !enemy.gameObject.GetComponent<Enemy>().IwasHit)
-        //{
-        //    enemy.gameObject.GetComponent<Enemy>().Flip();
-        //}
-        //else if (hit_down.collider == null && enemy.gameObject.GetComponent<Enemy>().isGrounded && (enemy.gameObject.GetComponent<Enemy>().playerNoticed || enemy.gameObject.GetComponent<Enemy>().IwasHit) && !enemy.gameObject.GetComponent<Enemy>().triggerDeath)
-        //{
-        //    enemy.gameObject.GetComponent<Enemy>().JumpEnemy();
-        //}
-
-        //hit_straight = Physics2D.Raycast(transform.position, Vector3.right * enemy.gameObject.transform.localScale.x, distance, whatIsGround);
-        //if (hit_straight.collider != null && !enemy.gameObject.GetComponent<Enemy>().playerNoticed && !enemy.gameObject.GetComponent<Enemy>().IwasHit)
-        //{
-        //    enemy.gameObject.GetComponent<Enemy>().Flip();
-        //}
-        //else if (hit_straight.collider != null && enemy.gameObject.GetComponent<Enemy>().isGrounded && (enemy.gameObject.GetComponent<Enemy>().playerNoticed || enemy.gameObject.GetComponent<Enemy>().IwasHit) && !enemy.gameObject.GetComponent<Enemy>().triggerDeath)
-        //{
-        //    enemy.gameObject.GetComponent<Enemy>().JumpEnemy();
-        //}
-
-
-
-
         hit_down = Physics2D.Raycast(transform.position, Vector2.down, distance, whatIsGround);
         if (hit_down.collider == null && enemy.isGround && !enemy.playerNoticed && !enemy.IwasHit)
         {
@@ -67,9 +44,6 @@ public class AI_Patrol : MonoBehaviour
             enemy.JumpEnemy();
         }
     }
-
-
-
 
     //private void OnDrawGizmos()
     //{

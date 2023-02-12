@@ -31,10 +31,6 @@ public class M_WeaponHold : MonoBehaviourPun
 
     public GameObject wp;
 
-
-    public GameObject WS;
-
-
     void Start()
     {
 
@@ -78,7 +74,7 @@ public class M_WeaponHold : MonoBehaviourPun
             hit.collider.GetComponent<Rigidbody2D>().simulated = false;
 
             //FindObjectOfType<hands>().res();
-            WS.gameObject.transform.GetChild(0).GetComponent<Transform>().rotation = Quaternion.Euler(0f, 0f, 0f);
+            wp.gameObject.transform.GetChild(0).GetComponent<Transform>().rotation = Quaternion.Euler(0f, 0f, 0f);
             hit.collider.gameObject.transform.rotation = Quaternion.Euler(0f, 0f, 0.64f);
             hit.collider.gameObject.transform.position = holdPointPistol.gameObject.transform.position;
             hit.transform.parent = holdPointPistol;
@@ -104,7 +100,7 @@ public class M_WeaponHold : MonoBehaviourPun
             hit.collider.GetComponent<Rigidbody2D>().simulated = false;
 
 
-            WS.gameObject.transform.GetChild(1).GetComponent<Transform>().rotation = Quaternion.Euler(0f, 0f, 0f);
+            wp.gameObject.transform.GetChild(1).GetComponent<Transform>().rotation = Quaternion.Euler(0f, 0f, 0f);
             hit.collider.gameObject.transform.rotation = Quaternion.Euler(0f, 0f, 0.64f);
             hit.collider.gameObject.transform.position = holdPointAutomaticGun.gameObject.transform.position;
             hit.transform.parent = holdPointAutomaticGun;

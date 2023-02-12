@@ -186,7 +186,7 @@ Transform:
   - {fileID: 3294124699048025921}
   - {fileID: 3294124697369890614}
   m_Father: {fileID: 0}
-  m_RootOrder: 21
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &3294124698909468563
 SpriteRenderer:
@@ -344,7 +344,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6348ca22d223a474ea9eb59250509439, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BoomEffect: {fileID: 8012785240002148960, guid: 71f5f4a0f3d06e34b84278fd151c1d8b, type: 3}
+  BoomEffect: {fileID: 8012785240002148960, guid: cf4dda2bdd6532f4586f2385e40d586d, type: 3}
 --- !u!114 &3294124698909468572
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -374,7 +374,7 @@ MonoBehaviour:
   health: 20
   speed: 3
   distance: 6
-  distanceBack: 0
+  distanceBack: 1.5
   rb: {fileID: 3294124698909468560}
   facingRight: 1
   playerNoticed: 0

@@ -30,6 +30,8 @@ public class AutomaticGun : MonoBehaviour
     public Text ammoCount;
     [SerializeField] private WeaponSwitch ws;
 
+    private Animator anim;
+
 
     // ==============================================================
 
@@ -41,35 +43,43 @@ public class AutomaticGun : MonoBehaviour
 
     void Update()
     {
-        if (gameObject.transform.parent)
+        if (gameObject.transform.parent != null)
         {
-            OutText();
-        }
+            anim = gameObject.transform.parent.gameObject.transform.parent.gameObject.transform.parent.GetComponent<Animator>();
 
-
-        if (timeBtwShots <= 0 && currentAmmo > 0)
-        {
-
-            if (Input.GetMouseButton(0) && gameObject.transform.parent != null)
+            if (gameObject.transform.parent)
             {
-                gameObject.transform.GetChild(1).gameObject.GetComponent<ParticleSystem>().startSpeed = 1;
-                Instantiate(bullet, shotPoint.position, transform.rotation);
-                timeBtwShots = startTimeBtwShots;
-                currentAmmo -= 1;
+                OutText();
+            }
+
+
+            if (timeBtwShots <= 0 && currentAmmo > 0)
+            {
+
+                if (Input.GetMouseButton(0) && gameObject.transform.parent != null)
+                {
+                    gameObject.transform.GetChild(1).gameObject.GetComponent<ParticleSystem>().startSpeed = 1;
+                    Instantiate(bullet, shotPoint.position, transform.rotation);
+                    timeBtwShots = startTimeBtwShots;
+                    currentAmmo -= 1;
+                    anim.SetBool("Shot", true);
+                }
+                else
+                {
+                    gameObject.transform.GetChild(1).gameObject.GetComponent<ParticleSystem>().startSpeed = 0;
+                    anim.SetBool("Shot", false);
+                }
             }
             else
             {
-                gameObject.transform.GetChild(1).gameObject.GetComponent<ParticleSystem>().startSpeed = 0;
+                timeBtwShots -= Time.deltaTime;
             }
-        }
-        else
-        {
-            timeBtwShots -= Time.deltaTime;
-        }
 
-        if (currentAmmo == 0)
-        {
-            gameObject.transform.GetChild(1).gameObject.GetComponent<ParticleSystem>().startSpeed = 0;
+            if (currentAmmo == 0)
+            {
+                gameObject.transform.GetChild(1).gameObject.GetComponent<ParticleSystem>().startSpeed = 0;
+                anim.SetBool("Shot", false);
+            }
         }
 
 

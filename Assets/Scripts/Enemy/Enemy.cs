@@ -75,7 +75,6 @@ public class Enemy : MonoBehaviour
     {
         isGround = Physics2D.OverlapCircle(feetPos.position, checkRaduis, whatIsGround);
 
-
         if (!hold)
         {
             Physics2D.queriesStartInColliders = false;
@@ -92,15 +91,12 @@ public class Enemy : MonoBehaviour
                 playerNoticed = false;
             }           
 
-
             hitBack = Physics2D.Raycast(transform.position, Vector3.left * transform.localScale.x, distanceBack, SeePlayer);
             if (hitBack.collider != null && hitBack.collider.gameObject.tag == "Player")
             {
                 Flip();
                 hold = true;
             }
-
-
         }
         else
         {
@@ -138,13 +134,6 @@ public class Enemy : MonoBehaviour
             anim.SetBool("run_enemy", false);
         }
 
-
-        if (!playerNoticed && !Head.gameObject.GetComponent<head>().playerNoticedHead && !fPE.gameObject.GetComponent<feetPosEnemy>().playerNoticedLegs)
-        {
-            //trigger = false;
-        }
-
-
         if (target != null)
         {
             if (Mathf.Round(target.transform.position.x) == Mathf.Round(transform.position.x) && trigger)
@@ -152,9 +141,6 @@ public class Enemy : MonoBehaviour
                 trigger = false;
             }
         }
-
-
-
 
         if (trigger)
         {
@@ -175,9 +161,8 @@ public class Enemy : MonoBehaviour
             IwasHit = true;
         }
         else if (!trigger)
-        {
             timeBtwShots -= Time.deltaTime;
-        }
+        
 
         if (timeBtwShots <= 0)
         {

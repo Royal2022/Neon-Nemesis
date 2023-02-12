@@ -6,71 +6,22 @@ using UnityEngine;
 
 public class head : MonoBehaviour
 {
-    /*
-   RaycastHit2D hit;
-   bool facingRight = true;
-   public bool playerNoticed = false;
-   public float distance = 20f;
-
-
-   public bool hold = false;
-
-
-   void Update()
-   {
-       if (!hold)
-       {
-           Physics2D.queriesStartInColliders = false;
-           hit = Physics2D.Raycast(transform.position, Vector2.right * FindObjectOfType<Enemy>().transform.localScale.x, distance);
-
-
-           if (hit.collider != null && hit.collider.tag == "Player")
-           {
-               Debug.Log("true0");
-           }
-           if (hit.collider != null)
-           {
-               Debug.Log(hit.collider.gameObject.tag);
-           }
-
-
-       }
-       Physics2D.queriesStartInColliders = true;
-
-   }
-   private void OnDrawGizmos()
-   {
-       Gizmos.color = Color.red;
-       Gizmos.DrawLine(transform.position, transform.position + Vector3.right * FindObjectOfType<Enemy>().transform.localScale.x * distance);
-   }
-   */
-
-
-
     RaycastHit2D hit, hitBack;
     public LayerMask SeePlayer;
     public float distance = 6f;
     public float distanceBack = 1.5f;
 
-    //[SerializeField] private Enemy enemy;
     public GameObject enemy;
 
     public bool playerNoticedHead = false;
 
     public bool hold = false;
 
-    private void Start()
-    {
-        //enemy = FindObjectOfType<Enemy>();
-    }
-
     private void Update()
     {
-
         if (!hold)
         {
             Physics2D.queriesStartInColliders = false;
-
 
             hit = Physics2D.Raycast(transform.position, Vector3.right * enemy.gameObject.GetComponent<Transform>().localScale.x, distance, SeePlayer);
             if (hit.collider != null && hit.collider.gameObject.tag == "Player")
@@ -99,11 +50,7 @@ public class head : MonoBehaviour
             hold = false;
         }
         Physics2D.queriesStartInColliders = true;
-
-
     }
-
-
 
     private void OnDrawGizmos()
     {

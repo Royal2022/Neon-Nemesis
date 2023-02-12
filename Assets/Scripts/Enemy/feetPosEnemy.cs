@@ -8,8 +8,6 @@ public class feetPosEnemy : MonoBehaviour
     public LayerMask SeePlayer;
     public float distance = 6f;
     public float distanceBack = 1.5f;
-
-    //[SerializeField] private Enemy enemy; 
     
     public bool playerNoticedLegs = false;
 
@@ -17,20 +15,11 @@ public class feetPosEnemy : MonoBehaviour
 
     public bool hold;
 
-    private void Start()
-    {
-        //enemy = FindObjectOfType<Enemy>();
-    }
-
     private void Update()
     {
-
-
-
         if (!hold)
         {
             Physics2D.queriesStartInColliders = false;
-
 
             hit = Physics2D.Raycast(transform.position, Vector3.right * enemy.gameObject.GetComponent<Transform>().localScale.x, distance, SeePlayer);
             if (hit.collider != null && hit.collider.gameObject.tag == "Player")
@@ -58,17 +47,13 @@ public class feetPosEnemy : MonoBehaviour
             hold = false;
         }
         Physics2D.queriesStartInColliders = true;
-
     }
 
 
     private void OnDrawGizmos()
     {
-        //enemy = FindObjectOfType<Enemy>();
-
         Gizmos.color = Color.yellow;
         Gizmos.DrawLine(transform.position, transform.position + Vector3.right * enemy.gameObject.GetComponent<Transform>().localScale.x * distance);
         Gizmos.DrawLine(transform.position, transform.position + Vector3.left * enemy.gameObject.GetComponent<Transform>().localScale.x * distanceBack);
-
     }
 }

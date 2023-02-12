@@ -4,16 +4,13 @@ using System.Collections.Generic;
 using Unity.Burst.CompilerServices;
 using Unity.VisualScripting;
 using UnityEditor;
-//using UnityEditor.PackageManager;
 using UnityEngine;
-//using UnityEngine.UIElements;
 using UnityEngine.UI;
 public class Player : MonoBehaviour
 {
 
     public static int pistol_ammo = 0;
     public static int automaticGun_ammo = 0;
-
     
     public Rigidbody2D rb;
     public float Speed;
@@ -29,11 +26,11 @@ public class Player : MonoBehaviour
 
     public static bool facingRight = true;
 
-    public int health = 10;
-
-    public int armor;
     public static int money;
     public Text MoneyText;
+
+    public int health = 10;
+    public int armor;
 
     public Slider stamine;
     public Slider healthSlider;
@@ -43,16 +40,10 @@ public class Player : MonoBehaviour
 
     public int hand_damage = 1;
 
-
     public bool doubleJump = false;
-
-
 
     public Vector3 mousePos;
     public Vector3 mousePosClick;
-
-
-    
 
     void Start()
     {
@@ -62,18 +53,13 @@ public class Player : MonoBehaviour
     }
 
 
-
     public void FixedUpdate()
     {
         moveInput = Input.GetAxis("Horizontal");
         rb.velocity = new Vector2(moveInput * Speed, rb.velocity.y);
 
         StaminFunc();
-
-
-            
-        //moveInput = Input.GetAxis("Horizontal");
-
+       
         if (moveInput == 0)
         {
             anim.SetBool("player_run", false);
@@ -95,11 +81,8 @@ public class Player : MonoBehaviour
             Flip();
             //Debug.Log("left");
         }
+    }
 
-    
-
-
-}
     public void Flip()
     {
         facingRight = !facingRight;
@@ -107,19 +90,14 @@ public class Player : MonoBehaviour
         Vector3 Scaler = transform.localScale;
         Scaler.x *= -1;
         transform.localScale = Scaler;
-        /*transform.Rotate(0f, 180f, 0f);*/
     }
 
 
-    void Update()
+    public void Update()
     {
         if (health <= 0)
             anim.Play("death");
 
-        //if (health >= 0)
-        //    healthDisplay.text = "" + health;
-        //else if (health <= 0)
-        //    healthDisplay.text = "" + 0;
         if (health >= 0)
             healthSlider.value = health;
         else if (health <= 0)
@@ -134,27 +112,6 @@ public class Player : MonoBehaviour
 
         if (GetComponent<Animator>().runtimeAnimatorController == WS.nogunanim)
         {
-            /*
-            if (Input.GetMouseButtonDown(0) && !anim.GetCurrentAnimatorStateInfo(0).IsName("attack") && !anim.GetCurrentAnimatorStateInfo(0).IsName("run_attack"))
-            {
-                //anim.Play("attack");
-                anim.SetBool("attack", true);                             
-            }
-            else
-            {
-                anim.SetBool("attack", false);
-            }
-
-
-            if (Input.GetMouseButtonDown(0) && anim.GetBool("player_run") && !anim.GetCurrentAnimatorStateInfo(0).IsName("run_attack"))
-            {
-                anim.SetBool("run_attack", true);
-            }
-            else
-            {
-                anim.SetBool("run_attack", false);
-            }
-            */
             if (Input.GetMouseButtonDown(0))
             {
                 if (anim.GetBool("player_run") && !anim.GetCurrentAnimatorStateInfo(0).IsName("run_attack"))
@@ -171,33 +128,9 @@ public class Player : MonoBehaviour
                 anim.SetBool("attack", false);
                 anim.SetBool("run_attack", false);
             }
-
-            /*
-            if (Input.GetMouseButtonDown(0) && !anim.GetCurrentAnimatorStateInfo(0).IsName("attack") && !anim.GetCurrentAnimatorStateInfo(0).IsName("run_attack"))
-            {
-                HandAttack();
-
-                if (anim.GetBool("player_run"))
-                {
-                    anim.SetBool("run_attack", true);
-                }
-                else
-                {
-                    anim.SetBool("attack", true);
-                }
-            }
-            else
-            {
-                anim.SetBool("attack", false);
-                anim.SetBool("run_attack", false);
-            }*/
         }
 
-
-
-
-
-        if (Input.GetKey(KeyCode.LeftShift) && stamine.value > 10 && isGround == true)
+        if (Input.GetKey(KeyCode.LeftShift) && stamine.value > 3 && isGround == true)
         {
             Speed = 6f;
         }
@@ -206,18 +139,7 @@ public class Player : MonoBehaviour
             Speed = 4f;
         }
 
-        //Debug.Log(isGround);
         isGround = Physics2D.OverlapCircle(feetPos.position, checkRaduis, whatIsGround);
-
-        /*
-        if(isGround == true && Input.GetKeyDown(KeyCode.Space))
-        {
-            rb.velocity = Vector2.up * jumpForce;
-            anim.SetTrigger("takeOf");
-            
-            //rb.AddForce(new Vector2(0f, jumpForce));
-            //rb.velocity = new Vector2(0, 0);
-        }*/
 
 
         if (Input.GetKeyDown(KeyCode.Space))
@@ -234,27 +156,16 @@ public class Player : MonoBehaviour
                 rb.velocity = Vector2.up * jumpForce;
                 anim.Play("sault");
             }
-
         }
-
-
 
 
         if (isGround == true)
         {
             anim.SetBool("player_jump", false);
-
-            /*==== Ladder =====*/
-            //rb.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeRotation;
-            //Player.anim.SetBool("touched_ground", true);
-            /*=================*/
-
         }
         else
         {
             anim.SetBool("player_jump", true);
-            //Player.anim.SetBool("touched_ground", false);
-
         }
 
 
@@ -288,7 +199,6 @@ public class Player : MonoBehaviour
     //        pistol_ammo += 15;
     //        //Debug.Log("pistol");
     //    }
-
     //}
     
 
@@ -326,7 +236,6 @@ public class Player : MonoBehaviour
 
     public void HandAttack()
     {
-
         RaycastHit2D hitInfo = Physics2D.Raycast(transform.position, Vector2.right * transform.localScale.x, distance, whatIsSolid);
 
         if (hitInfo.collider != null)
@@ -336,7 +245,6 @@ public class Player : MonoBehaviour
                 hitInfo.collider.GetComponent<Enemy>().TakeDamage(hand_damage);
             }
         }
-
     }
     public void TakeDamage(int damage)
     {
@@ -349,7 +257,6 @@ public class Player : MonoBehaviour
         }
         else
             armor -= damage;
-
     }
 
     public void Death()
@@ -363,11 +270,6 @@ public class Player : MonoBehaviour
         Gizmos.color = Color.black;
         Gizmos.DrawLine(transform.position, transform.position + Vector3.right * transform.localScale.x * distance);
     }
-
-
-
-
-
 }
 
 

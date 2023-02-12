@@ -18,4 +18,17 @@ public class MenuButton : MonoBehaviour
         SceneManager.LoadScene(0);
     }
 
+
+    /*LocalPlayGames*/
+    public void OnClick_Continue()
+    {
+        SceneManager.LoadScene(5);
+    }    
+    
+    
+    public void OnClick_Quit()
+    {
+        Application.Quit();
+    }
+
 }

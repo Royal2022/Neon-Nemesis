@@ -8,21 +8,22 @@ using UnityEngine.UI;
 public class OutPlayerInfo : MonoBehaviour
 {
 
-    public Text healthDisplay;
     public Text AmmoDisplay;
 
-    void Start()
-    {
-
-    }
-
+    public Slider stamine;
+    public Slider healthSlider;
+    public Slider armorSlider;
 
     public void HealthInfo(int info)
     {
-        healthDisplay.text = "" + info;
+        healthSlider.value = info;
     }
     public void AmmoInfo(float info1, float info2)
     {
         AmmoDisplay.text = info1 + "/" + info2;
+    }
+    public void ArmorInfo(int info)
+    {
+        armorSlider.value = info;
     }
 }

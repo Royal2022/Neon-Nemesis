@@ -4,29 +4,31 @@ using UnityEngine;
 
 public class AttackEnemyLVL4 : MonoBehaviour
 {
-    public GameObject enemy;
+    private Enemy enemyGetComp;
     public float enemyDistanceAttack = 2.5f;
 
-
+    private void Start()
+    {
+        enemyGetComp = gameObject.GetComponent<Enemy>();
+    }
 
     void Update()
     {
-        if (enemy.gameObject.GetComponent<Enemy>().playerNoticed || enemy.gameObject.GetComponent<Enemy>().trigger)
+        if (enemyGetComp.playerNoticed || enemyGetComp.trigger)
         {
-
-            if ((Vector2.Distance(transform.position, gameObject.GetComponent<Enemy>().target.position) > enemyDistanceAttack /*&& !gameObject.GetComponent<Enemy>().Patrol.gameObject.GetComponent<Patrol>().ground*/) && !gameObject.GetComponent<Enemy>().triggerDeath)
+            if ((Vector2.Distance(transform.position, enemyGetComp.target.position) > enemyDistanceAttack /*&& !enemyGetComp.Patrol.gameObject.GetComponent<Patrol>().ground*/) && !enemyGetComp.triggerDeath)
             {
-                gameObject.GetComponent<Enemy>().speed = 5;
-                Vector2.Distance(transform.position, gameObject.GetComponent<Enemy>().target.transform.position);
-                gameObject.GetComponent<Enemy>().anim.SetBool("attack_enemy", false);
+                enemyGetComp.speed = 4;
+                Vector2.Distance(transform.position, enemyGetComp.target.transform.position);
+                enemyGetComp.anim.SetBool("attack_enemy", false);
             }
-            else if (Vector2.Distance(transform.position, gameObject.GetComponent<Enemy>().target.position) <= enemyDistanceAttack && !gameObject.GetComponent<Enemy>().triggerDeath)
+            else if (Vector2.Distance(transform.position, enemyGetComp.target.position) <= enemyDistanceAttack && !enemyGetComp.triggerDeath)
             {
-                gameObject.GetComponent<Enemy>().speed = 5;
-                gameObject.GetComponent<Enemy>().trigger = false;
-                if (!gameObject.GetComponent<Enemy>().anim.GetCurrentAnimatorStateInfo(0).IsName("attack_enemy"))
+                enemyGetComp.speed = 5;
+                enemyGetComp.trigger = false;
+                if (!enemyGetComp.anim.GetCurrentAnimatorStateInfo(0).IsName("attack_enemy"))
                 {
-                    gameObject.GetComponent<Enemy>().anim.SetBool("attack_enemy", true);
+                    enemyGetComp.anim.SetBool("attack_enemy", true);
                 }
             }
         }
@@ -34,6 +36,6 @@ public class AttackEnemyLVL4 : MonoBehaviour
 
     public void attack_off()
     {
-        gameObject.GetComponent<Enemy>().anim.SetBool("attack_enemy", false);
+        enemyGetComp.anim.SetBool("attack_enemy", false);
     }
 }

@@ -4,7 +4,6 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Burst.CompilerServices;
 using Unity.VisualScripting;
-//using UnityEditor.PackageManager;
 using UnityEngine;
 
 public class M_Bullet : MonoBehaviourPun
@@ -18,23 +17,21 @@ public class M_Bullet : MonoBehaviourPun
     public LayerMask whatIsSolid;
 
     [PunRPC] public GameObject sr;
-    //[SerializeField] private Enemy enemy;
 
     public GameObject player;
 
     private void Start()
     {
-        //sr = GetComponent<SpriteRenderer>();
         if (!photonView.IsMine) return;
-        if (M_Player.facingRight)
-        {
-            rb.velocity = transform.right * speed;
-        }
-        else if (!M_Player.facingRight)
-        {
-            rb.velocity = (transform.right * -1) * speed;
-            gameObject.GetPhotonView().RPC("unwrap", RpcTarget.AllBuffered);
-        }
+            if (M_Player.facingRight)
+            {
+                rb.velocity = transform.right * speed;
+            }
+            else if (!M_Player.facingRight)
+            {
+                rb.velocity = (transform.right * -1) * speed;
+                gameObject.GetPhotonView().RPC("unwrap", RpcTarget.AllBuffered);
+            }
 
         Invoke("DestroyBullet", 2f);
     }
@@ -42,7 +39,7 @@ public class M_Bullet : MonoBehaviourPun
     void Update()
     {
         if (!photonView.IsMine) return;
-        RaycastHit2D hitInfo = Physics2D.Raycast(transform.position, transform.right, distanceRayCast, whatIsSolid);
+            RaycastHit2D hitInfo = Physics2D.Raycast(transform.position, transform.right, distanceRayCast, whatIsSolid);
 
         if (hitInfo.collider != null)
         {
@@ -53,7 +50,6 @@ public class M_Bullet : MonoBehaviourPun
 
             if (!photonView.IsMine) return;
                 PhotonNetwork.Destroy(gameObject);
-
         }
 
     }
@@ -67,10 +63,6 @@ public class M_Bullet : MonoBehaviourPun
     public void unwrap()
     {
         PhotonView.Find(sr.gameObject.GetPhotonView().ViewID).gameObject.GetComponent<SpriteRenderer>().flipX = true;
-        //sr.flipX = true;
     }
-
-
-
 
 }

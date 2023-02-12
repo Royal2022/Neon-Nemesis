@@ -37,12 +37,12 @@ public class M_Player : MonoBehaviourPun
 
     public static bool facingRight = true;
 
-    [SerializeField] private OutPlayerInfo OutText;
+    [SerializeField] public OutPlayerInfo OutText;
 
     public bool hold;
 
     public int Health;
-
+    public static int armor;
 
 
     [SerializeField] private Text TextName;
@@ -55,7 +55,8 @@ public class M_Player : MonoBehaviourPun
 
     public PhotonView thisPhotonView;
 
-    public bool canShot;
+    public bool IsItYou;
+
 
 
     private void Start()
@@ -69,12 +70,12 @@ public class M_Player : MonoBehaviourPun
         
         TextName.text = photonView.Owner.NickName;
         if (!photonView.IsMine) return;
-        FindObjectOfType<CameraFollow>().m_player = CameraPosition.transform;
+            FindObjectOfType<CameraFollow>().m_player = CameraPosition.transform;
 
         thisPhotonView = GetComponent<PhotonView>();
 
         if (photonView.IsMine)
-        Player_ID = thisPhotonView.ViewID;
+            Player_ID = thisPhotonView.ViewID;
 
         Debug.Log(Player_ID);
     }
@@ -86,11 +87,16 @@ public class M_Player : MonoBehaviourPun
 
     private void Update()
     {
-
         if (Health <= 0)
         {
-            //Death();
-            gameObject.GetPhotonView().RPC("Death", RpcTarget.All);
+            anim.SetBool("death", true);
+            this.transform.Find("weapon_hands").gameObject.SetActive(false);
+            this.transform.Find("arm").gameObject.SetActive(false);
+        }
+        if (!photonView.IsMine) return;
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            Health -= 10;
         }
 
         if (!photonView.IsMine) return;
@@ -135,18 +141,6 @@ public class M_Player : MonoBehaviourPun
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            //if (isGround)
-            //{
-            //    rb.velocity = Vector2.up * jumpForce;
-            //    doubleJump = false;
-            //    anim.SetBool("sault", false);
-            //}
-            //else if (!doubleJump /*&& GetComponent<Animator>().runtimeAnimatorController == WS.nogunanim*/)
-            //{
-            //    doubleJump = true;
-            //    rb.velocity = Vector2.up * jumpForce;
-            //    anim.SetBool("sault", true);
-            //}
             if (isGround)
             {
                 rb.velocity = Vector2.up * jumpForce;
@@ -205,9 +199,9 @@ public class M_Player : MonoBehaviourPun
         /*===========================================*/
 
         if (!photonView.IsMine) return;
-        canShot = true;
+            IsItYou = true;
         if (photonView.IsMine) return;
-        canShot = false;
+            IsItYou = false;
 
 
     }
@@ -228,14 +222,69 @@ public class M_Player : MonoBehaviourPun
         
     }
 
+    private void FixedUpdate()
+    {
+        StaminFunc();
+        if (Input.GetKey(KeyCode.LeftShift) && OutText.stamine.value > 3 && isGround == true)
+        {
+            Speed = 6f;
+        }
+        else
+        {
+            Speed = 4f;
+        }
+
+        OutInfoArmor();
+    }
+
+
+    public void StaminFunc()
+    {
+        if (Input.GetKey(KeyCode.LeftShift) && OutText.stamine.value > 0 && (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D)))
+        {
+            OutText.stamine.value -= 0.6f;
+        }
+        if (!Input.GetKey(KeyCode.LeftShift) && (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S)))
+        {
+            OutText.stamine.value += 0.2f;
+        }
+        if (!Input.GetKey(KeyCode.LeftShift) && !Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D) && !Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.S))
+        {
+            OutText.stamine.value += 0.5f;
+        }
+        if (Input.GetKey(KeyCode.LeftShift) && (!Input.GetKey(KeyCode.A) || !Input.GetKey(KeyCode.D) || !Input.GetKey(KeyCode.W) || !Input.GetKey(KeyCode.S)))
+        {
+            OutText.stamine.value += 0.3f;
+        }
+
+
+        //if (Input.GetKey(KeyCode.LeftShift) && stamine.value > 0 && (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S)) && FindObjectOfType<Ladder>().isTrigger == true)
+        //{
+        //    stamine.value -= 0.6f;
+        //}
+    }
+
+
+
+
     [PunRPC]
     public void TakeDamage(int damage, int ID,  PhotonMessageInfo info)
     {
+        //if (!photonView.IsMine) return;
+        //Health -= damage;
+        //OutTextHealth();
+        //Debug.Log("Player_ID: "  + Player_ID);
+        //Debug.Log("Id: " + ID);
         if (!photonView.IsMine) return;
-        Health -= damage;
-        OutTextHealth();
-        Debug.Log("Player_ID: "  + Player_ID);
-        Debug.Log("Id: " + ID);
+            if (armor <= 0)
+            {
+                if (Health != 0)
+                {
+                    Health -= damage;
+                }
+            }
+            else
+                armor -= damage;
     }
 
     public void OutTextHealth()
@@ -243,12 +292,22 @@ public class M_Player : MonoBehaviourPun
         if (!photonView.IsMine) return;
         OutText.HealthInfo(Health);
     }
+    public void OutInfoArmor()
+    {
+        if (!photonView.IsMine) return;
+        OutText.ArmorInfo(armor);
+    }
 
     [PunRPC]
     public void Death()
     {
         if (!photonView.IsMine) return;
         PhotonNetwork.Destroy(gameObject);
+    }
+
+    public void DeathAnim()
+    {
+        gameObject.GetPhotonView().RPC("Death", RpcTarget.All);
     }
 
     //public float distance = 0.7f;
@@ -269,8 +328,6 @@ public class M_Player : MonoBehaviourPun
     //        hitInfo.collider.gameObject.GetComponent<M_Player>().TakeDamage(hand_damage);   
     //    }
     //    Physics2D.queriesStartInColliders = true;
-
-
     //}
 
     //private void OnDrawGizmos()

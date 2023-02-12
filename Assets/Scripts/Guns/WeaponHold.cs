@@ -7,11 +7,6 @@ using UnityEngine.Playables;
 
 public class WeaponHold : MonoBehaviour
 {
-
-    //[SerializeField] private hands _Hands;
-
-
-
     public bool hold;
     public float distance = 1f;
     RaycastHit2D hit;
@@ -20,20 +15,18 @@ public class WeaponHold : MonoBehaviour
     public float throwobject = 2f;
 
 
-
-
-    [SerializeField] private WeaponSwitch wp;
+    //[SerializeField] private WeaponSwitch wp;
+    public GameObject WeaponSwitch;
+    private WeaponSwitch wp;
 
     void Start()
     {
-        //_Hands = FindObjectOfType<hands>();
-        wp = FindObjectOfType<WeaponSwitch>();
+        wp = WeaponSwitch.GetComponent<WeaponSwitch>();
     }
 
 
     void Update()
     {
-
         if (Input.GetKeyDown(KeyCode.F))
         {
             if (!hold)
