@@ -32,6 +32,7 @@ public class Bullet2 : MonoBehaviour
         }
         Invoke("DestroyBullet", flightRange);
 
+        transform.Rotate(transform.rotation.x, transform.rotation.y, Random.Range(-5, 5));
     }
 
 

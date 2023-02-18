@@ -275,6 +275,9 @@ AnimatorStateTransition:
   - m_ConditionMode: 1
     m_ConditionEvent: attack
     m_EventTreshold: 0
+  - m_ConditionMode: 2
+    m_ConditionEvent: player_jump
+    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -4233005125923115475}
   m_Solo: 0
@@ -518,6 +521,9 @@ AnimatorStateTransition:
     m_EventTreshold: 0
   - m_ConditionMode: 2
     m_ConditionEvent: player_run
+    m_EventTreshold: 0
+  - m_ConditionMode: 2
+    m_ConditionEvent: player_jump
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -4233005125923115475}
