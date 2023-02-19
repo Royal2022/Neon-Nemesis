@@ -26,7 +26,7 @@ public class Player : MonoBehaviour
 
     public static bool facingRight = true;
 
-    public static int money;
+    public static int money = 50;
     public Text MoneyText;
 
     public int health = 10;
@@ -74,7 +74,6 @@ public class Player : MonoBehaviour
         {
             Flip();
             //Debug.Log("right");
-
         }
         else if (facingRight == true && moveInput < 0)
         {

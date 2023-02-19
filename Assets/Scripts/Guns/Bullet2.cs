@@ -15,8 +15,7 @@ public class Bullet2 : MonoBehaviour
     public float distanceRayCast = 0.1f;
     public LayerMask whatIsSolid;
 
-     SpriteRenderer sr;
-
+    private SpriteRenderer sr;
 
     private void Start()
     {
@@ -32,13 +31,12 @@ public class Bullet2 : MonoBehaviour
         }
         Invoke("DestroyBullet", flightRange);
 
-        transform.Rotate(transform.rotation.x, transform.rotation.y, Random.Range(-5, 5));
+        transform.Rotate(transform.rotation.x, transform.rotation.y, Random.Range(-5, 10));
     }
 
 
     void Update()
     {
-
         RaycastHit2D hitInfo = Physics2D.Raycast(transform.position, transform.right, distanceRayCast, whatIsSolid);
 
         

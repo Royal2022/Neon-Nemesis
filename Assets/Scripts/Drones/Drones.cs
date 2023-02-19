@@ -16,13 +16,13 @@ public class Drones : MonoBehaviour
     public float DronsDistanceStop;
     private bool facingRight = true;
 
-    public Transform playerPosition;
+    private Transform playerPosition;
 
     Vector3 OldPosition;
 
     private bool delivered;
 
-    bool ThrowOne;
+    private bool ThrowOne;
 
 
     void Start()
@@ -62,7 +62,7 @@ public class Drones : MonoBehaviour
                 {
                     if (!ThrowOne)
                     {
-                        Invoke("Throw", 1);
+                        Invoke("Throw", 0.6f);
                         ThrowOne = true;
                     }
                 }
@@ -82,15 +82,13 @@ public class Drones : MonoBehaviour
         }
         else
             anim.SetBool("run", false);
-
-
     }
 
     private void FixedUpdate()
     {
         if (!delivered)
         {
-            Vector2 playerXposition = new Vector2(playerPosition.position.x, 0);
+            Vector2 playerXposition = new Vector2(playerPosition.position.x, playerPosition.position.y + 2);
             transform.position = Vector2.MoveTowards(transform.position, playerXposition, speedDrons * Time.fixedDeltaTime);
         }
         else if (delivered)
@@ -102,11 +100,17 @@ public class Drones : MonoBehaviour
     }
 
 
-    bool death;
+    public void Product(GameObject product)
+    {
+        Instantiate(product, gameObject.transform.GetChild(0)).GetComponent<Rigidbody2D>().simulated = false;
+    }
+
+    private bool death;
 
     private void Throw()
     {
-        Debug.Log("Бросить");
+        gameObject.transform.GetChild(0).transform.GetChild(0).GetComponent<Rigidbody2D>().simulated = true;
+        gameObject.transform.GetChild(0).transform.GetChild(0).parent = null;
         delivered = true;
         speedDrons = 4;
 
