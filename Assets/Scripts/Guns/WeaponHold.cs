@@ -9,7 +9,7 @@ public class WeaponHold : MonoBehaviour
 {
     public bool hold;
     public float distance = 1f;
-    RaycastHit2D hit;
+    private RaycastHit2D hit;
     public Transform holdPointPistol;
     public Transform holdPointAutomaticGun;
     public float throwobject = 2f;
@@ -18,6 +18,10 @@ public class WeaponHold : MonoBehaviour
     //[SerializeField] private WeaponSwitch wp;
     public GameObject WeaponSwitch;
     private WeaponSwitch wp;
+
+    public GameObject AutomaticGunHands;
+
+    public LayerMask whatIsSolid;
 
     void Start()
     {
@@ -31,9 +35,9 @@ public class WeaponHold : MonoBehaviour
         {
             if (!hold)
             {
-                Physics2D.queriesStartInColliders = false;
+                //Physics2D.queriesStartInColliders = false;
 
-                hit = Physics2D.Raycast(transform.position, Vector2.right * transform.localScale.x, distance);
+                hit = Physics2D.Raycast(transform.position, Vector2.right * transform.localScale.x, distance, whatIsSolid);
 
 
                 if (hit.collider != null && hit.collider.tag == "Weapon" && holdPointPistol.GetChild(0).gameObject)
@@ -60,7 +64,7 @@ public class WeaponHold : MonoBehaviour
                     hit.transform.parent = holdPointPistol;
                 }          
                 
-                if (hit.collider != null && hit.collider.tag == "AK" && holdPointAutomaticGun.GetChild(0).gameObject)
+                if (hit.collider != null && hit.collider.tag == "AK" && holdPointAutomaticGun.GetChild(0).GetChild(0).gameObject)
                 {
                     if (wp.transform.GetChild(2).gameObject.activeSelf == false)
                     {
@@ -68,28 +72,28 @@ public class WeaponHold : MonoBehaviour
                         wp.SelectWeapon();
                     }
                     hold = true;
-                    //Destroy(holdPoint.GetChild(0).gameObject);
 
-                    holdPointAutomaticGun.GetChild(0).transform.rotation = Quaternion.Euler(0f, 0f, 0.64f);
+                    holdPointAutomaticGun.GetChild(0).GetChild(0).transform.rotation = Quaternion.Euler(0f, 0f, 0f);
                     //holdPointAutomaticGun.GetChild(0).transform.position = hit.collider.gameObject.transform.position;
-                    holdPointAutomaticGun.GetChild(0).gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(transform.localScale.x, 1) * throwobject;
-                    holdPointAutomaticGun.GetChild(0).gameObject.GetComponent<Rigidbody2D>().simulated = true;
-                    holdPointAutomaticGun.GetChild(0).parent = null;
+                    holdPointAutomaticGun.GetChild(0).GetChild(0).gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(transform.localScale.x, 1) * throwobject;
+                    holdPointAutomaticGun.GetChild(0).GetChild(0).gameObject.GetComponent<Rigidbody2D>().simulated = true;
+                    holdPointAutomaticGun.GetChild(0).GetChild(0).parent = null;
 
 
                     hit.collider.GetComponent<Rigidbody2D>().simulated = false;
 
-                    FindObjectOfType<hands>().res();
-                    hit.collider.gameObject.transform.rotation = Quaternion.Euler(0f, 0f, 0.64f);
+                    //FindObjectOfType<HandsAutomaticGun>().res();
+                    AutomaticGunHands.GetComponent<HandsAutomaticGun>().res();
+                    hit.collider.gameObject.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
                     hit.collider.gameObject.transform.position = holdPointAutomaticGun.gameObject.transform.position;
-                    hit.transform.parent = holdPointAutomaticGun;
+                    hit.transform.parent = holdPointAutomaticGun.GetChild(0);
                 }
             }
             else
             {
                 hold = false;
             }
-            Physics2D.queriesStartInColliders = true;
+            //Physics2D.queriesStartInColliders = true;
 
         }
         if (hold)

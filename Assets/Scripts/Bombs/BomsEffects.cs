@@ -1,94 +1,98 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Burst.CompilerServices;
 using UnityEngine;
 
 public class BomsEffects : MonoBehaviour
 {
-    public void DestroyEffect()
+    public float explosionForce = 150;
+    public float explosionRadius = 3;
+    public float upwardsModifier = 100;
+    public float Damege = 3;
+
+    private List<GameObject> AllPlayerGranadeRadius = new List<GameObject>();
+    private List<GameObject> AllEnemyGranadeRadius = new List<GameObject>();
+
+
+    void Start()
     {
-        Destroy(gameObject);
-    }
-
-    
-    //public float radius = 5f;
-    public float force = 2000f;
-
-    public float radiusOfImpact = 5f;
-    public LayerMask LayerToHit;
-
-    private float saveForce;
-
-    public int damage = 5;
-
-    private void Start()
-    {
-        saveForce= force;
-        Explode();
-    }
-
-    //void Explode()
-    //{
-    //    Collider2D[] overlappedColliders = Physics2D.OverlapCircleAll(transform.position, radius);
-
-    //    for (int j = 0; j < overlappedColliders.Length; j++)
-    //    {
-    //        Rigidbody2D rigidbody = overlappedColliders[j].attachedRigidbody;
-    //        if (rigidbody)
-    //        {
-    //            rigidbody.AddExplosionForce2D(force, this.transform.position, radius);
-    //        }
-    //    }
-    //}
-
-    private void Explode()
-    {
-        
-        Collider2D[] objects = Physics2D.OverlapCircleAll(transform.position, radiusOfImpact, LayerToHit);
-
-        for (int i = 0; i < objects.Length; i++)
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, explosionRadius);
+        foreach (Collider2D col in colliders)
         {
-            if (objects[i].tag == "Player")
+            Rigidbody2D rb2 = col.GetComponent<Rigidbody2D>();
+            if (rb2 != null)
             {
-                if (!objects[i].GetComponent<Player>().isGround)
-                {
-                    force = 200;
+                if (col.CompareTag("Player"))
+                {         
+                    if (!col.GetComponent<Player>().ImInGrenadeRadius)
+                    {
+                        if (!col.GetComponent<Player>().isGround)
+                        {
+                            Explode(rb2, explosionForce / 2);
+                            col.GetComponent<Player>().TakeDamage(Damege, true, transform.position);
+                            col.GetComponent<Player>().StartStun();
+                        }
+                        else
+                        {
+                            Explode(rb2, explosionForce);
+                            col.GetComponent<Player>().TakeDamage(Damege, true, transform.position);
+                            col.GetComponent<Player>().StartStun();
+                        }
+                    }
+                    col.GetComponent<Player>().ImInGrenadeRadius = true;
+                    AllPlayerGranadeRadius.Add(col.gameObject);
                 }
-                else if (objects[i].GetComponent<Player>().isGround)
-                    force = saveForce;
-
-                objects[i].GetComponent<Player>().TakeDamage(damage);
-            }
-            if (objects[i].tag == "Enemy")
-            {
-                if (!objects[i].GetComponent<Enemy>().isGround)
+                if (col.CompareTag("Enemy"))
                 {
-                    force = 200;
-                }
-                else if (objects[i].GetComponent<Enemy>().isGround)
-                    force = saveForce;
-
-                objects[i].GetComponent<Enemy>().TakeDamage(damage);
-            }
-
-            if (objects[i].GetComponent<Rigidbody2D>())
-            {
-                Vector2 direction = objects[i].transform.position - transform.position;
-
-                if (objects[i].tag == "Enemy" || objects[i].tag == "Player")
-                {
-                    objects[i].GetComponent<Rigidbody2D>().AddForce(direction * (force * 15));
+                    if (!col.GetComponent<Enemy>().ImInGrenadeRadius)
+                    {
+                        if (!col.GetComponent<Enemy>().isGround)
+                        {
+                            Explode(rb2, explosionForce / 2);
+                            col.GetComponent<Enemy>().TakeDamage(Damege);
+                        }
+                        else
+                        {
+                            Explode(rb2, explosionForce);
+                            col.GetComponent<Enemy>().TakeDamage(Damege);
+                        }
+                        col.GetComponent<Enemy>().ImInGrenadeRadius = true;
+                        AllEnemyGranadeRadius.Add(col.gameObject);
+                    }
                 }
                 else
-                {
-                    objects[i].GetComponent<Rigidbody2D>().AddForce(direction * 250);
-                }
+                    Explode(rb2, 20);
             }
+            if (col.CompareTag("GrenadeItem"))
+                col.GetComponent<grenade>().enabled = true;
+            if (col.CompareTag("Fireplugs"))
+                col.GetComponent<Fireplugs>().ExplodeThisObject();
         }
     }
 
-    private void OnDrawGizmosSelected()
+    private void Explode(Rigidbody2D Erb2, float EexplosionForce)
     {
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, radiusOfImpact);
+        //Erb2.AddForce((Erb2.transform.position - transform.position).normalized * EexplosionForce, ForceMode2D.Impulse);
+        Vector2 direction = Erb2.transform.position - transform.position;
+        Erb2.AddForce(direction.normalized * EexplosionForce, ForceMode2D.Impulse);
+    }
+    public void DestroyEffect()
+    {
+        for (int i = 0; i < AllPlayerGranadeRadius.Count; i++)
+        {
+            AllPlayerGranadeRadius[i].GetComponent<Player>().ImInGrenadeRadius = false;
+        }
+        for (int i = 0; i < AllEnemyGranadeRadius.Count; i++)
+        {
+            if (AllEnemyGranadeRadius[i] != null)
+                AllEnemyGranadeRadius[i].GetComponent<Enemy>().ImInGrenadeRadius = false;
+        }
+        Destroy(gameObject);
+    }
+
+    void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, explosionRadius);
     }
 }

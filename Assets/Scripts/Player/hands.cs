@@ -34,4 +34,12 @@ public class hands : MonoBehaviour
     {
         GetComponent<Transform>().rotation = Quaternion.Euler(0f, 0f, 0f);
     }
+
+    public void ReloadEndPistol()
+    {
+        GetComponent<Animator>().SetBool("reload", false);
+        Transform holdPoint = transform.GetChild(0).GetChild(0);
+        if (holdPoint.childCount > 0)
+            holdPoint.GetChild(0).GetComponent<Pistol>().Reload();
+    }
 }

@@ -17,8 +17,12 @@ public class Phone : MonoBehaviour
 
     public GameObject[] allProducts;
 
+    public GameObject AlreadyExistDrones;
+
     private void Update()
     {
+        AlreadyExistDrones = GameObject.FindGameObjectWithTag("Drones");
+
         if (Input.GetKeyDown(KeyCode.Tab) && !anim.GetBool("up_or_down"))
             anim.SetBool("up_or_down", true);
         else if (Input.GetKeyDown(KeyCode.Tab) && anim.GetBool("up_or_down"))
@@ -28,23 +32,28 @@ public class Phone : MonoBehaviour
         {
             int price = int.Parse(ProductSelection[i].transform.Find("Textprice").gameObject.GetComponent<TextMeshProUGUI>().text);
 
-            if(Player.money < price)
-                ProductSelection[i].transform.Find("product").gameObject.GetComponent<Button>().interactable = false;
-            else if (Player.money >= price)
-                ProductSelection[i].transform.Find("product").gameObject.GetComponent<Button>().interactable = true;
+            if (!AlreadyExistDrones)
+            {
+                if (Player.money < price)
+                    ProductSelection[i].GetComponent<Button>().interactable = false;
+                else if (Player.money >= price)
+                    ProductSelection[i].GetComponent<Button>().interactable = true;
+            }
+            else
+                ProductSelection[i].GetComponent<Button>().interactable = false;
         }
-
     }
-    public void OnClick_BuyAmmoPistol(int id)
-    {
-        int price = int.Parse(ProductSelection[id].transform.Find("Textprice").gameObject.GetComponent<TextMeshProUGUI>().text);
 
+    public void OnClick_Buy(int id)
+    {
+        Debug.Log(id);
+        int price = int.Parse(ProductSelection[id].transform.Find("Textprice").gameObject.GetComponent<TextMeshProUGUI>().text);
         if (Player.money >= price)
         {
             Instantiate(DronesSpawn, new Vector3(SpawnPointDrones.position.x, SpawnPointDrones.position.y, SpawnPointDrones.position.z),
                 Quaternion.identity).GetComponent<Drones>().Product(allProducts[id]);
             Player.money -= price;
+            ProductSelection[id].GetComponent<Button>().interactable = false;
         }
-
     }
 }

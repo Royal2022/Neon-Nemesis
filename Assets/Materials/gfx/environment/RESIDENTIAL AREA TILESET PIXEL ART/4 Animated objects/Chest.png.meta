@@ -20,11 +20,12 @@ TextureImporter:
     externalNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
+    flipGreenChannel: 0
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
-  ignoreMasterTextureLimit: 0
+  ignoreMipmapLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -63,6 +64,7 @@ TextureImporter:
   textureFormatSet: 0
   ignorePngGamma: 0
   applyGammaDecoding: 0
+  swizzle: 50462976
   cookieLightType: 0
   platformSettings:
   - serializedVersion: 3
@@ -113,6 +115,18 @@ TextureImporter:
     overridden: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -120,10 +134,10 @@ TextureImporter:
       name: Chest_0
       rect:
         serializedVersion: 2
-        x: 1
+        x: 0
         y: 0
-        width: 30
-        height: 24
+        width: 32
+        height: 26
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -141,10 +155,10 @@ TextureImporter:
       name: Chest_1
       rect:
         serializedVersion: 2
-        x: 33
+        x: 64
         y: 0
-        width: 30
-        height: 24
+        width: 32
+        height: 26
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -162,10 +176,10 @@ TextureImporter:
       name: Chest_2
       rect:
         serializedVersion: 2
-        x: 65
+        x: 32
         y: 0
-        width: 30
-        height: 24
+        width: 32
+        height: 26
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -183,10 +197,10 @@ TextureImporter:
       name: Chest_3
       rect:
         serializedVersion: 2
-        x: 97
+        x: 96
         y: 0
-        width: 30
-        height: 25
+        width: 32
+        height: 26
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -228,7 +242,7 @@ TextureImporter:
         x: 160
         y: 0
         width: 32
-        height: 20
+        height: 26
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -249,7 +263,7 @@ TextureImporter:
         x: 192
         y: 0
         width: 32
-        height: 15
+        height: 26
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -270,7 +284,7 @@ TextureImporter:
         x: 224
         y: 0
         width: 32
-        height: 15
+        height: 26
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -295,17 +309,16 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Chest_3: 900683853
       Chest_0: 126995930
-      Chest_6: -2036251239
-      Chest_5: 1444061445
-      Chest_2: 1242007048
-      Chest_4: 864578849
-      Chest_7: 1830968903
       Chest_1: -2072253394
-  spritePackingTag: 
+      Chest_2: 1242007048
+      Chest_3: 900683853
+      Chest_4: 864578849
+      Chest_5: 1444061445
+      Chest_6: -2036251239
+      Chest_7: 1830968903
+  mipmapLimitGroupName: 
   pSDRemoveMatte: 0
-  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 

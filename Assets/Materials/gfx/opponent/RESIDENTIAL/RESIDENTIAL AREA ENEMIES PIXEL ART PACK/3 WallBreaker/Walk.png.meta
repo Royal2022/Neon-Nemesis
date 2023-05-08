@@ -136,10 +136,10 @@ TextureImporter:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 27
-        height: 36
+        width: 34
+        height: 47
       alignment: 9
-      pivot: {x: 0.740841, y: 0.5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -157,10 +157,10 @@ TextureImporter:
         serializedVersion: 2
         x: 48
         y: 0
-        width: 26
-        height: 37
+        width: 34
+        height: 47
       alignment: 9
-      pivot: {x: 0.8112805, y: 0.5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -178,10 +178,10 @@ TextureImporter:
         serializedVersion: 2
         x: 96
         y: 0
-        width: 29
-        height: 36
-      alignment: 9
-      pivot: {x: 0.68812037, y: 0.5}
+        width: 34
+        height: 47
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -199,10 +199,10 @@ TextureImporter:
         serializedVersion: 2
         x: 144
         y: 0
-        width: 32
-        height: 36
-      alignment: 9
-      pivot: {x: 0.62465715, y: 0.5}
+        width: 34
+        height: 47
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -220,10 +220,10 @@ TextureImporter:
         serializedVersion: 2
         x: 192
         y: 0
-        width: 28
-        height: 37
-      alignment: 9
-      pivot: {x: 0.71153915, y: 0.5}
+        width: 34
+        height: 47
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -241,10 +241,10 @@ TextureImporter:
         serializedVersion: 2
         x: 240
         y: 0
-        width: 26
-        height: 36
+        width: 34
+        height: 47
       alignment: 9
-      pivot: {x: 0.7719785, y: 0.5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -267,12 +267,12 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Walk_5: -261797621
       Walk_0: 269325674
-      Walk_4: -1637808759
+      Walk_1: 29075490
       Walk_2: 1726730155
       Walk_3: -265030552
-      Walk_1: 29075490
+      Walk_4: -1637808759
+      Walk_5: -261797621
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

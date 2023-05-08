@@ -5,7 +5,7 @@ using UnityEngine;
 public class bullet_Enemy : MonoBehaviour
 {
     public float speed = 25f;
-    public int damage = 2;
+    public float damage = 2;
     public Rigidbody2D rb;
 
 
@@ -39,7 +39,7 @@ public class bullet_Enemy : MonoBehaviour
         {
             if (hitInfo.collider.gameObject.CompareTag("Player"))
             {
-                hitInfo.collider.gameObject.GetComponent<Player>().TakeDamage(damage);
+                hitInfo.collider.gameObject.GetComponent<Player>().TakeDamage(damage, true, transform.position);
                 Destroy(gameObject);
             }
         }

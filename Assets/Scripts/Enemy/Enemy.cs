@@ -8,7 +8,7 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
 
-    public int health;
+    public float health;
     public float speed;
     public float distance = 6f;
     public float distanceBack = 1.5f;
@@ -18,7 +18,7 @@ public class Enemy : MonoBehaviour
     public bool playerNoticed = false;
 
 
-    public bool hold = false;
+    private bool hold = false;
 
 
     public bool isGround;
@@ -55,6 +55,17 @@ public class Enemy : MonoBehaviour
     public float startTimeBtwShots = 4;
     public bool IwasHit = false;
 
+    public bool CanJump;
+
+    public bool Death;
+
+    /*=========Sound=========*/
+    public AudioSource DeathSound;
+    public AudioSource DamagSound;
+    public AudioSource RunSound;
+    /*==========================*/
+
+    public bool ImInGrenadeRadius;
 
     private void Start()
     {
@@ -80,7 +91,7 @@ public class Enemy : MonoBehaviour
             Physics2D.queriesStartInColliders = false;
 
             hit = Physics2D.Raycast(transform.position, Vector3.right * transform.localScale.x, distance, SeePlayer);
-            if (hit.collider != null && hit.collider.gameObject.tag == "Player")
+            if (hit.collider != null && hit.collider.CompareTag("Player"))
             {
                 playerNoticed = true;
                 hold =true;
@@ -92,7 +103,7 @@ public class Enemy : MonoBehaviour
             }           
 
             hitBack = Physics2D.Raycast(transform.position, Vector3.left * transform.localScale.x, distanceBack, SeePlayer);
-            if (hitBack.collider != null && hitBack.collider.gameObject.tag == "Player")
+            if (hitBack.collider != null && hitBack.collider.CompareTag("Player"))
             {
                 Flip();
                 hold = true;
@@ -109,6 +120,7 @@ public class Enemy : MonoBehaviour
 
         if (health <= 0 && isGround)
         {
+            Death = true;
             anim.Play("death");
             triggerDeath = true;
         }
@@ -128,10 +140,13 @@ public class Enemy : MonoBehaviour
         if (speed > 0 && !anim.GetBool("attack_enemy"))
         {
             anim.SetBool("run_enemy", true);
+            if (!Death)
+                RunSound.volume = 0.4f;          
         }
         else
         {
             anim.SetBool("run_enemy", false);
+            RunSound.volume = 0;
         }
 
         if (target != null)
@@ -164,19 +179,20 @@ public class Enemy : MonoBehaviour
             timeBtwShots -= Time.deltaTime;
         
 
-        if (timeBtwShots <= 0)
+        if (timeBtwShots <= 0 && IwasHit)
         {
-            speed = 3;
             IwasHit = false;
+            timeBtwShots = startTimeBtwShots;
+            speed = 3;
         }
 
     }
 
-    public void TakeDamage(int damage)
+    public void TakeDamage(float damage)
     {
         health -= damage;
         trigger = true;
-
+        IwasHit = false;
 
         spriteRend.material = matBlink;
         Invoke("ResetMaterial", 0.1f);
@@ -188,16 +204,20 @@ public class Enemy : MonoBehaviour
 
     public void Flip()
     {
-        facingRight = !facingRight;
+        if (!Death)
+        {
+            facingRight = !facingRight;
 
-        Vector3 Scaler = gameObject.transform.localScale;
-        Scaler.x *= -1;
-        gameObject.transform.localScale = Scaler;
+            Vector3 Scaler = transform.localScale;
+            Scaler.x *= -1;
+            transform.localScale = Scaler;
+        }
     }
 
     public void JumpEnemy()
     {
         rb.velocity = Vector2.up * jumpForce;
+        anim.SetBool("run_enemy", false);
     }
 
 
@@ -205,10 +225,19 @@ public class Enemy : MonoBehaviour
     {
         Destroy(gameObject);
     }
+    public void DeathSoundPlay()
+    {
+        RunSound.volume = 0;
+        DeathSound.Play();
+    }
 
     public void OnEnemyAttack()
     {
-        FindObjectOfType<Player>().health -= damege;
+        RaycastHit2D HitAttack = Physics2D.Raycast(transform.position, Vector3.right * transform.localScale.x, distance, SeePlayer);
+        if (HitAttack.collider != null && HitAttack.collider.CompareTag("Player"))
+        {
+            HitAttack.collider.GetComponent<Player>().TakeDamage(damege, false, transform.position);
+        }
     }
 
 

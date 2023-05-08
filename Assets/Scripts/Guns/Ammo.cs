@@ -4,52 +4,21 @@ using UnityEngine;
 
 public class Ammo : MonoBehaviour
 {
-    /*
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.CompareTag("Player") && gameObject.tag == "pistol2")
-        {
-            Destroy(gameObject);
-            AutomaticGun.allAmmo += 35;
-        }
-        else if (collision.CompareTag("Player") && gameObject.tag == "pistol1")
-        {
-            Destroy(gameObject);
-            Pistol.allAmmo += 15;
-            Debug.Log("C");
-        }
-    }*/
-
-    //private void OnTriggerEnter2D(Collider2D collision)
-    //{
-    //    if (gameObject.tag == "pistol1")
-    //        if (collision.CompareTag("Player"))
-    //        {
-    //            Destroy(gameObject);
-    //            Player.pistol_ammo += 15;
-    //        }
-    //    if (gameObject.tag == "pistol2")
-    //        if (collision.CompareTag("Player"))
-    //        {
-    //            Destroy(gameObject);
-    //            Player.automaticGun_ammo += 35;
-    //        }
-
-    //}
-
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (gameObject.tag == "pistol1")
-            if (collision.gameObject.CompareTag("Player"))
+        if (collision.collider.CompareTag("Player"))
+        {
+            collision.collider.GetComponent<Player>().AmmoSound.Play();
+            if (gameObject.CompareTag("pistol1"))
             {
-                Destroy(gameObject);
                 Player.pistol_ammo += 15;
-            }
-        if (gameObject.tag == "pistol2")
-            if (collision.gameObject.CompareTag("Player"))
-            {
                 Destroy(gameObject);
-                Player.automaticGun_ammo += 35;
             }
+            else if (gameObject.CompareTag("pistol2"))
+            {
+                Player.automaticGun_ammo += 35;
+                Destroy(gameObject);
+            }
+        }
     }
 }

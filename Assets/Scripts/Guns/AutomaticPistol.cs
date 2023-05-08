@@ -29,7 +29,7 @@ public class AutomaticPistol : MonoBehaviour
     [SerializeField] private WeaponSwitch ws;
 
 
-    // ==============================================================
+    // ==============================================================    
 
     private void Start()
     {
@@ -45,12 +45,16 @@ public class AutomaticPistol : MonoBehaviour
         }
 
         //OutText();
+        var main = gameObject.transform.GetChild(1).gameObject.GetComponent<ParticleSystem>().main;
+
 
         if (timeBtwShots <= 0 && currentAmmo > 0)
         {
             if (Input.GetMouseButton(0) && gameObject.transform.parent != null)
             {
-                gameObject.transform.GetChild(1).gameObject.GetComponent<ParticleSystem>().startSpeed = 0.5f;
+                main.startSpeed = 0.5f;
+                //gameObject.transform.GetChild(1).gameObject.GetComponent<ParticleSystem>().startSpeed = 0.5f;
+
                 Instantiate(bullet, shotPoint.position, transform.rotation);
                 timeBtwShots = startTimeBtwShots;
                 currentAmmo -= 1;
@@ -58,7 +62,8 @@ public class AutomaticPistol : MonoBehaviour
             }
             else
             {
-                gameObject.transform.GetChild(1).gameObject.GetComponent<ParticleSystem>().startSpeed = 0;
+                main.startSpeed = 0;
+                //gameObject.transform.GetChild(1).gameObject.GetComponent<ParticleSystem>().startSpeed = 0;
             }
         }
         else
@@ -68,7 +73,8 @@ public class AutomaticPistol : MonoBehaviour
 
         if (currentAmmo == 0)
         {
-            gameObject.transform.GetChild(1).gameObject.GetComponent<ParticleSystem>().startSpeed = 0;
+            main.startSpeed = 0;
+            //gameObject.transform.GetChild(1).gameObject.GetComponent<ParticleSystem>().startSpeed = 0;
         }
 
         // ======================== Ammo ================================

@@ -17,9 +17,11 @@ public class WeaponSwitch : MonoBehaviour
 
     public RuntimeAnimatorController nogunanim;
     public RuntimeAnimatorController gunanim;
+    public RuntimeAnimatorController pistolanim;
+
+    public Animator PlayerAnim;
 
     public Text ammoCount;
-
 
     void Start()
     {
@@ -30,56 +32,53 @@ public class WeaponSwitch : MonoBehaviour
 
     public void Update()
     {
-        if (weaponSwitch == 1)
-        {
-            gameObject.transform.parent.gameObject.transform.Find("arm").gameObject.SetActive(true);
-        }
-        if (weaponSwitch != 1)
-        {
-            gameObject.transform.parent.gameObject.transform.Find("arm").gameObject.SetActive(false);
-        }
         int currentWeapon = weaponSwitch;
 
         
-        if (Input.GetAxis("Mouse ScrollWheel") > 0f)
+        if (!PlayerAnim.GetCurrentAnimatorStateInfo(0).IsName("sault") || !PlayerAnim.GetBool("Sault"))
         {
-            if (weaponSwitch >= transform.childCount - weaponOpened)
+            if (Input.GetAxis("Mouse ScrollWheel") > 0f)
+            {
+                if (weaponSwitch >= transform.childCount - weaponOpened)
+                {
+                    weaponSwitch = 0;
+                }
+                else
+                {
+                    weaponSwitch++;
+                }
+            }
+            if (Input.GetAxis("Mouse ScrollWheel") < 0f)
+            {
+                if (weaponSwitch <= 0)
+                {
+                    weaponSwitch = transform.childCount - weaponOpened;
+                }
+                else
+                {
+                    weaponSwitch--;
+                }
+            }
+
+
+            if (Input.GetKeyDown(KeyCode.Alpha1))
             {
                 weaponSwitch = 0;
+                Hands.res();
             }
-            else
+            if (Input.GetKeyDown(KeyCode.Alpha2) && transform.childCount >= 2)
             {
-                weaponSwitch++;
+                weaponSwitch = 1;
+                Hands.res();
             }
-        }
-        if (Input.GetAxis("Mouse ScrollWheel") < 0f)
-        {
-            if (weaponSwitch <= 0)
+            if (Input.GetKeyDown(KeyCode.Alpha3) /*&& akPickeUp == true*/)
             {
-                weaponSwitch = transform.childCount - weaponOpened;
-            }
-            else
-            {
-                weaponSwitch--;
+                weaponSwitch = 2;
+                Hands.res();
             }
         }
 
-
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {   
-            weaponSwitch = 0;
-            Hands.res();
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha2) && transform.childCount >= 2)
-        {
-            weaponSwitch = 1;
-            Hands.res();
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha3) /*&& akPickeUp == true*/)
-        {
-            weaponSwitch = 2;
-            Hands.res();
-        }
+        
 
 
         if (currentWeapon != weaponSwitch)
@@ -92,16 +91,24 @@ public class WeaponSwitch : MonoBehaviour
         //FindObjectOfType<Player>().GetComponent<Animator>().runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>("Player");
 
 
-
         if (weaponSwitch == 0)
         {
-            FindObjectOfType<Player>().GetComponent<Animator>().runtimeAnimatorController = nogunanim;
-            FindObjectOfType<Player>().GetComponent<Animator>().applyRootMotion = false;
+            PlayerAnim.SetFloat("Blend", 0);
+            OutText();
+            //player.GetComponent<Animator>().runtimeAnimatorController = nogunanim;
+            //player.GetComponent<Animator>().applyRootMotion = false;
         }
-        else if(weaponSwitch != 0)
+        else if (weaponSwitch == 1)
         {
-            FindObjectOfType<Player>().GetComponent<Animator>().runtimeAnimatorController = gunanim;
-            FindObjectOfType<Player>().GetComponent<Animator>().applyRootMotion = true;
+            PlayerAnim.SetFloat("Blend", 1);
+            //player.GetComponent<Animator>().runtimeAnimatorController = pistolanim;
+            //player.GetComponent<Animator>().applyRootMotion = true;
+        }
+        else if(weaponSwitch == 2)
+        {
+            PlayerAnim.SetFloat("Blend", 2);
+            //player.GetComponent<Animator>().runtimeAnimatorController = gunanim;
+            //player.GetComponent<Animator>().applyRootMotion = true;
         }
 
 
@@ -130,15 +137,8 @@ public class WeaponSwitch : MonoBehaviour
         
     }
 
-
-        /*
-        public void OnTriggerEnter2D(Collider2D collision)
-        {
-            if (collision.gameObject.tag == "AK")
-            {
-                weaponOpened -= 1;
-                akPickeUp = true;
-                Destroy(collision.gameObject);
-            }
-        }*/
+    public void OutText()
+    {
+        ammoCount.text = 0 + "/" + 0;
     }
+}

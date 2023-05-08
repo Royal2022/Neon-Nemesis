@@ -143,7 +143,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   distance: 0.6
-  enemy: {fileID: 2777245502056195158}
+  Enemy: {fileID: 0}
   whatIsGround:
     serializedVersion: 2
     m_Bits: 64
@@ -208,7 +208,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -286,8 +286,7 @@ MonoBehaviour:
   rb: {fileID: 0}
   facingRight: 1
   playerNoticed: 0
-  hold: 0
-  isGrounded: 0
+  isGround: 0
   whatIsGround:
     serializedVersion: 2
     m_Bits: 64
@@ -307,6 +306,7 @@ MonoBehaviour:
   damege: 1
   startTimeBtwShots: 4
   IwasHit: 0
+  CanJump: 0
 --- !u!61 &2777245502056195163
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -432,6 +432,7 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &2777245502056195156
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -444,7 +445,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5192f94acc43b245812819d75609898, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemy: {fileID: 0}
   enemyDistanceAttack: 1.5
 --- !u!1 &2777245502743674950
 GameObject:

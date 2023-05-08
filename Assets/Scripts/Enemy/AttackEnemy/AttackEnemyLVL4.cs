@@ -16,13 +16,13 @@ public class AttackEnemyLVL4 : MonoBehaviour
     {
         if (enemyGetComp.playerNoticed || enemyGetComp.trigger)
         {
-            if ((Vector2.Distance(transform.position, enemyGetComp.target.position) > enemyDistanceAttack /*&& !enemyGetComp.Patrol.gameObject.GetComponent<Patrol>().ground*/) && !enemyGetComp.triggerDeath)
-            {
-                enemyGetComp.speed = 4;
-                Vector2.Distance(transform.position, enemyGetComp.target.transform.position);
-                enemyGetComp.anim.SetBool("attack_enemy", false);
-            }
-            else if (Vector2.Distance(transform.position, enemyGetComp.target.position) <= enemyDistanceAttack && !enemyGetComp.triggerDeath)
+            //if ((Vector2.Distance(transform.position, enemyGetComp.target.position) > enemyDistanceAttack /*&& !enemyGetComp.Patrol.gameObject.GetComponent<Patrol>().ground*/) && !enemyGetComp.triggerDeath)
+            //{
+            //    enemyGetComp.speed = 4;
+            //    Vector2.Distance(transform.position, enemyGetComp.target.transform.position);
+            //    enemyGetComp.anim.SetBool("attack_enemy", false);
+            //}
+            if (Vector2.Distance(transform.position, enemyGetComp.target.position) <= enemyDistanceAttack && !enemyGetComp.triggerDeath)
             {
                 enemyGetComp.speed = 5;
                 enemyGetComp.trigger = false;
@@ -31,6 +31,12 @@ public class AttackEnemyLVL4 : MonoBehaviour
                     enemyGetComp.anim.SetBool("attack_enemy", true);
                 }
             }
+        }
+        else if (Vector2.Distance(transform.position, enemyGetComp.target.position) > enemyDistanceAttack)
+        {
+            enemyGetComp.anim.SetBool("attack_enemy", false);
+            enemyGetComp.speed = 3;
+
         }
     }
 

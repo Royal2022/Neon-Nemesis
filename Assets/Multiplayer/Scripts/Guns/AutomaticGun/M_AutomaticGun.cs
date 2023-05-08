@@ -1,13 +1,9 @@
-using Photon.Pun;
-using System;
+using Mirror;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UI;
 
-
-public class M_AutomaticGun : MonoBehaviourPun
+public class M_AutomaticGun : MonoBehaviour
 {
     public float offset;
     public GameObject bullet;
@@ -35,37 +31,88 @@ public class M_AutomaticGun : MonoBehaviourPun
     // ==============================================================
 
     [SerializeField] private OutPlayerInfo AmmoDisplay;
-    [SerializeField] private M_Player player;
 
+    public Animator anim;
+
+    private M_Player player;
+
+    public bool SHOT;
+
+    public ParticleSystem ParticalS;
 
     private void Start()
-    {      
+    {
         sr = GetComponent<SpriteRenderer>();
         ws = FindObjectOfType<WeaponSwitch>();
     }
 
+
     void Update()
     {
-        if (gameObject.transform.parent)
+        if (gameObject.transform.parent != null)
         {
-            OutText();
-        }
+            player = transform.root.gameObject.GetComponent<M_Player>();
 
+            anim = gameObject.transform.parent.gameObject.transform.parent.gameObject.transform.parent.gameObject.transform.parent.GetComponent<Animator>();
 
-        if (timeBtwShots <= 0 && currentAmmo > 0)
-        {
-            if (Input.GetMouseButton(0) && gameObject.transform.parent != null && transform.root.gameObject.GetComponent<M_Player>().IsItYou)
+            if (gameObject.transform.parent)
             {
                 OutText();
-                PhotonNetwork.Instantiate(bullet.name, shotPoint.position, transform.rotation);
-                timeBtwShots = startTimeBtwShots;
-                currentAmmo -= 1;
+            }
+
+            var main = gameObject.transform.GetChild(1).gameObject.GetComponent<ParticleSystem>().main;
+
+            if (timeBtwShots <= 0 && currentAmmo > 0)
+            {
+                if (Input.GetMouseButton(0) && gameObject.transform.parent != null && transform.root.gameObject.GetComponent<M_Player>().IsItYou)
+                {
+                    SHOT = true;
+                    //player.AnimTrueOrFalse("M_Fire_AutomaticGun", true);
+                    //anim.SetBool("M_Fire_AutomaticGun", true);
+                    //anim.SetBool("Shot", true);
+                    OutText();
+                    player.CallSpawnBullet(player.netId, shotPoint.position, transform.rotation);
+                    timeBtwShots = startTimeBtwShots;
+                    currentAmmo -= 1;
+                    main.startSpeed = player.ParticalValue;
+                }
+                else
+                {
+                    SHOT = false;
+                    //anim.SetBool("Shot", false);
+                    //player.AnimTrueOrFalse("M_Fire_AutomaticGun", false);
+                    //anim.SetBool("M_Fire_AutomaticGun", false);
+                    main.startSpeed = player.ParticalValue;
+                }
+            }
+            else
+            {
+                timeBtwShots -= Time.deltaTime;
+            }
+
+
+
+            if (currentAmmo == 0)
+            {
+                //anim.SetBool("M_Fire_AutomaticGun", false);
+                main.startSpeed = player.ParticalValue;
+                SHOT = false;
+            }
+
+
+
+            if (player.facingRight == true)
+            {
+                ParticalS.transform.localScale = new Vector3(1, 1, 1);
+                ParticalS.GetComponent<ParticleSystemRenderer>().lengthScale = -2;
+            }
+            else if (player.facingRight == false)
+            {
+                ParticalS.transform.localScale = new Vector3(-1, 1, 1);
+                ParticalS.GetComponent<ParticleSystemRenderer>().lengthScale = 2;
             }
         }
-        else
-        {
-            timeBtwShots -= Time.deltaTime;
-        }
+
 
         // ======================== Ammo ================================
 
@@ -75,28 +122,30 @@ public class M_AutomaticGun : MonoBehaviourPun
         }
     }
 
+
+
     public void Reload()
     {
-        int reason = 35 - currentAmmo;
-        if (M_Player.automaticGun_AllAmmo >= reason)
+        if (gameObject.transform.parent != null)
         {
-            M_Player.automaticGun_AllAmmo -= reason;
-            currentAmmo = 35;
+            int reason = 35 - currentAmmo;
+            if (M_Player.automaticGun_AllAmmo >= reason)
+            {
+                M_Player.automaticGun_AllAmmo -= reason;
+                currentAmmo = 35;
+            }
+            else
+            {
+                currentAmmo = currentAmmo + M_Player.automaticGun_AllAmmo;
+                M_Player.automaticGun_AllAmmo = 0;
+            }
         }
-        else
-        {
-            currentAmmo = currentAmmo + M_Player.automaticGun_AllAmmo;
-            M_Player.automaticGun_AllAmmo = 0;
-        }
-
     }
 
     public void OutText()
     {
-        if (!photonView.IsMine) return;
+        if (player.isLocalPlayer)
             FindObjectOfType<OutPlayerInfo>().AmmoInfo(currentAmmo, M_Player.automaticGun_AllAmmo);
     }
-
-
 
 }

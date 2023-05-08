@@ -1,6 +1,6 @@
-using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
+using System.Net;
 using Unity.Burst.CompilerServices;
 using Unity.VisualScripting;
 using UnityEditor;
@@ -11,7 +11,8 @@ public class Player : MonoBehaviour
 
     public static int pistol_ammo = 0;
     public static int automaticGun_ammo = 0;
-    
+
+
     public Rigidbody2D rb;
     public float Speed;
     public float jumpForce;
@@ -26,11 +27,14 @@ public class Player : MonoBehaviour
 
     public static bool facingRight = true;
 
-    public static int money = 50;
+    public static int money = 500;
     public Text MoneyText;
 
-    public int health = 10;
-    public int armor;
+    public static int NumberOfGrenades = 3;
+    public Text NumberOfGrenadesText;
+
+    public float health = 10;
+    public float armor;
 
     public Slider stamine;
     public Slider healthSlider;
@@ -45,18 +49,51 @@ public class Player : MonoBehaviour
     public Vector3 mousePos;
     public Vector3 mousePosClick;
 
+
+    /*=========Sound=========*/
+    public AudioSource RunSound;
+    private bool runSound = false;
+    public AudioSource JumpSound;
+    public AudioSource LadderUpSound;
+    public AudioSource AmmoSound;
+    public AudioSource ArmorSound;
+    public AudioSource FirstAidSound;
+    public AudioSource MoneySound;
+    public AudioSource FractureSound;
+    /*==========================*/
+
+    public GameObject DeathCanvas;
+
+    public bool ImInGrenadeRadius;
+
+    /*============Red_Flicker============*/
+    private Material matBlink;
+    private Material matDefault;
+    private SpriteRenderer spriteRend;
+    public SpriteRenderer hold_P;
+    public SpriteRenderer hold_A;
+    /*===================================*/
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         WS = FindObjectOfType<WeaponSwitch>();
+
+        spriteRend = GetComponent<SpriteRenderer>();
+        matBlink = Resources.Load("EnemyBlink1", typeof(Material)) as Material;
+        matDefault = spriteRend.material;
     }
 
 
     public void FixedUpdate()
     {
-        moveInput = Input.GetAxis("Horizontal");
-        rb.velocity = new Vector2(moveInput * Speed, rb.velocity.y);
+        if (!PlayingOrNotAnim("dropGrenade") && !PlayingOrNotAnim("idle_dropGrenade") && health > 0)
+        {
+            moveInput = Input.GetAxis("Horizontal");
+            rb.velocity = new Vector2(moveInput * Speed, rb.velocity.y);
+        }
+
 
         StaminFunc();
        
@@ -67,6 +104,18 @@ public class Player : MonoBehaviour
         else
         {
             anim.SetBool("player_run", true);
+        }
+
+        if (anim.GetBool("player_run") && isGround && !runSound) {
+            //RunSound.volume = 0.5f;
+            RunSound.Play();
+            runSound = true;
+        }
+        else if (!anim.GetBool("player_run") && runSound || !isGround)
+        {
+            //RunSound.volume = 0;
+            RunSound.Stop();
+            runSound = false;
         }
 
 
@@ -80,6 +129,8 @@ public class Player : MonoBehaviour
             Flip();
             //Debug.Log("left");
         }
+
+
     }
 
     public void Flip()
@@ -90,7 +141,6 @@ public class Player : MonoBehaviour
         Scaler.x *= -1;
         transform.localScale = Scaler;
     }
-
 
     public void Update()
     {
@@ -108,16 +158,17 @@ public class Player : MonoBehaviour
             armorSlider.value = 0;
 
         MoneyText.text = "" + money;
+        NumberOfGrenadesText.text = "" + NumberOfGrenades;
 
-        if (GetComponent<Animator>().runtimeAnimatorController == WS.nogunanim)
+        if (anim.GetFloat("Blend") == 0/*GetComponent<Animator>().runtimeAnimatorController == WS.nogunanim*/)
         {
-            if (Input.GetMouseButtonDown(0))
+            if (Input.GetMouseButtonDown(0) && !PlayingOrNotAnim("dropGrenade") && !PlayingOrNotAnim("idle_dropGrenade"))
             {
-                if (anim.GetBool("player_run") && !anim.GetCurrentAnimatorStateInfo(0).IsName("run_attack"))
+                if (anim.GetBool("player_run") && !PlayingOrNotAnim("run_attack") && !PlayingOrNotAnim("jump"))
                 {
                     anim.SetBool("run_attack", true);
                 }
-                else if (!anim.GetCurrentAnimatorStateInfo(0).IsName("attack"))
+                else if (!PlayingOrNotAnim("attack"))
                 {
                     anim.SetBool("attack", true);
                 }
@@ -128,6 +179,8 @@ public class Player : MonoBehaviour
                 anim.SetBool("run_attack", false);
             }
         }
+
+
 
         if (Input.GetKey(KeyCode.LeftShift) && stamine.value > 3 && isGround == true)
         {
@@ -141,7 +194,7 @@ public class Player : MonoBehaviour
         isGround = Physics2D.OverlapCircle(feetPos.position, checkRaduis, whatIsGround);
 
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && !PlayingOrNotAnim("idle_dropGrenade") && !PlayingOrNotAnim("dropGrenade"))
         {
             if (isGround)
             {
@@ -149,7 +202,7 @@ public class Player : MonoBehaviour
                 anim.SetTrigger("takeOf");
                 doubleJump = false;
             }
-            else if (!doubleJump && GetComponent<Animator>().runtimeAnimatorController == WS.nogunanim)
+            else if (!doubleJump && anim.GetFloat("Blend") == 0 /*GetComponent<Animator>().runtimeAnimatorController == WS.nogunanim*/)
             {
                 doubleJump = true;
                 rb.velocity = Vector2.up * jumpForce;
@@ -181,25 +234,42 @@ public class Player : MonoBehaviour
             }
         }
         /*===========================================*/
+
+
+
+
+
+
+        /*=========Grenade==========*/
+        //if (Input.GetKey(KeyCode.G) && !PlayingOrNotAnim("Run")
+        //    && !PlayingOrNotAnim("jump") && !PlayingOrNotAnim("sault")
+        //    && !PlayingOrNotAnim("run_attack") && !PlayingOrNotAnim("attack") && !anim.GetBool("player_jump") && NumberOfGrenades > 0 && !PlayingOrNotAnim("dropGrenade") && !anim.GetBool("throwGrenade"))
+        //{
+        //    //gameObject.GetComponent<Animator>().runtimeAnimatorController = nogunanim;
+        //    //gameObject.GetComponent<Animator>().applyRootMotion = false;
+
+        //    PowerThrow += 0.2f;
+        //    if (PowerThrow > 15)
+        //        PowerThrow = 15;
+
+        //    anim.SetTrigger("throwGrenadeTrigger");
+        //    if (PlayingOrNotAnim("idle_dropGrenade"))
+        //    {
+        //        WeaponHands.SetActive(false);
+        //        HandPoint.SetActive(true);
+        //    }
+        //}
+        //else if (PlayingOrNotAnim("idle_dropGrenade") && !anim.GetBool("throwGrenade"))
+        //    anim.SetBool("throwGrenade", true);
+        /*==========================*/
     }
 
-    
-    //private void OnTriggerEnter2D(Collider2D collision)
-    //{
-    //    if (collision.CompareTag("pistol2"))
-    //    {
-    //        Destroy(collision.gameObject);
-    //        automaticGun_ammo += 35;
-    //        //Debug.Log("gun");   
-    //    }
-    //    else if (collision.CompareTag("pistol1"))
-    //    {
-    //        Destroy(collision.gameObject);
-    //        pistol_ammo += 15;
-    //        //Debug.Log("pistol");
-    //    }
-    //}
-    
+    public bool PlayingOrNotAnim(string name)
+    {
+       return anim.GetCurrentAnimatorStateInfo(0).IsName($"{name}");
+    }
+
+
 
     public void StaminFunc()
     {
@@ -245,23 +315,85 @@ public class Player : MonoBehaviour
             }
         }
     }
-    public void TakeDamage(int damage)
+    public GameObject PostProcessing;
+    public Blood bloodAnim;
+    public void TakeDamage(float damage, bool BulletOrExplosive, Vector3 direction)
     {
-        if (armor <= 0)
+        StartCoroutine(PostProcessing.GetComponent<PostProcessing>().Dawn());
+        if (direction.x > transform.position.x)
         {
-            if (health != 0)
+            if (facingRight)           
+                bloodAnim.RandomBloodAnim(false);            
+            else           
+                bloodAnim.RandomBloodAnim(true);
+        }
+        else if (direction.x < transform.position.x)
+        {
+            if (facingRight)
+                bloodAnim.RandomBloodAnim(true);
+            else
+                bloodAnim.RandomBloodAnim(false);
+        }
+
+
+        if (BulletOrExplosive)
+        {
+            if (armor <= 0)
             {
-                health -= damage;
+                if (health != 0)
+                {
+                    health -= damage;
+                }
             }
+            else
+                armor -= damage;
         }
         else
-            armor -= damage;
+            health -= damage;
+
+
+        spriteRend.material = matBlink;
+        hold_P.material = matBlink;
+        hold_A.material = matBlink;
+        Invoke("ResetMaterial", 0.1f);
     }
 
+    private void ResetMaterial()
+    {
+        spriteRend.material = matDefault;
+        hold_P.material = matDefault;
+        hold_A.material = matDefault;
+    }
+
+    public void StartStun()
+    {
+        StartCoroutine(PostProcessing.GetComponent<PostProcessing>().StunDawn());
+        StartCoroutine(PostProcessing.GetComponent<PostProcessing>().AberrationDawn());
+    }
+
+
+    /*=========Death==========*/
     public void Death()
     {
-        Destroy(gameObject);
-        Time.timeScale = 0;
+        //Destroy(gameObject);
+        //Time.timeScale = 0;
+        armor = 0;
+        DeathCanvas.SetActive(true);
+        gameObject.SetActive(false);
+    }
+    /*==========================*/
+
+
+    public void SaultStatus(int value)
+    {
+        if (value == 0)
+            anim.SetBool("Sault", true);
+        else
+        {
+            anim.SetBool("Sault", false);
+            anim.Play("Jump", 0, 0.22f);
+        }
+
     }
 
     private void OnDrawGizmos()

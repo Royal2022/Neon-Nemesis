@@ -1,143 +1,215 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
-using Photon.Pun;
+using Mirror;
 using Cinemachine;
-using Unity.Burst.CompilerServices;
-using Photon.Realtime;
-using Photon.Pun.Demo.Asteroids;
 
-public class M_Player : MonoBehaviourPun
+
+
+public class M_Player : NetworkBehaviour
 {
-
-    public static int pistol_AllAmmo = 0;
-    public static int automaticGun_AllAmmo = 0;
-    //public static M_Player localPlayer;
-
     public Rigidbody2D rb;
-
-
     private float moveInput;
-    public float Speed;
+    public float Speed = 4;
     public float jumpForce;
 
+    [SyncVar(hook = nameof(OnHealth))]
+    public int Health;
+    [SyncVar(hook = nameof(OnArmor))]
+    public int Armor;
 
     public Transform feetPos;
-    private bool isGround;
+    public bool isGround;
     public float checkRaduis;
     public LayerMask whatIsGround;
 
-    //public bool doubleJump = false;
-
     public Animator anim;
-
-    public static bool facingRight = true;
 
     [SerializeField] public OutPlayerInfo OutText;
 
-    public bool hold;
-
-    public int Health;
-    public static int armor;
-
-
-    [SerializeField] private Text TextName;
+    public Text TextName;
     [SerializeField] private Canvas NameCanvas;
+
+
+
 
     public GameObject CameraPosition;
 
-
-    public int Player_ID;
-
-    public PhotonView thisPhotonView;
+    public static int pistol_AllAmmo = 0;
+    public static int automaticGun_AllAmmo = 0;
 
     public bool IsItYou;
+    public GameObject BulletPrefab;
+
+    /*======================= Синхронизация направление игрока ================================*/
+    [SyncVar(hook = nameof(OnBoolValueChanged))]
+    public bool facingRight = true;
+    /*=========================================================================================*/
+
+    public GameObject holdpointAutomaticGun;
 
 
+    public GameObject PlayerListingPrefab;
+    public GameObject PLayerListingMenuContent;
+
+
+    private LobbyManager lobbymanager;
+
+    [SyncVar]
+    public int NumberOfRoundsWins;
 
     private void Start()
     {
-        thisPhotonView = GetComponent<PhotonView>();
+        lobbymanager = FindObjectOfType<LobbyManager>();
+        transform.GetChild(3).gameObject.SetActive(false);
+        GetComponent<Rigidbody2D>().simulated = false;
 
         OutText = FindObjectOfType<OutPlayerInfo>();
 
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
-        
-        TextName.text = photonView.Owner.NickName;
-        if (!photonView.IsMine) return;
-            FindObjectOfType<CameraFollow>().m_player = CameraPosition.transform;
 
-        thisPhotonView = GetComponent<PhotonView>();
 
-        if (photonView.IsMine)
-            Player_ID = thisPhotonView.ViewID;
+        DisabledAllChildrenAndParent();
 
-        Debug.Log(Player_ID);
+        if (!isLocalPlayer) return;
+        {
+            lobbymanager.CmdSavePlayerName(M_PlayerInfoSave.PlayerNickName); 
+        }
+
+        if (!isLocalPlayer) return;
+        {
+            FindObjectOfType<CameraFollow>().GetComponent<CinemachineVirtualCamera>().Follow = CameraPosition.transform;            
+        }
+            
+
+
+
+
+
     }
 
 
-    [SerializeField] private GameObject Gun;
-    [SerializeField] private GameObject Gun2;
+    /*======================== Отключение скрипта и дочерних объектов ====================*/
 
+    [ClientRpc]
+    public void RpcDisabledAllChildrenAndParent()
+    {
+        //GetComponent<M_Player>().enabled = false;
+        GetComponent<M_WeaponSwitch>().enabled = false;
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            transform.GetChild(i).gameObject.SetActive(false);
+        }
+
+    }
+    [Command(requiresAuthority = false)]
+    public void CmdDisabledAllChildrenAndParent()
+    {
+        RpcDisabledAllChildrenAndParent();
+    }
+    public void DisabledAllChildrenAndParent()
+    {
+        if (isServer)
+            RpcDisabledAllChildrenAndParent();
+        else if (isClient)
+            CmdDisabledAllChildrenAndParent();
+    }
+    /*====================================================================================*/
+
+
+
+    public Animator animHold;
+
+
+    private bool BoolName;
+    [ClientRpc]
+    public void RpcSetName(string newText)
+    {
+        if (!BoolName)
+        {
+            TextName.text = newText;
+            BoolName = true;
+        }
+    }
+    [Command(requiresAuthority = false)]
+    public void CmdSetName(string newText)
+    {
+        RpcSetName(newText);
+    }
+    public void SetName(string newText)
+    {
+        if (isServer)       
+            RpcSetName(newText);       
+        else if (isClient)
+            CmdSetName(newText);
+    }
+
+
+    //private bool BoolPlayerListingName;
+    //[ClientRpc]
+    //private void RpcPlayerListingSetName()
+    //{
+    //    if (!BoolPlayerListingName && TextName.text != "Nick")
+    //    {
+    //        //FindObjectOfType<LobbyManager>().CreatePlayerListing(TextName.text);
+    //        BoolPlayerListingName = true;
+    //    }
+    //}
+    //[Command]
+    //public void CmdPlayerListingSetName()
+    //{
+    //    RpcPlayerListingSetName();
+    //}
+    //public void PlayerListingSetName()
+    //{
+    //    if (isServer)
+    //        RpcPlayerListingSetName();
+    //    else if (isClient)
+    //        CmdPlayerListingSetName();
+    //}
 
     private void Update()
     {
-        if (Health <= 0)
-        {
-            anim.SetBool("death", true);
-            this.transform.Find("weapon_hands").gameObject.SetActive(false);
-            this.transform.Find("arm").gameObject.SetActive(false);
-        }
-        if (!photonView.IsMine) return;
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            Health -= 10;
-        }
-
-        if (!photonView.IsMine) return;
-        if (Input.GetKeyDown(KeyCode.Z))
-        {
-            PhotonNetwork.Instantiate(Gun.name, new Vector2(Random.Range(-5, 5), 0), Quaternion.identity);
-        }        
-        if (!photonView.IsMine) return;
-        if (Input.GetKeyDown(KeyCode.X))
-        {
-            PhotonNetwork.Instantiate(Gun2.name, new Vector2(Random.Range(-5, 5), 0), Quaternion.identity);
-        }
-        OutTextHealth();
+        //ActiveiteOrDisabledHold();
 
 
-        /*=============== HandAttack =================*/
-        /*
-        if (Input.GetMouseButtonDown(0))
+        if (!isLocalPlayer) return;
+        SetName(M_PlayerInfoSave.PlayerNickName);
+        //PlayerListingSetName();
+
+
+        if (!isLocalPlayer) return;
+        if (holdpointAutomaticGun.transform.childCount > 0)
         {
-            if (anim.GetBool("player_run"))
+            if (holdpointAutomaticGun.transform.GetChild(0).GetComponent<M_AutomaticGun>().SHOT)
             {
-                anim.SetBool("run_attack", true);
+                AnimTrueOrFalse("M_Fire_AutomaticGun", true);
+                animHold.SetBool("M_Fire_AutomaticGun", true);
+                CheckParticalValue(1);
             }
             else
             {
-                anim.SetBool("attack", true);
+                AnimTrueOrFalse("M_Fire_AutomaticGun", false);
+                animHold.SetBool("M_Fire_AutomaticGun", false);
+                CheckParticalValue(0);
             }
+
         }
-        else
-        {
-            anim.SetBool("attack", false);
-            anim.SetBool("run_attack", false);
-        }*/
-        /*=============================================*/
 
 
-        if (!photonView.IsMine) return;
-            moveInput = Input.GetAxis("Horizontal");
-            rb.velocity = new Vector2(moveInput * Speed, rb.velocity.y);
 
-            isGround = Physics2D.OverlapCircle(feetPos.position, checkRaduis, whatIsGround);
+        if (!isLocalPlayer) return;
+        if (Input.GetKeyDown(KeyCode.X))
+            Health = 0;
+
+        if (!isLocalPlayer) return;
+        moveInput = Input.GetAxis("Horizontal");
+        rb.velocity = new Vector2(moveInput * Speed, rb.velocity.y);
+
+        isGround = Physics2D.OverlapCircle(feetPos.position, checkRaduis, whatIsGround);
+
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
@@ -147,8 +219,6 @@ public class M_Player : MonoBehaviourPun
                 anim.SetBool("player_jump", true);
             }
         }
-
-
 
         if (isGround)
         {
@@ -161,30 +231,30 @@ public class M_Player : MonoBehaviourPun
         }
 
 
-        
+
         if (moveInput == 0)
-        {      
+        {
             anim.SetBool("player_run", false);
         }
         else
-        {                
+        {
             anim.SetBool("player_run", true);
         }
-            
-        if (facingRight == false && moveInput > 0)
-   
-        {       
-            Flip();   
-        }
-        else if (facingRight == true && moveInput < 0)
-   
-        {       
-            Flip();   
-        }
 
+
+        if (transform.localScale.x <= -1 && moveInput > 0)
+        {
+            Flip();
+        }
+        else if (transform.localScale.x >= 1 && moveInput < 0)
+
+        {
+            Flip();
+        }
 
 
         /*=========== Разворот при клике  ===========*/
+        if (!isLocalPlayer) return;
         if (Input.GetMouseButtonDown(0) && !Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D) && !anim.GetBool("player_run"))
         {
             if (Camera.main.ScreenToWorldPoint(Input.mousePosition).x < transform.position.x && facingRight)
@@ -197,29 +267,42 @@ public class M_Player : MonoBehaviourPun
             }
         }
         /*===========================================*/
+        OutTextHealth();
 
-        if (!photonView.IsMine) return;
+        /*================================== Смерть игрока ========================================*/
+
+        if (Health <= 0)
+        {
+            SetActiveOrDisabled(3, false);
+            //SetActiveOrDisabled(4, false);
+
+            gameObject.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezePositionX;
+            anim.SetBool("death", true);
+            //anim.Play("death");
+        }
+        /*=========================================================================================*/
+
+
+
+        if (!isLocalPlayer) return;
             IsItYou = true;
-        if (photonView.IsMine) return;
+        if (isLocalPlayer) return;
             IsItYou = false;
-
 
     }
 
     public void Flip()
     {
-        if (!photonView.IsMine) return;
-        facingRight = !facingRight;
-            
-        Vector3 Scaler = transform.localScale;           
-        Scaler.x *= -1;           
-        transform.localScale = Scaler;
+        //facingRight = !facingRight;
+        SetBoolValueOnServer(!facingRight);
 
+        Vector3 Scaler = transform.localScale;
+        Scaler.x *= -1;
+        transform.localScale = Scaler;
 
         Vector3 Scaler2 = NameCanvas.transform.localScale;
         Scaler2.x *= -1;
         NameCanvas.transform.localScale = Scaler2;
-        
     }
 
     private void FixedUpdate()
@@ -256,95 +339,235 @@ public class M_Player : MonoBehaviourPun
         {
             OutText.stamine.value += 0.3f;
         }
-
-
-        //if (Input.GetKey(KeyCode.LeftShift) && stamine.value > 0 && (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S)) && FindObjectOfType<Ladder>().isTrigger == true)
-        //{
-        //    stamine.value -= 0.6f;
-        //}
     }
 
 
-
-
-    [PunRPC]
-    public void TakeDamage(int damage, int ID,  PhotonMessageInfo info)
+    /*======================= Урон играку ================================*/
+    public void CheckTakeDamage(int damage)
     {
-        //if (!photonView.IsMine) return;
-        //Health -= damage;
-        //OutTextHealth();
-        //Debug.Log("Player_ID: "  + Player_ID);
-        //Debug.Log("Id: " + ID);
-        if (!photonView.IsMine) return;
-            if (armor <= 0)
-            {
-                if (Health != 0)
-                {
-                    Health -= damage;
-                }
-            }
-            else
-                armor -= damage;
+        if (isServer)
+        {
+            TakeDamage(damage);
+        }
+        else
+        {
+            CmdTakeDamage(damage);
+        }
     }
+
+
+    private void OnHealth(int oldhealth, int health)
+    {
+        Health = health;
+    }
+    private void OnArmor(int oldarmor, int armor)
+    {
+        Armor = armor;
+    }
+
+    [Server]
+    public void TakeDamage(int damage)
+    {
+        if (Armor <= 0)
+        {
+            if (Health != 0)
+            {
+                Health -= damage;
+            }
+        }
+        else
+            Armor -= damage;
+    }
+
+    [Command]
+    public void CmdTakeDamage(int damage)
+    {
+        TakeDamage(damage);
+    }
+    /*=========================================================================================*/
+
+
 
     public void OutTextHealth()
     {
-        if (!photonView.IsMine) return;
+        if (!isLocalPlayer) return;
         OutText.HealthInfo(Health);
     }
     public void OutInfoArmor()
     {
-        if (!photonView.IsMine) return;
-        OutText.ArmorInfo(armor);
+        if (!isLocalPlayer) return;
+        OutText.ArmorInfo(Armor);
     }
 
-    [PunRPC]
-    public void Death()
+
+
+
+
+    [Server]
+    public void SpawnBullet(uint owner, Vector3 target, Quaternion transf)
     {
-        if (!photonView.IsMine) return;
-        PhotonNetwork.Destroy(gameObject);
+        GameObject bulletGo = Instantiate(BulletPrefab, target, transf);
+
+        NetworkServer.Spawn(bulletGo);
+
+        //if (!isLocalPlayer) return;
+        bulletGo.GetComponent<M_Bullet>().Init(owner, facingRight);
     }
 
-    public void DeathAnim()
+
+    [Command]
+    public void CmdSpawnBullet(uint owner, Vector3 target, Quaternion transf)
     {
-        gameObject.GetPhotonView().RPC("Death", RpcTarget.All);
+        SpawnBullet(owner, target, transf);
     }
 
-    //public float distance = 0.7f;
-    //public LayerMask whatIsSolid;
-    //public int hand_damage = 1;
-
-
-    //public void HandAttack()
-    //{      
-    //    Physics2D.queriesStartInColliders = false;
-
-    //    RaycastHit2D hitInfo = Physics2D.Raycast(transform.position, Vector2.right * transform.localScale.x, distance, whatIsSolid);    
-
-    //    if (hitInfo.collider != null && hitInfo.collider.tag == "Player")    
-    //    {           
-    //        //if (hitInfo.collider.CompareTag("Player"))        
-    //        if (photonView.IsMine) return;
-    //        hitInfo.collider.gameObject.GetComponent<M_Player>().TakeDamage(hand_damage);   
-    //    }
-    //    Physics2D.queriesStartInColliders = true;
-    //}
-
-    //private void OnDrawGizmos()
-    //{
-    //    Gizmos.color = Color.black;
-    //    Gizmos.DrawLine(transform.position, transform.position + Vector3.right * transform.localScale.x * distance);
-    //}
+    public void CallSpawnBullet(uint owner, Vector3 target, Quaternion transf)
+    {
+        if (isServer)
+        {
+            SpawnBullet(owner, target, transf);
+        }
+        else if (isClient)
+        {
+            CmdSpawnBullet(owner, target, transf);
+        }
+    }
 
 
 
+    /*======================= Синхронизация направление игрока ================================*/
+    private void OnBoolValueChanged(bool oldValue, bool newValue)
+    {
+        facingRight = newValue;
+    }
 
+    private void SetBoolValueOnServer(bool newValue)
+    {
+        if (isServer)
+            facingRight = newValue;
+        else       
+            CmdSetBoolValueOnServer(newValue);
+    }
+
+    [Command]
+    private void CmdSetBoolValueOnServer(bool newValue)
+    {
+        facingRight = newValue;
+    }
+    /*=========================================================================================*/
+
+    /*================================== Смерть игрока ========================================*/
+    public void DeathAnimEnd()
+    {
+        ReSpawnManager reSpawnManager = FindAnyObjectByType<ReSpawnManager>();
+        reSpawnManager.ResSpawnInfo(gameObject);
+        reSpawnManager.Win();
+        gameObject.SetActive(false);
+        anim.SetBool("death", false);
+    }
+    /*=========================================================================================*/
+
+
+    /*=== Изменение состояния дочерних объектов на активированный или деактивированный ========*/
+    [ClientRpc]
+    public void RpcSetActive(int num, bool tf)
+    {
+        transform.GetChild(num).gameObject.SetActive(tf);
+    }
+
+    public void SetActiveOrDisabled(int num, bool tf)
+    {
+        if (isServer)
+            RpcSetActive(num, tf);  
+        else if (isClient)        
+            CmdSetActive(num, tf);
+    }
+
+    [Command]
+    public void CmdSetActive(int num, bool tf)
+    {
+        RpcSetActive(num, tf);
+    }
+    /*=========================================================================================*/
+
+
+
+    [Command]
+    void CmdAnimationBool(string animationName, bool value)
+    {
+        //animHold.SetBool(animationName, value);
+        RpcSetAnimBool(animationName, value);
+    }
+
+    [ClientRpc]
+    public void RpcSetAnimBool(string paramName, bool value)
+    {
+        animHold.SetBool(paramName, value);
+    }
+
+    public void AnimTrueOrFalse(string animationName, bool value)
+    {
+        if (isServer)
+        {
+            RpcSetAnimBool(animationName, value);
+        }
+        else if (isClient)
+        {
+            CmdAnimationBool(animationName, value);
+        }
+    }
+
+
+
+
+
+    /*======================= Partical System================================*/
+    [SyncVar(hook = nameof(OnParticalValue))]
+    public int ParticalValue;
+
+    private void OnParticalValue(int oldParticalValue, int particalValue)
+    {
+        ParticalValue = particalValue;
+    }
+
+    public void CheckParticalValue(int damage)
+    {
+        if (isServer)
+        {
+            ServParticalValue(damage);
+        }
+        else
+        {
+            CmdServParticalValue(damage);
+        }
+    }
+
+
+    [Server]
+    public void ServParticalValue(int damage)
+    {
+        ParticalValue = damage;
+    }
+
+    [Command]
+    public void CmdServParticalValue(int damage)
+    {
+        ServParticalValue(damage);
+    }
+    /*=========================================================================================*/
+
+
+    bool AcitveHoldStart;
+    public void ActiveiteOrDisabledHold()
+    {
+        if (!AcitveHoldStart && !lobbymanager.gameObject.activeSelf)
+        {
+            AcitveHoldStart = true;
+            transform.GetChild(3).gameObject.SetActive(true);
+            GetComponent<Rigidbody2D>().simulated = true;
+        }
+    }
 
 }
-
-
-
-
-
 
 

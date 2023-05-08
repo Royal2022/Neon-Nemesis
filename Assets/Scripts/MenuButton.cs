@@ -1,3 +1,4 @@
+using Mirror;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,7 +12,7 @@ public class MenuButton : MonoBehaviour
     }
     public void OnClick_MultiplayerPlay() 
     {
-        SceneManager.LoadScene(2);
+        SceneManager.LoadScene(4);
     }
     public void OnClick_BackMenu()
     {
@@ -22,7 +23,7 @@ public class MenuButton : MonoBehaviour
     /*LocalPlayGames*/
     public void OnClick_Continue()
     {
-        SceneManager.LoadScene(5);
+        SceneManager.LoadScene(3);
     }    
     
     

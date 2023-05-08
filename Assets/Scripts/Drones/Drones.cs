@@ -1,7 +1,7 @@
-using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 
 public class Drones : MonoBehaviour
@@ -25,12 +25,21 @@ public class Drones : MonoBehaviour
     private bool ThrowOne;
 
 
+
+    private Material matBlink;
+    private Material matDefault;
+    private SpriteRenderer spriteRend;
+
     void Start()
     {
         speedDrons = SpeedDrons;
         playerPosition = FindObjectOfType<Player>().GetComponent<Transform>();
 
         OldPosition = playerPosition.position;
+
+        spriteRend = GetComponent<SpriteRenderer>();
+        matBlink = Resources.Load("EnemyBlink1", typeof(Material)) as Material;
+        matDefault = spriteRend.material;
     }
 
     void Update()
@@ -82,6 +91,18 @@ public class Drones : MonoBehaviour
         }
         else
             anim.SetBool("run", false);
+
+
+        if (healthDrons <= 0)
+        {
+            anim.Play("death");
+            speedDrons = 0;
+            if (gameObject.transform.GetChild(0).childCount >= 1)
+            {
+                gameObject.transform.GetChild(0).transform.GetChild(0).GetComponent<Rigidbody2D>().simulated = true;
+                gameObject.transform.GetChild(0).transform.GetChild(0).parent = null;
+            }
+        }
     }
 
     private void FixedUpdate()
@@ -103,19 +124,25 @@ public class Drones : MonoBehaviour
     public void Product(GameObject product)
     {
         Instantiate(product, gameObject.transform.GetChild(0)).GetComponent<Rigidbody2D>().simulated = false;
+
+        if (gameObject.transform.GetChild(0).transform.GetChild(0).GetComponent<Animator>())
+            gameObject.transform.GetChild(0).transform.GetChild(0).GetComponent<Animator>().enabled = false;
     }
 
     private bool death;
 
     private void Throw()
     {
+        if (gameObject.transform.GetChild(0).transform.GetChild(0).GetComponent<Animator>())
+            gameObject.transform.GetChild(0).transform.GetChild(0).GetComponent<Animator>().enabled = true;
+
         gameObject.transform.GetChild(0).transform.GetChild(0).GetComponent<Rigidbody2D>().simulated = true;
         gameObject.transform.GetChild(0).transform.GetChild(0).parent = null;
         delivered = true;
         speedDrons = 4;
 
         death = true;
-        //Invoke("Death", 2);
+        Invoke("OnBecameInvisible", 10);
     }
 
     public void Flip()
@@ -127,7 +154,17 @@ public class Drones : MonoBehaviour
         gameObject.transform.localScale = Scaler;
     }
 
+    public void TakeDamage(int damage)
+    {
+        healthDrons -= damage;
 
+        spriteRend.material = matBlink;
+        Invoke("ResetMaterial", 0.1f);
+    }
+    private void ResetMaterial()
+    {
+        spriteRend.material = matDefault;
+    }
 
     public void Death()
     {
@@ -136,6 +173,6 @@ public class Drones : MonoBehaviour
     void OnBecameInvisible()
     {
         if (death)
-            Death();
+            anim.Play("death");
     }
 }

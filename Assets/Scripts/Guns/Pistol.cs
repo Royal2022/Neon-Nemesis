@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.UI;
 
 public class Pistol : MonoBehaviour
@@ -17,6 +18,10 @@ public class Pistol : MonoBehaviour
     public static SpriteRenderer sr;
 
     private Animator anim;
+
+    public AudioSource GetGunSound;
+    public AudioSource ReloadSound;
+    public AudioSource ShotSound;
 
 
     // ======================== Ammo ================================
@@ -42,6 +47,7 @@ public class Pistol : MonoBehaviour
     {
         if (gameObject.transform.parent != null)
         {
+            GetGunSound.enabled = true;
             anim = gameObject.transform.parent.gameObject.transform.parent.gameObject.transform.parent.GetComponent<Animator>();
 
 
@@ -55,14 +61,17 @@ public class Pistol : MonoBehaviour
 
             if (timeBtwShots <= 0 && currentAmmo > 0)
             {
-                if (Input.GetMouseButtonDown(0) && gameObject.transform.parent != null)
+                if (Input.GetMouseButtonDown(0) && gameObject.transform.parent != null && !anim.GetBool("reload"))
                 {
+                    ShotSound.Play();
                     gameObject.transform.GetChild(1).gameObject.GetComponent<ParticleSystem>().Play();
                     Instantiate(bullet, shotPoint.position, transform.rotation);
                     timeBtwShots = startTimeBtwShots;
                     currentAmmo -= 1;
                     OutText();
                     anim.SetBool("fire", true);
+                    shotPoint.GetComponent<Light2D>().intensity = 2.5f;
+                    Invoke("offLight", 0.05f);
                 }
             }
             else
@@ -83,18 +92,18 @@ public class Pistol : MonoBehaviour
                 gameObject.transform.GetChild(1).gameObject.transform.localScale = new Vector3(-1, 1, 1);
                 gameObject.transform.GetChild(1).gameObject.GetComponent<ParticleSystemRenderer>().lengthScale = 2;
             }
+
+
+            // ======================== Ammo ================================
+
+            if (Input.GetKeyDown(KeyCode.R) && Player.pistol_ammo > 0 && currentAmmo < 15)
+            {
+                anim.SetBool("reload", true);
+                ReloadSound.Play();
+            }
         }
-
-
-
-        // ======================== Ammo ================================
-
-        if (Input.GetKeyDown(KeyCode.R) && Player.pistol_ammo > 0)
-        {
-            Reload();
-        }
-
-    
+        else
+            GetGunSound.enabled = false;
     }
 
     public void Reload()
@@ -110,18 +119,20 @@ public class Pistol : MonoBehaviour
             currentAmmo = currentAmmo + Player.pistol_ammo;
             Player.pistol_ammo = 0;
         }
-
     }
+
 
     public void OutText()
     {
         ammoCount.text = currentAmmo + "/" + Player.pistol_ammo;
     }
 
-    
+
     // ==============================================================
 
-
-
+    public void offLight()
+    {
+        shotPoint.GetComponent<Light2D>().intensity = 0;
+    }
 
 }

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.UI;
 
 
@@ -35,6 +36,10 @@ public class AutomaticGun : MonoBehaviour
 
     // ==============================================================
 
+    public AudioSource GetGunSound;
+    public AudioSource ReloadSound;
+    public AudioSource ShotSound;
+
     private void Start()
     {      
         sr = GetComponent<SpriteRenderer>();
@@ -43,9 +48,14 @@ public class AutomaticGun : MonoBehaviour
 
     void Update()
     {
+        var main = gameObject.transform.GetChild(1).gameObject.GetComponent<ParticleSystem>().main;
+
         if (gameObject.transform.parent != null)
         {
-            anim = gameObject.transform.parent.gameObject.transform.parent.gameObject.transform.parent.GetComponent<Animator>();
+            GetGunSound.enabled = true;
+            GameObject ParentHands = gameObject.transform.parent.gameObject.transform.parent.gameObject.transform.parent.gameObject.transform.parent.gameObject;
+            anim = ParentHands.GetComponent<Animator>();
+            ammoCount = ParentHands.GetComponent<HandsAutomaticGun>().AmmoCountText;
 
             if (gameObject.transform.parent)
             {
@@ -53,20 +63,26 @@ public class AutomaticGun : MonoBehaviour
             }
 
 
+
             if (timeBtwShots <= 0 && currentAmmo > 0)
             {
 
-                if (Input.GetMouseButton(0) && gameObject.transform.parent != null)
+                if (Input.GetMouseButton(0) && gameObject.transform.parent != null && !anim.GetBool("reload"))
                 {
-                    gameObject.transform.GetChild(1).gameObject.GetComponent<ParticleSystem>().startSpeed = 1;
+                    ShotSound.Play();
+                    main.startSpeed = 1;
+                    //gameObject.transform.GetChild(1).gameObject.GetComponent<ParticleSystem>().startSpeed = 1;
                     Instantiate(bullet, shotPoint.position, transform.rotation);
                     timeBtwShots = startTimeBtwShots;
                     currentAmmo -= 1;
                     anim.SetBool("Shot", true);
+                    shotPoint.GetComponent<Light2D>().intensity = 2.5f;
+                    Invoke("offLight", 0.05f);
                 }
                 else
                 {
-                    gameObject.transform.GetChild(1).gameObject.GetComponent<ParticleSystem>().startSpeed = 0;
+                    main.startSpeed = 0;
+                    //gameObject.transform.GetChild(1).gameObject.GetComponent<ParticleSystem>().startSpeed = 0;
                     anim.SetBool("Shot", false);
                 }
             }
@@ -77,10 +93,25 @@ public class AutomaticGun : MonoBehaviour
 
             if (currentAmmo == 0)
             {
-                gameObject.transform.GetChild(1).gameObject.GetComponent<ParticleSystem>().startSpeed = 0;
+                main.startSpeed = 0;
+                //gameObject.transform.GetChild(1).gameObject.GetComponent<ParticleSystem>().startSpeed = 0;
                 anim.SetBool("Shot", false);
             }
+
+
+
+            if (Input.GetKeyDown(KeyCode.R) && Player.automaticGun_ammo > 0 && currentAmmo < 35)
+            {
+                anim.SetBool("reload", true);
+                ReloadSound.Play();
+            }
         }
+        else
+        {
+            GetGunSound.enabled = false;
+            main.startSpeed = 0;
+        }
+
 
 
 
@@ -98,10 +129,6 @@ public class AutomaticGun : MonoBehaviour
         // ======================== Ammo ================================
 
 
-        if (Input.GetKeyDown(KeyCode.R) && Player.automaticGun_ammo > 0)
-        {
-            Reload();
-        }
 
 
     }
@@ -127,7 +154,12 @@ public class AutomaticGun : MonoBehaviour
         ammoCount.text = currentAmmo + "/" + Player.automaticGun_ammo;
     }
 
+
     // ==============================================================
 
 
+    public void offLight()
+    {
+        shotPoint.GetComponent<Light2D>().intensity = 0;
+    }
 }

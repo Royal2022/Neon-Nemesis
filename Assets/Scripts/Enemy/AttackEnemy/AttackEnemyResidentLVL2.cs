@@ -9,11 +9,13 @@ public class AttackEnemyResidentLVL2 : MonoBehaviour
     public Transform shotPoint;
 
     private float timeBtwShots;
-    public float startTimeBtwShots;
+    public float startTimeBtwShots = 4;
 
     private Enemy enemyGetComp;
 
     public float enemyDistanceAttack = 1.5f;
+
+    public AudioSource ShotSound;
 
     void Start()
     {
@@ -35,13 +37,12 @@ public class AttackEnemyResidentLVL2 : MonoBehaviour
         if (enemyGetComp.playerNoticed || enemyGetComp.trigger)
         {
 
-            if ((Vector2.Distance(transform.position, enemyGetComp.target.position) > enemyDistanceAttack /*&& !enemyGetComp.Patrol.gameObject.GetComponent<Patrol>().ground*/) && !enemyGetComp.triggerDeath)
-            {
-                enemyGetComp.speed = 4;
-                Vector2.Distance(transform.position, enemyGetComp.target.transform.position);
-                enemyGetComp.anim.SetBool("attack_enemy", false);
-            }
-            else if (Vector2.Distance(transform.position, enemyGetComp.target.position) <= enemyDistanceAttack && !enemyGetComp.triggerDeath && enemyGetComp.isGround)
+            //if ((Vector2.Distance(transform.position, enemyGetComp.target.position) > enemyDistanceAttack /*&& !enemyGetComp.Patrol.gameObject.GetComponent<Patrol>().ground*/) && !enemyGetComp.triggerDeath)
+            //{
+            //    Vector2.Distance(transform.position, enemyGetComp.target.transform.position);
+            //    enemyGetComp.anim.SetBool("attack_enemy", false);
+            //}
+            if (Vector2.Distance(transform.position, enemyGetComp.target.position) <= enemyDistanceAttack && !enemyGetComp.triggerDeath && enemyGetComp.isGround)
             {
                 enemyGetComp.speed = 0;
                 enemyGetComp.trigger = false;
@@ -51,11 +52,18 @@ public class AttackEnemyResidentLVL2 : MonoBehaviour
                 }
             }
         }
+        else if (Vector2.Distance(transform.position, enemyGetComp.target.position) > enemyDistanceAttack)
+        {
+            enemyGetComp.anim.SetBool("attack_enemy", false);
+            enemyGetComp.speed = 3;
+
+        }
     }
 
     public void Shot()
     {
         bullet.gameObject.GetComponent<bullet_Enemy>().Direction = (int)gameObject.transform.localScale.x;
-        Instantiate(bullet, shotPoint.position, transform.rotation);           
+        Instantiate(bullet, shotPoint.position, transform.rotation);
+        ShotSound.Play();
     }
 }

@@ -20,11 +20,12 @@ TextureImporter:
     externalNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
+    flipGreenChannel: 0
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
-  ignoreMasterTextureLimit: 0
+  ignoreMipmapLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -63,6 +64,7 @@ TextureImporter:
   textureFormatSet: 0
   ignorePngGamma: 0
   applyGammaDecoding: 0
+  swizzle: 50462976
   cookieLightType: 0
   platformSettings:
   - serializedVersion: 3
@@ -103,6 +105,18 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
     buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
@@ -253,29 +267,28 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Death_19: -1513765373
-      Death_7: 1237877346
-      Death_10: 1891044013
-      Death_15: 2082801853
-      Death_1: 1798904969
-      Death_5: -952791378
-      Death_17: 251080656
       Death_0: 888090680
-      Death_4: 1554992185
+      Death_1: 1798904969
+      Death_10: 1891044013
       Death_11: -1855368697
-      Death_14: 1390353290
-      Death_2: -1476140200
-      Death_13: 555528289
-      Death_9: 588917061
-      Death_6: -670988273
       Death_12: -1765491450
+      Death_13: 555528289
+      Death_14: 1390353290
+      Death_15: 2082801853
       Death_16: 1538236766
+      Death_17: 251080656
       Death_18: -398467308
-      Death_8: 1824549681
+      Death_19: -1513765373
+      Death_2: -1476140200
       Death_3: -433567955
-  spritePackingTag: 
+      Death_4: 1554992185
+      Death_5: -952791378
+      Death_6: -670988273
+      Death_7: 1237877346
+      Death_8: 1824549681
+      Death_9: 588917061
+  mipmapLimitGroupName: 
   pSDRemoveMatte: 0
-  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 

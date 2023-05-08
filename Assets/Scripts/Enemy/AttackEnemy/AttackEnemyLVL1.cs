@@ -1,11 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 
 public class AttackEnemyLVL1 : MonoBehaviour
 {
     private Enemy enemyGetComp;
     public float enemyDistanceAttack = 1.5f;
+    public AudioSource AttackSound;
+
+
+    public bool EffectAttack;
+    public GameObject PrfabSparks;
+    public Transform PosSpawnSparks;
 
     private void Start()
     {
@@ -32,5 +39,19 @@ public class AttackEnemyLVL1 : MonoBehaviour
                 }
             }
         }
+    }
+    public void AttackSoundPlay()
+    {
+        if (EffectAttack)
+        {
+            GameObject obj = Instantiate(PrfabSparks);
+            if (enemyGetComp.facingRight)
+                obj.transform.localScale = new Vector3(1, 1, 1);
+            else
+                obj.transform.localScale = new Vector3(-1, 1, 1);
+
+            obj.transform.position = PosSpawnSparks.position;
+        }
+        AttackSound.Play();
     }
 }

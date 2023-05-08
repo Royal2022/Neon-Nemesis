@@ -192,8 +192,8 @@ TextureImporter:
         y: 0
         width: 23
         height: 34
-      alignment: 9
-      pivot: {x: 0.52086973, y: 0.5}
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -235,7 +235,7 @@ TextureImporter:
         width: 23
         height: 34
       alignment: 9
-      pivot: {x: 0.43415368, y: 0.5}
+      pivot: {x: 0.40519184, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -279,12 +279,12 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Biker_attack1_4: -846650052
-      Biker_attack1_3: -1640746159
-      Biker_attack1_2: 956091555
-      Biker_attack1_1: 535787922
-      Biker_attack1_5: -1026090090
       Biker_attack1_0: 922458677
+      Biker_attack1_1: 535787922
+      Biker_attack1_2: 956091555
+      Biker_attack1_3: -1640746159
+      Biker_attack1_4: -846650052
+      Biker_attack1_5: -1026090090
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

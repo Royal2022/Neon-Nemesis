@@ -16,6 +16,13 @@ TagManager:
   - FirstAid
   - armor
   - Money
+  - Drones
+  - Grenade
+  - Bosses
+  - Chest
+  - StreetLamp
+  - GrenadeItem
+  - Fireplugs
   layers:
   - Default
   - TransparentFX
@@ -24,7 +31,7 @@ TagManager:
   - Water
   - UI
   - Ground
-  - 
+  - Fireplugs
   - Solid
   - Player
   - Ladder
@@ -35,14 +42,14 @@ TagManager:
   - armor
   - FirstAid
   - Money
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Drones
+  - Bullet
+  - Bosses
+  - Grenade
+  - BulletEnemy
+  - Chest
+  - GrenadeItem
+  - Post Processing
   - 
   - 
   - 
