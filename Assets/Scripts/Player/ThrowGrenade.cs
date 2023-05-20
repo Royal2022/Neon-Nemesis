@@ -23,10 +23,12 @@ public class ThrowGrenade : MonoBehaviour
 
     private Player player;
 
+    private WeaponHold weaponHold;
 
     void Start()
     {
         player = GetComponent<Player>();
+        weaponHold = GetComponent<WeaponHold>();
     }
 
     void Update()
@@ -37,7 +39,9 @@ public class ThrowGrenade : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.G) && player.isGround && !PlayingOrNotAnim("dropGrenade") && !player.anim.GetBool("throwGrenade")
             && !PlayingOrNotAnim("Run")
             && !PlayingOrNotAnim("jump") && !PlayingOrNotAnim("sault")
-            && !PlayingOrNotAnim("run_attack") && !PlayingOrNotAnim("attack") && !player.anim.GetBool("player_jump"))
+            && !PlayingOrNotAnim("run_attack") && !PlayingOrNotAnim("attack") && !player.anim.GetBool("player_jump")
+            && !PlayingOrNotAnim("ZipLine") && !PlayingOrNotAnim("idleZipLine")
+            && !weaponHold.HandsAnim.GetBool("reload") && !weaponHold.AutomaticGunHandsAnim.GetBool("reload"))
             {
                 player.anim.SetTrigger("throwGrenadeTrigger");
                 player.anim.Play("idle_dropGrenade");

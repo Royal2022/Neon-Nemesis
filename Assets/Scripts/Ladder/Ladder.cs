@@ -18,12 +18,13 @@ public class Ladder : MonoBehaviour
 
     public bool touchedLadder = false;
 
+
     public void OnTriggerStay2D(Collider2D other)
     {
 
         if (other.gameObject.CompareTag("Player"))
         {
-            if (Input.GetKey(KeyCode.W) && (!(Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D)) || touchedLadder) && !Input.GetKey(KeyCode.Space))
+            if (Input.GetKey(KeyCode.W) && (!(Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D)) || touchedLadder) && !Input.GetKey(KeyCode.Space) && (!LadderUP.upTriger || other.GetComponent<Player>().PlayingOrNotAnim("stop_ladder") || other.GetComponent<Player>().PlayingOrNotAnim("ladder_up")))
             {
                 //other.GetComponent<Player>().anim.SetBool("StairsOn", true);
                 other.GetComponent<Player>().LadderUpSound.volume = 1.1f;

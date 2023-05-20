@@ -53,17 +53,17 @@ public class M_Pistol : MonoBehaviour
 
             anim = gameObject.transform.parent.gameObject.transform.parent.gameObject.transform.parent.gameObject.transform.parent.GetComponent<Animator>();
 
+
             if (gameObject.transform.parent)
             {
                 OutText();
             }
 
-            if (timeBtwShots <= 0 && currentAmmo > 0)
+            if (timeBtwShots <= 0 && currentAmmo > 0 && !anim.GetBool("reloadPistol"))
             {
                 if (Input.GetMouseButtonDown(0) && gameObject.transform.parent != null && player.isLocalPlayer/*&& transform.root.gameObject.GetComponent<M_Player>().IsItYou*/)
                 {
                     //hands.anim.Play("M_fire");
-                    //anim.Play("M_fire");
                     anim.Play("PistolShot");
                     player.CallSpawnBullet(player.netId, shotPoint.position, transform.rotation);
                     
@@ -83,15 +83,18 @@ public class M_Pistol : MonoBehaviour
             {
                 timeBtwShots -= Time.deltaTime;
             }
+
+
+            // ======================== Ammo ================================
+
+            if (Input.GetKeyDown(KeyCode.R) && M_Player.pistol_AllAmmo > 0 && currentAmmo < 15)
+            {
+                anim.SetBool("reloadPistol", true);
+            }
         }
 
 
-        // ======================== Ammo ================================
-
-        if (Input.GetKeyDown(KeyCode.R) && M_Player.pistol_AllAmmo > 0)
-        {
-            Reload();
-        }
+  
     }
 
 

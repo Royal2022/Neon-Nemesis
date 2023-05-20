@@ -13,11 +13,9 @@ public class M_WeaponSwitch : NetworkBehaviour
 
     public int weaponOpened = 1;
 
-    public GameObject M_Player;
+    public M_Player player;
+    public Animator playerAnim;
 
-
-    public RuntimeAnimatorController pistolanim;
-    public RuntimeAnimatorController gunanim;
 
 
     public void Start()
@@ -29,40 +27,46 @@ public class M_WeaponSwitch : NetworkBehaviour
     {
         int currentWeapon = weaponSwitch;
         if (!isLocalPlayer) return;
-        if (Input.GetAxis("Mouse ScrollWheel") > 0f)
+        if (!player.PlayingOrNotAnim("sault"))
         {
-            if (weaponSwitch >= WSwitch.transform.childCount - weaponOpened)
+            if (Input.GetAxis("Mouse ScrollWheel") > 0f)
+            {
+                if (weaponSwitch >= WSwitch.transform.childCount - weaponOpened)
+                {
+                    SetActive(0);
+                }
+                else
+                {
+                    SetActive(weaponSwitch++);
+                }
+            }
+            if (Input.GetAxis("Mouse ScrollWheel") < 0f)
+            {
+                if (weaponSwitch <= 0)
+                {
+                    SetActive(weaponSwitch = WSwitch.transform.childCount - weaponOpened);
+
+                }
+                else
+                {
+                    SetActive(weaponSwitch--);
+                }
+            }
+
+            if (!isLocalPlayer) return;
+            if (Input.GetKeyDown(KeyCode.Alpha1))
             {
                 SetActive(0);
             }
-            else
+            if (Input.GetKeyDown(KeyCode.Alpha2) && transform.childCount >= 2)
             {
-                SetActive(weaponSwitch++);
+                SetActive(1);
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha3))
+            {
+                SetActive(2);
             }
         }
-        if (Input.GetAxis("Mouse ScrollWheel") < 0f)
-        {
-            if (weaponSwitch <= 0)
-            {
-                SetActive(weaponSwitch = WSwitch.transform.childCount - weaponOpened);
-
-            }
-            else
-            {
-                SetActive(weaponSwitch--);
-            }
-        }
-
-        if (!isLocalPlayer) return;
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            SetActive(0);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha2) && transform.childCount >= 2)
-        {
-            SetActive(1);
-        }
-
         if (currentWeapon != weaponSwitch)
         {
             SetActive(weaponSwitch);
@@ -88,14 +92,21 @@ public class M_WeaponSwitch : NetworkBehaviour
         {
             //M_Player.GetComponent<Animator>().runtimeAnimatorController = pistolanim;
             //M_Player.GetComponent<Animator>().applyRootMotion = true;
-            M_Player.GetComponent<Animator>().SetInteger("PitolOrAutomaticGun", 0);
+            playerAnim.SetFloat("Blend", 0);
         }
         else if (a == 1)
         {
             //M_Player.GetComponent<Animator>().runtimeAnimatorController = gunanim;
             //M_Player.GetComponent<Animator>().applyRootMotion = true;
-            M_Player.GetComponent<Animator>().SetInteger("PitolOrAutomaticGun", 1);
+            playerAnim.SetFloat("Blend", 1);
         }
+        else if (a == 2)
+        {
+            //M_Player.GetComponent<Animator>().runtimeAnimatorController = gunanim;
+            //M_Player.GetComponent<Animator>().applyRootMotion = true;
+            playerAnim.SetFloat("Blend", 2);
+        }
+
 
 
 

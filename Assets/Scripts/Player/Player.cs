@@ -74,6 +74,8 @@ public class Player : MonoBehaviour
     public SpriteRenderer hold_A;
     /*===================================*/
 
+    public bool death;
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -88,43 +90,16 @@ public class Player : MonoBehaviour
 
     public void FixedUpdate()
     {
-        if (!PlayingOrNotAnim("dropGrenade") && !PlayingOrNotAnim("idle_dropGrenade") && health > 0)
-        {
-            moveInput = Input.GetAxis("Horizontal");
-            rb.velocity = new Vector2(moveInput * Speed, rb.velocity.y);
-        }
-
 
         StaminFunc();
        
-        if (moveInput == 0)
-        {
-            anim.SetBool("player_run", false);
-        }
-        else
-        {
-            anim.SetBool("player_run", true);
-        }
 
-        if (anim.GetBool("player_run") && isGround && !runSound) {
-            //RunSound.volume = 0.5f;
-            RunSound.Play();
-            runSound = true;
-        }
-        else if (!anim.GetBool("player_run") && runSound || !isGround)
-        {
-            //RunSound.volume = 0;
-            RunSound.Stop();
-            runSound = false;
-        }
-
-
-        if (facingRight == false && moveInput > 0)
+        if (facingRight == false && moveInput > 0 && !PlayingOrNotAnim("ZipLine") && !PlayingOrNotAnim("idleZipLine"))
         {
             Flip();
             //Debug.Log("right");
         }
-        else if (facingRight == true && moveInput < 0)
+        else if (facingRight == true && moveInput < 0 && !PlayingOrNotAnim("ZipLine") && !PlayingOrNotAnim("idleZipLine"))
         {
             Flip();
             //Debug.Log("left");
@@ -142,10 +117,51 @@ public class Player : MonoBehaviour
         transform.localScale = Scaler;
     }
 
+    public Animator LegsAnim;
+
     public void Update()
     {
+        if (!PlayingOrNotAnim("dropGrenade") && !PlayingOrNotAnim("idle_dropGrenade") && health > 0 && !PlayingOrNotAnim("ZipLine") && !PlayingOrNotAnim("idleZipLine") && !death)
+        {
+            moveInput = Input.GetAxis("Horizontal");
+            rb.velocity = new Vector2(moveInput * Speed, rb.velocity.y);
+        }
+
+        if (moveInput == 0)
+        {
+            anim.SetBool("player_run", false);
+        }
+        else
+        {
+            anim.SetBool("player_run", true);
+        }
+
+        if (anim.GetBool("player_run") && isGround && !runSound)
+        {
+            //RunSound.volume = 0.5f;
+            RunSound.Play();
+            runSound = true;
+
+            LegsAnim.gameObject.SetActive(true);
+            LegsAnim.SetBool("run", true);
+        }
+        else if (!anim.GetBool("player_run") && runSound || !isGround)
+        {
+            //RunSound.volume = 0;
+            RunSound.Stop();
+            runSound = false;
+            LegsAnim.SetBool("run", false);
+        }
+
+
+
+
         if (health <= 0)
+        {
+            death = true;
             anim.Play("death");
+            transform.Find("weapon_hands").gameObject.SetActive(false);
+        }
 
         if (health >= 0)
             healthSlider.value = health;
@@ -194,15 +210,16 @@ public class Player : MonoBehaviour
         isGround = Physics2D.OverlapCircle(feetPos.position, checkRaduis, whatIsGround);
 
 
-        if (Input.GetKeyDown(KeyCode.Space) && !PlayingOrNotAnim("idle_dropGrenade") && !PlayingOrNotAnim("dropGrenade"))
+        if (Input.GetKeyDown(KeyCode.Space) && !PlayingOrNotAnim("idle_dropGrenade") && !PlayingOrNotAnim("dropGrenade") && !death)
         {
+            LegsAnim.gameObject.SetActive(false);
             if (isGround)
             {
                 rb.velocity = Vector2.up * jumpForce;
                 anim.SetTrigger("takeOf");
                 doubleJump = false;
             }
-            else if (!doubleJump && anim.GetFloat("Blend") == 0 /*GetComponent<Animator>().runtimeAnimatorController == WS.nogunanim*/)
+            else if (!doubleJump && anim.GetFloat("Blend") == 0 && !PlayingOrNotAnim("ZipLine"))
             {
                 doubleJump = true;
                 rb.velocity = Vector2.up * jumpForce;
@@ -211,7 +228,7 @@ public class Player : MonoBehaviour
         }
 
 
-        if (isGround == true)
+        if (isGround)
         {
             anim.SetBool("player_jump", false);
         }
@@ -222,7 +239,8 @@ public class Player : MonoBehaviour
 
 
         /*=========== Разворот при клике  ===========*/
-        if (Input.GetMouseButtonDown(0) && !Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D) && !anim.GetBool("player_run"))
+        if (Input.GetMouseButtonDown(0) && !Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D) && !anim.GetBool("player_run") && !PlayingOrNotAnim("ZipLine") && !PlayingOrNotAnim("idleZipLine") 
+            && Time.timeScale != 0)
         {
             if (Camera.main.ScreenToWorldPoint(Input.mousePosition).x < transform.position.x && facingRight)
             {
@@ -234,9 +252,6 @@ public class Player : MonoBehaviour
             }
         }
         /*===========================================*/
-
-
-
 
 
 
@@ -270,6 +285,11 @@ public class Player : MonoBehaviour
     }
 
 
+    public void SaultEnd()
+    {
+        anim.Play("Jump", 0, 21);
+    }
+
 
     public void StaminFunc()
     {
@@ -298,7 +318,6 @@ public class Player : MonoBehaviour
     }
 
 
-    public bool hold = false;
 
     public float distance = 0.7f;
     public LayerMask whatIsSolid;
@@ -317,7 +336,7 @@ public class Player : MonoBehaviour
     }
     public GameObject PostProcessing;
     public Blood bloodAnim;
-    public void TakeDamage(float damage, bool BulletOrExplosive, Vector3 direction)
+    public void TakeDamage(float damage, Vector3 direction)
     {
         StartCoroutine(PostProcessing.GetComponent<PostProcessing>().Dawn());
         if (direction.x > transform.position.x)
@@ -336,20 +355,15 @@ public class Player : MonoBehaviour
         }
 
 
-        if (BulletOrExplosive)
+        if (armor <= 0)
         {
-            if (armor <= 0)
+            if (health != 0)
             {
-                if (health != 0)
-                {
-                    health -= damage;
-                }
+                health -= damage;
             }
-            else
-                armor -= damage;
         }
         else
-            health -= damage;
+            armor -= damage;
 
 
         spriteRend.material = matBlink;
@@ -382,19 +396,6 @@ public class Player : MonoBehaviour
         gameObject.SetActive(false);
     }
     /*==========================*/
-
-
-    public void SaultStatus(int value)
-    {
-        if (value == 0)
-            anim.SetBool("Sault", true);
-        else
-        {
-            anim.SetBool("Sault", false);
-            anim.Play("Jump", 0, 0.22f);
-        }
-
-    }
 
     private void OnDrawGizmos()
     {

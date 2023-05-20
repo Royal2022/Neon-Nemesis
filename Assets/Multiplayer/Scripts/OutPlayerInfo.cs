@@ -11,6 +11,8 @@ public class OutPlayerInfo : MonoBehaviour
     public Slider stamine;
     public Slider healthSlider;
     public Slider armorSlider;
+    public Text GranadeText;
+    public Image GranadeTimerImage;
 
     public void HealthInfo(int info)
     {

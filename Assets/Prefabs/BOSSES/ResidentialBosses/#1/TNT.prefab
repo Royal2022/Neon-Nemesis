@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2475489156840728005}
   - component: {fileID: 3885597505031881954}
   - component: {fileID: 6720895086599219103}
-  - component: {fileID: 5214826758490624264}
+  - component: {fileID: 1166609875616400504}
   m_Layer: 21
   m_Name: TNT
   m_TagString: Grenade
@@ -33,7 +33,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 27
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &2475489156840728005
 SpriteRenderer:
@@ -159,7 +159,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &5214826758490624264
+--- !u!114 &1166609875616400504
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -168,7 +168,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5488170647671886834}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0eebd5dddf5721c4a8b29e27176ac66a, type: 3}
+  m_Script: {fileID: 11500000, guid: 3a2b8d53d0f8a2a4393348f4e53d77e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 6720895086599219103}
@@ -179,3 +179,4 @@ MonoBehaviour:
   checkRaduis: 0.2
   BombsEffect: {fileID: 8012785240002148960, guid: 71f5f4a0f3d06e34b84278fd151c1d8b, type: 3}
   explosionTime: 1
+  WhereToFly: 0

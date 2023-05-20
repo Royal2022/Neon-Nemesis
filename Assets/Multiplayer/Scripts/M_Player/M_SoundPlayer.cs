@@ -8,6 +8,7 @@ public class M_SoundPlayer : NetworkBehaviour
     public AudioSource RunSound;
 
     private M_Player player;
+    private bool runSound;
 
     void Start()
     {
@@ -17,25 +18,34 @@ public class M_SoundPlayer : NetworkBehaviour
     void Update()
     {
         if (!isLocalPlayer) return;
-        if (player.anim.GetBool("player_run") && player.isGround)
-            VolumeControl(1);
-        else
-            VolumeControl(0);
+        if (player.anim.GetBool("player_run") && player.isGround && !runSound)
+            VolumeControl(true);
+        else if (!player.anim.GetBool("player_run") && runSound || !player.isGround && runSound)
+            VolumeControl(false);
     }
 
     /*============================== –егул€ци€ громкости ======================================*/
     [ClientRpc]
-    void RpcVolumeContro(int value)
+    void RpcVolumeContro(bool value)
     {
-        RunSound.volume = value;
+        if (value)
+        {
+            RunSound.Play();
+            runSound = value;
+        }
+        else
+        {
+            RunSound.Stop();
+            runSound = value;
+        }
+
     }
     [Command]
-    void CmdVolumeControl(int value)
+    void CmdVolumeControl(bool value)
     {
-        RunSound.volume = value;
         RpcVolumeContro(value);
     }
-    private void VolumeControl(int value)
+    private void VolumeControl(bool value)
     {
         if (isServer)
             RpcVolumeContro(value);

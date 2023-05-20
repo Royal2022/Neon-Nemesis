@@ -9,22 +9,35 @@ public class Chest : MonoBehaviour
     public Transform ItemSpawnPosition;
     public float ThrowObject = 1;
     public AudioSource ChestSoundOpen;
-    private bool OpenOrClosed;
+    private bool OpenOrClosed = false;
+    private LayerMask WhatLayerPlayer;
 
     void Start()
     {
         anim = GetComponent<Animator>();
+        WhatLayerPlayer = LayerMask.GetMask("Player");
     }
 
-    public void OnTriggerStay2D(Collider2D collision)
+    private void FixedUpdate()
     {
-        if (Input.GetKey(KeyCode.E) && !OpenOrClosed)
+        if (!OpenOrClosed)
         {
-            anim.SetTrigger("open");
-            ChestSoundOpen.Play();
-            OpenOrClosed = true;
+            Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, 1.5f, WhatLayerPlayer);
+            foreach (Collider2D col in colliders)
+            {
+                if (col.CompareTag("Player"))
+                {
+                    if (Input.GetKey(KeyCode.E))
+                    {
+                        anim.SetTrigger("open");
+                        ChestSoundOpen.Play();
+                        OpenOrClosed = true;
+                    }
+                }
+            }
         }
     }
+
     public void DropItem()
     {
         Instantiate(ItemPrefab, ItemSpawnPosition.position, transform.rotation).GetComponent<Rigidbody2D>().velocity = new Vector2(transform.localScale.y, 1) * ThrowObject;

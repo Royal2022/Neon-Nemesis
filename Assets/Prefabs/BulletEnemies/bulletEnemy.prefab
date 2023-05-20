@@ -178,4 +178,4 @@ MonoBehaviour:
   whatIsSolid:
     serializedVersion: 2
     m_Bits: 512
-  Direction: 0
+  Direction: 1

@@ -1,11 +1,7 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.UI;
-
+using UnityEngine.UIElements;
 
 public class AutomaticGun : MonoBehaviour
 {
@@ -19,17 +15,20 @@ public class AutomaticGun : MonoBehaviour
 
     public static SpriteRenderer sr;
 
+
+    private float timerOverheating;
+    public float StartTimeOverheating = 0.5f;
+
+
     // ======================== Ammo ================================
 
     public GameObject ammo;
 
 
     public int currentAmmo = 35;
-    //public static int Player.automaticGun_ammo = 0;
     public int full = 35;
 
     public Text ammoCount;
-    [SerializeField] private WeaponSwitch ws;
 
     private Animator anim;
 
@@ -43,94 +42,107 @@ public class AutomaticGun : MonoBehaviour
     private void Start()
     {      
         sr = GetComponent<SpriteRenderer>();
-        ws = FindObjectOfType<WeaponSwitch>();
     }
 
     void Update()
     {
-        var main = gameObject.transform.GetChild(1).gameObject.GetComponent<ParticleSystem>().main;
-
-        if (gameObject.transform.parent != null)
+        if (Time.timeScale != 0)
         {
-            GetGunSound.enabled = true;
-            GameObject ParentHands = gameObject.transform.parent.gameObject.transform.parent.gameObject.transform.parent.gameObject.transform.parent.gameObject;
-            anim = ParentHands.GetComponent<Animator>();
-            ammoCount = ParentHands.GetComponent<HandsAutomaticGun>().AmmoCountText;
+            var main = gameObject.transform.GetChild(1).gameObject.GetComponent<ParticleSystem>().main;
 
-            if (gameObject.transform.parent)
+            if (gameObject.transform.parent != null)
             {
+                GetGunSound.enabled = true;
+                GameObject ParentHands = gameObject.transform.parent.gameObject.transform.parent.gameObject.transform.parent.gameObject.transform.parent.gameObject;
+                anim = ParentHands.GetComponent<Animator>();
+                ammoCount = ParentHands.GetComponent<HandsAutomaticGun>().AmmoCountText;
+
+
                 OutText();
-            }
 
-
-
-            if (timeBtwShots <= 0 && currentAmmo > 0)
-            {
-
-                if (Input.GetMouseButton(0) && gameObject.transform.parent != null && !anim.GetBool("reload"))
+                if (timeBtwShots <= 0 && currentAmmo > 0)
                 {
-                    ShotSound.Play();
-                    main.startSpeed = 1;
-                    //gameObject.transform.GetChild(1).gameObject.GetComponent<ParticleSystem>().startSpeed = 1;
-                    Instantiate(bullet, shotPoint.position, transform.rotation);
-                    timeBtwShots = startTimeBtwShots;
-                    currentAmmo -= 1;
-                    anim.SetBool("Shot", true);
-                    shotPoint.GetComponent<Light2D>().intensity = 2.5f;
-                    Invoke("offLight", 0.05f);
+
+                    if (Input.GetMouseButton(0) && gameObject.transform.parent != null && !anim.GetBool("reload"))
+                    {
+                        ShotSound.Play();
+                        main.startSpeed = 1;
+
+                        Quaternion bulletrot = transform.rotation;
+
+
+                        if (timerOverheating < StartTimeOverheating)
+                        {
+                            timerOverheating += Time.deltaTime * 10;
+                        }
+                        else if (timerOverheating >= StartTimeOverheating)
+                        {
+                            anim.SetBool("Overheating", true);
+                            //float randomRot = transform.rotation.z + Random.Range(0, 20);
+                            //bulletrot = Quaternion.Euler(new Vector3(0, 0, randomRot));
+                        }
+
+
+                        Instantiate(bullet, shotPoint.position, bulletrot);
+                        timeBtwShots = startTimeBtwShots;
+                        currentAmmo -= 1;
+                        anim.SetBool("Shot", true);
+                        shotPoint.GetComponent<Light2D>().intensity = 2.5f;
+                        Invoke("offLight", 0.05f);
+
+
+
+                    }
+                    else
+                    {
+                        timerOverheating = 0;
+                        anim.SetBool("Overheating", false);
+
+                        main.startSpeed = 0;
+                        anim.SetBool("Shot", false);
+                    }
                 }
                 else
                 {
+                    timeBtwShots -= Time.deltaTime;
+                }
+
+                if (currentAmmo == 0)
+                {
                     main.startSpeed = 0;
-                    //gameObject.transform.GetChild(1).gameObject.GetComponent<ParticleSystem>().startSpeed = 0;
                     anim.SetBool("Shot", false);
+                }
+
+
+                // ======================== Ammo ================================
+
+                if (Input.GetKeyDown(KeyCode.R) && Player.automaticGun_ammo > 0 && currentAmmo < 35)
+                {
+                    anim.SetBool("reload", true);
+                    ReloadSound.Play();
                 }
             }
             else
             {
-                timeBtwShots -= Time.deltaTime;
-            }
-
-            if (currentAmmo == 0)
-            {
+                GetGunSound.enabled = false;
                 main.startSpeed = 0;
-                //gameObject.transform.GetChild(1).gameObject.GetComponent<ParticleSystem>().startSpeed = 0;
-                anim.SetBool("Shot", false);
             }
 
 
 
-            if (Input.GetKeyDown(KeyCode.R) && Player.automaticGun_ammo > 0 && currentAmmo < 35)
+
+            if (Player.facingRight)
             {
-                anim.SetBool("reload", true);
-                ReloadSound.Play();
+                gameObject.transform.GetChild(1).gameObject.transform.localScale = new Vector3(1, 1, 1);
+                gameObject.transform.GetChild(1).gameObject.GetComponent<ParticleSystemRenderer>().lengthScale = -2;
             }
+            else if (!Player.facingRight)
+            {
+                gameObject.transform.GetChild(1).gameObject.transform.localScale = new Vector3(-1, 1, 1);
+                gameObject.transform.GetChild(1).gameObject.GetComponent<ParticleSystemRenderer>().lengthScale = 2;
+            }
+
         }
-        else
-        {
-            GetGunSound.enabled = false;
-            main.startSpeed = 0;
-        }
-
-
-
-
-        if (Player.facingRight == true)
-        {
-            gameObject.transform.GetChild(1).gameObject.transform.localScale = new Vector3(1, 1, 1);
-            gameObject.transform.GetChild(1).gameObject.GetComponent<ParticleSystemRenderer>().lengthScale = -2;
-        }
-        else if (Player.facingRight == false)
-        {
-            gameObject.transform.GetChild(1).gameObject.transform.localScale = new Vector3(-1, 1, 1);
-            gameObject.transform.GetChild(1).gameObject.GetComponent<ParticleSystemRenderer>().lengthScale = 2;
-        }
-
-        // ======================== Ammo ================================
-
-
-
-
     }
 
     public void Reload()

@@ -345,11 +345,11 @@ MonoBehaviour:
   bullet: {fileID: 1669126192366538561, guid: 35d4f7d4504362c418a71f51a91c22da, type: 3}
   shotPoint: {fileID: 4481165228460346286}
   startTimeBtwShots: 0.2
+  StartTimeOverheating: 0.5
   ammo: {fileID: 0}
   currentAmmo: 35
   full: 45
   ammoCount: {fileID: 0}
-  ws: {fileID: 0}
   GetGunSound: {fileID: 2484515097415141362}
   ReloadSound: {fileID: 4107229567245597858}
   ShotSound: {fileID: 1412760048127247427}

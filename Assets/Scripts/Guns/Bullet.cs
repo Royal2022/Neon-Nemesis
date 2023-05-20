@@ -13,7 +13,7 @@ public class Bullet : MonoBehaviour
     public Rigidbody2D rb;
 
 
-    public float distanceRayCast = 0.1f;
+    public float RadiusRayCast = 0.05f;
     public LayerMask whatIsSolid;
 
     private SpriteRenderer sr;
@@ -21,6 +21,8 @@ public class Bullet : MonoBehaviour
     private void Start()
     {
         sr = GetComponent<SpriteRenderer>();
+        if (Player.facingRight == false)
+            sr.flipX = true;
 
         if (Player.facingRight == true)
         {
@@ -31,7 +33,6 @@ public class Bullet : MonoBehaviour
             rb.velocity = (transform.right * -1) * speed;
         }
         Invoke("DestroyBullet", flightRange);
-
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -47,62 +48,69 @@ public class Bullet : MonoBehaviour
         Destroy(gameObject);
     }
 
-    private void Update()
-    {
-        transform.right = rb.velocity;
-    }
-
     private void FixedUpdate()
     {
-        RaycastHit2D hitInfo = Physics2D.Raycast(transform.position, transform.right, distanceRayCast, whatIsSolid);
+        transform.right = rb.velocity;
 
-        if (hitInfo.collider != null)
+        RaycastHit2D hit = Physics2D.CircleCast(transform.position, RadiusRayCast, transform.position, 1, whatIsSolid);
+
+        if (hit.collider != null)
         {
-            if (hitInfo.collider.CompareTag("Enemy"))
+            if (hit.collider.CompareTag("Enemy"))
             {
-                Enemy enemy = hitInfo.collider.GetComponent<Enemy>();
-                if (!enemy.Death)
+                Enemy enemy = hit.collider.GetComponent<Enemy>();
+                if (!enemy.triggerDeath)
                 {
                     enemy.DamagSound.Play();
                     enemy.TakeDamage(damage);
                     Destroy(gameObject);
                 }
             }
-            if (hitInfo.collider.CompareTag("EnemyHead"))
+            else if (hit.collider.CompareTag("EnemyHead"))
             {
-                Enemy enemy = hitInfo.collider.GetComponent<head>().enemy.gameObject.GetComponent<Enemy>();
-                if (!enemy.Death)
+                Enemy enemy = hit.collider.transform.parent.GetComponent<Enemy>();
+                if (!enemy.triggerDeath)
                 {
                     enemy.DamagSound.Play();
                     enemy.TakeDamage(damage * 2);
                     Destroy(gameObject);
                 }
             }
-            if (hitInfo.collider.CompareTag("Drones"))
+            else if (hit.collider.CompareTag("Bosses"))
             {
-                hitInfo.collider.GetComponent<Drones>().TakeDamage(damage);
-                Destroy(gameObject);
-            }
-            if (hitInfo.collider.CompareTag("StreetLamp"))
-            {
-                if (hitInfo.collider.GetComponent<Light2D>().enabled)
+                Bosses bosses = hit.collider.GetComponent<Bosses>();
+                if (!bosses.triggerDeath)
                 {
-                    hitInfo.collider.GetComponent<AudioSource>().Play();
+                    bosses.DamagSound.Play();
+                    bosses.TakeDamage(damage);
                     Destroy(gameObject);
                 }
-
-                hitInfo.collider.GetComponent<Light2D>().enabled = false;
             }
-            if (hitInfo.collider.CompareTag("GrenadeItem"))
+            else if (hit.collider.CompareTag("Drones"))
             {
-                hitInfo.collider.GetComponent<grenade>().enabled = true;
+                hit.collider.GetComponent<Drones>().TakeDamage(damage);
+                Destroy(gameObject);
+            }
+            if (hit.collider.CompareTag("StreetLamp"))
+            {
+                if (hit.collider.GetComponent<Light2D>().enabled)
+                {
+                    hit.collider.GetComponent<AudioSource>().Play();
+                    Destroy(gameObject);
+                }
+                hit.collider.GetComponent<Light2D>().enabled = false;
+            }
+            else if (hit.collider.CompareTag("GrenadeItem"))
+            {
+                hit.collider.GetComponent<grenade>().enabled = true;
                 Destroy(gameObject);
             }
         }
-
-        if (Player.facingRight == false)
-            sr.flipX = true;
     }
 
-
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.black;
+        Gizmos.DrawWireSphere(transform.position, 0.05f);
+    }
 }

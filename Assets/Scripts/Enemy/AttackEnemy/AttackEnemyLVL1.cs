@@ -45,10 +45,10 @@ public class AttackEnemyLVL1 : MonoBehaviour
         if (EffectAttack)
         {
             GameObject obj = Instantiate(PrfabSparks);
-            if (enemyGetComp.facingRight)
-                obj.transform.localScale = new Vector3(1, 1, 1);
-            else
+            if (enemyGetComp.facingLeft)
                 obj.transform.localScale = new Vector3(-1, 1, 1);
+            else
+                obj.transform.localScale = new Vector3(1, 1, 1);
 
             obj.transform.position = PosSpawnSparks.position;
         }

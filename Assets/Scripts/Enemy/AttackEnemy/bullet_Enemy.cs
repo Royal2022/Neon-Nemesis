@@ -39,7 +39,7 @@ public class bullet_Enemy : MonoBehaviour
         {
             if (hitInfo.collider.gameObject.CompareTag("Player"))
             {
-                hitInfo.collider.gameObject.GetComponent<Player>().TakeDamage(damage, true, transform.position);
+                hitInfo.collider.gameObject.GetComponent<Player>().TakeDamage(damage, transform.position);
                 Destroy(gameObject);
             }
         }

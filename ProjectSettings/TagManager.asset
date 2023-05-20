@@ -23,6 +23,8 @@ TagManager:
   - StreetLamp
   - GrenadeItem
   - Fireplugs
+  - PlayerLegs
+  - EnemyDeath
   layers:
   - Default
   - TransparentFX

@@ -29,81 +29,77 @@ public class Pistol : MonoBehaviour
     public GameObject ammo;
 
     public int currentAmmo = 15;
-    //public static int Player.pistol_ammo = 0;
     public int full = 45;
 
     public Text ammoCount;
-    [SerializeField] private WeaponSwitch ws;
 
     // ==============================================================
 
     private void Start()
     {        
         sr = GetComponent<SpriteRenderer>();
-        ws = FindObjectOfType<WeaponSwitch>();
     }
 
     void Update()
-    {
-        if (gameObject.transform.parent != null)
+    {    
+        if (Time.timeScale != 0)
         {
-            GetGunSound.enabled = true;
-            anim = gameObject.transform.parent.gameObject.transform.parent.gameObject.transform.parent.GetComponent<Animator>();
-
-
-            if (gameObject.transform.parent)
+            if (gameObject.transform.parent != null)
             {
+                GetGunSound.enabled = true;
+                anim = gameObject.transform.parent.gameObject.transform.parent.gameObject.transform.parent.gameObject.transform.parent.GetComponent<Animator>();
+
+
                 OutText();
-            }
-
-            //OutText();
 
 
-            if (timeBtwShots <= 0 && currentAmmo > 0)
-            {
-                if (Input.GetMouseButtonDown(0) && gameObject.transform.parent != null && !anim.GetBool("reload"))
+
+                if (timeBtwShots <= 0 && currentAmmo > 0)
                 {
-                    ShotSound.Play();
-                    gameObject.transform.GetChild(1).gameObject.GetComponent<ParticleSystem>().Play();
-                    Instantiate(bullet, shotPoint.position, transform.rotation);
-                    timeBtwShots = startTimeBtwShots;
-                    currentAmmo -= 1;
-                    OutText();
-                    anim.SetBool("fire", true);
-                    shotPoint.GetComponent<Light2D>().intensity = 2.5f;
-                    Invoke("offLight", 0.05f);
+                    if (Input.GetMouseButtonDown(0) && gameObject.transform.parent != null && !anim.GetBool("reload"))
+                    {
+                        ShotSound.Play();
+                        gameObject.transform.GetChild(1).gameObject.GetComponent<ParticleSystem>().Play();
+                        Instantiate(bullet, shotPoint.position, transform.rotation);
+                        timeBtwShots = startTimeBtwShots;
+                        currentAmmo -= 1;
+                        OutText();
+                        anim.SetBool("fire", true);
+                        shotPoint.GetComponent<Light2D>().intensity = 2.5f;
+                        Invoke("offLight", 0.05f);
+                    }
+                }
+                else
+                {
+                    timeBtwShots -= Time.deltaTime;
+                    anim.SetBool("fire", false);
+                }
+
+
+
+                if (Player.facingRight)
+                {
+                    gameObject.transform.GetChild(1).gameObject.transform.localScale = new Vector3(1, 1, 1);
+                    gameObject.transform.GetChild(1).gameObject.GetComponent<ParticleSystemRenderer>().lengthScale = -2;
+                }
+                else if (!Player.facingRight)
+                {
+                    gameObject.transform.GetChild(1).gameObject.transform.localScale = new Vector3(-1, 1, 1);
+                    gameObject.transform.GetChild(1).gameObject.GetComponent<ParticleSystemRenderer>().lengthScale = 2;
+                }
+
+
+                // ======================== Ammo ================================
+
+                if (Input.GetKeyDown(KeyCode.R) && Player.pistol_ammo > 0 && currentAmmo < 15)
+                {
+                    anim.SetBool("reload", true);
+                    ReloadSound.Play();
                 }
             }
             else
-            {
-                timeBtwShots -= Time.deltaTime;
-                anim.SetBool("fire", false);
-            }
-
-
-
-            if (Player.facingRight == true)
-            {
-                gameObject.transform.GetChild(1).gameObject.transform.localScale = new Vector3(1, 1, 1);
-                gameObject.transform.GetChild(1).gameObject.GetComponent<ParticleSystemRenderer>().lengthScale = -2;
-            }
-            else if (Player.facingRight == false)
-            {
-                gameObject.transform.GetChild(1).gameObject.transform.localScale = new Vector3(-1, 1, 1);
-                gameObject.transform.GetChild(1).gameObject.GetComponent<ParticleSystemRenderer>().lengthScale = 2;
-            }
-
-
-            // ======================== Ammo ================================
-
-            if (Input.GetKeyDown(KeyCode.R) && Player.pistol_ammo > 0 && currentAmmo < 15)
-            {
-                anim.SetBool("reload", true);
-                ReloadSound.Play();
-            }
-        }
-        else
-            GetGunSound.enabled = false;
+                GetGunSound.enabled = false;
+        }  
     }
 
     public void Reload()

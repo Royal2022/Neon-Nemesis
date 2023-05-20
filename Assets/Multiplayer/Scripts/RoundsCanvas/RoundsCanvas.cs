@@ -33,7 +33,7 @@ public class RoundsCanvas : NetworkBehaviour
             {
                 for (int j = 0; j < value; j++)
                 {
-                    StarsTable[i].transform.GetChild(j).gameObject.GetComponent<SpriteRenderer>().enabled = false;
+                    StarsTable[i].transform.GetChild(j).GetChild(0).gameObject.SetActive(false);
                     StarsTable[i].transform.GetChild(j).gameObject.SetActive(false);
                 }
             }
@@ -53,7 +53,7 @@ public class RoundsCanvas : NetworkBehaviour
             {
                 for (int j = 0; j < StarsTable[i].transform.childCount; j++)
                 {
-                    if (!StarsTable[i].transform.GetChild(j).gameObject.GetComponent<SpriteRenderer>().enabled)
+                    if (!StarsTable[i].transform.GetChild(j).gameObject.transform.GetChild(0).gameObject.activeSelf)
                     {
                         StarsTable[i].transform.GetChild(j).gameObject.GetComponent<Animator>().enabled = true;
                         StarsTable[i].transform.GetChild(j).gameObject.GetComponent<StarPoint>().Animator = StarsTable[i].transform.GetChild(j).gameObject.GetComponent<Animator>();

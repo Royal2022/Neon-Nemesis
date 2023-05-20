@@ -59,13 +59,27 @@ public class M_Player : NetworkBehaviour
     [SyncVar]
     public int NumberOfRoundsWins;
 
+    public bool ImInGrenadeRadius;
+
+    public bool doubleJump = false;
+
+    public uint MyId;
+
+    public Slider stamine;
+    public Slider healthSlider;
+    public Slider armorSlider;
+
     private void Start()
     {
+        MyId = netId;
         lobbymanager = FindObjectOfType<LobbyManager>();
         transform.GetChild(3).gameObject.SetActive(false);
         GetComponent<Rigidbody2D>().simulated = false;
 
         OutText = FindObjectOfType<OutPlayerInfo>();
+        stamine = OutText.stamine;
+        healthSlider = OutText.healthSlider;
+        armorSlider = OutText.armorSlider;
 
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
@@ -82,12 +96,6 @@ public class M_Player : NetworkBehaviour
         {
             FindObjectOfType<CameraFollow>().GetComponent<CinemachineVirtualCamera>().Follow = CameraPosition.transform;            
         }
-            
-
-
-
-
-
     }
 
 
@@ -174,7 +182,6 @@ public class M_Player : NetworkBehaviour
     {
         //ActiveiteOrDisabledHold();
 
-
         if (!isLocalPlayer) return;
         SetName(M_PlayerInfoSave.PlayerNickName);
         //PlayerListingSetName();
@@ -204,21 +211,30 @@ public class M_Player : NetworkBehaviour
         if (Input.GetKeyDown(KeyCode.X))
             Health = 0;
 
-        if (!isLocalPlayer) return;
-        moveInput = Input.GetAxis("Horizontal");
-        rb.velocity = new Vector2(moveInput * Speed, rb.velocity.y);
-
         isGround = Physics2D.OverlapCircle(feetPos.position, checkRaduis, whatIsGround);
 
-
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (!isLocalPlayer) return;
+        if (!PlayingOrNotAnim("dropGrenade") && !PlayingOrNotAnim("idle_dropGrenade") && Health > 0)
         {
-            if (isGround)
+            moveInput = Input.GetAxis("Horizontal");
+            rb.velocity = new Vector2(moveInput * Speed, rb.velocity.y);
+
+            if (Input.GetKeyDown(KeyCode.Space))
             {
-                rb.velocity = Vector2.up * jumpForce;
-                anim.SetBool("player_jump", true);
+                if (isGround)
+                {
+                    rb.velocity = Vector2.up * jumpForce;
+                    doubleJump = false;
+                }
+                else if (!doubleJump && anim.GetFloat("Blend") == 0 /*GetComponent<Animator>().runtimeAnimatorController == WS.nogunanim*/)
+                {
+                    doubleJump = true;
+                    rb.velocity = Vector2.up * jumpForce;
+                    anim.Play("sault");
+                }
             }
         }
+        
 
         if (isGround)
         {
@@ -284,11 +300,48 @@ public class M_Player : NetworkBehaviour
 
 
 
+        /*=================================== Ближняя Атака =======================================*/
+        if (!isLocalPlayer) return;
+        if (anim.GetFloat("Blend") == 0/*GetComponent<Animator>().runtimeAnimatorController == WS.nogunanim*/)
+        {
+            if (Input.GetMouseButtonDown(0) && !PlayingOrNotAnim("dropGrenade") && !PlayingOrNotAnim("idle_dropGrenade"))
+            {
+                if (anim.GetBool("player_run") && !PlayingOrNotAnim("AttackHandRun") && !PlayingOrNotAnim("jump"))
+                {
+                    anim.SetBool("AttackHandRun", true);
+                }
+                else if (!PlayingOrNotAnim("attack"))
+                {
+                    anim.SetBool("AttackHand", true);
+                }
+            }
+            else
+            {
+                anim.SetBool("AttackHand", false);
+                anim.SetBool("AttackHandRun", false);
+            }
+        }
+        /*=========================================================================================*/
+
+
+
+
         if (!isLocalPlayer) return;
             IsItYou = true;
         if (isLocalPlayer) return;
             IsItYou = false;
+    }
 
+
+    public bool PlayingOrNotAnim(string name)
+    {
+        return anim.GetCurrentAnimatorStateInfo(0).IsName($"{name}");
+    }
+
+
+    public void SaultEnd()
+    {
+        anim.Play("Jump", 0, 21);
     }
 
     public void Flip()
@@ -388,6 +441,40 @@ public class M_Player : NetworkBehaviour
 
 
 
+    /*====================================== Ближняя Атака ========================================*/
+    public float distance = 0.7f;
+    public LayerMask whatIsSolid;
+    public int HandDamage = 1;
+
+    [Command(requiresAuthority = false)]
+    private void CmdHandAttack()
+    {
+        RaycastHit2D[] hitInfos = Physics2D.RaycastAll(transform.position, Vector2.right * transform.localScale.x, distance, whatIsSolid);
+
+        foreach (var hitInfo in hitInfos)
+        {
+            if (hitInfo.collider != null)
+            {
+                if (hitInfo.collider.CompareTag("Player"))
+                {
+                    if (MyId != hitInfo.collider.GetComponent<M_Player>().netId)
+                    {
+                        hitInfo.collider.GetComponent<M_Player>().TakeDamage(HandDamage);
+                        Debug.Log(hitInfo.collider);
+                    }
+                }
+            }
+        }
+    }
+    private void HandAttack()
+    {
+        if (!isLocalPlayer) return;
+            CmdHandAttack();
+    }
+    /*=========================================================================================*/
+
+
+
     public void OutTextHealth()
     {
         if (!isLocalPlayer) return;
@@ -404,7 +491,7 @@ public class M_Player : NetworkBehaviour
 
 
     [Server]
-    public void SpawnBullet(uint owner, Vector3 target, Quaternion transf)
+    private void SpawnBullet(uint owner, Vector3 target, Quaternion transf)
     {
         GameObject bulletGo = Instantiate(BulletPrefab, target, transf);
 
@@ -416,7 +503,7 @@ public class M_Player : NetworkBehaviour
 
 
     [Command]
-    public void CmdSpawnBullet(uint owner, Vector3 target, Quaternion transf)
+    private void CmdSpawnBullet(uint owner, Vector3 target, Quaternion transf)
     {
         SpawnBullet(owner, target, transf);
     }
@@ -568,6 +655,31 @@ public class M_Player : NetworkBehaviour
         }
     }
 
+
+    /*====================== Спавн партикал эффектов после аптечки =============================*/
+    public GameObject EffectFirstAid;
+    [ClientRpc]
+    private void RpcCreateChildObj()
+    {
+        Instantiate(EffectFirstAid, transform);
+    }
+    [Command]
+    private void CmdCreateChildObj()
+    {
+        RpcCreateChildObj();
+    }
+    public void SpawnChildEffectFirstAid()
+    {
+        if (isServer)
+            RpcCreateChildObj();
+        else if (isClient)
+            CmdCreateChildObj();
+    }
+    /*=========================================================================================*/
+
+
 }
+
+
 
 

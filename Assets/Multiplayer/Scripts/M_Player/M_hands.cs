@@ -44,4 +44,9 @@ public class M_hands : MonoBehaviour
     {
         anim.SetBool(name, OnOff);
     }
+
+    public void res()
+    {
+        GetComponent<Transform>().rotation = Quaternion.Euler(0f, 0f, 0f);
+    }
 }

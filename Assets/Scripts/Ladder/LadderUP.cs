@@ -6,13 +6,14 @@ public class LadderUP : MonoBehaviour
 {
     public static bool upTriger;
 
-
     public void OnTriggerEnter2D(Collider2D collision)
     {
-        upTriger = true;
+        if (collision.CompareTag("PlayerLegs"))
+            upTriger = true;
     }
     public void OnTriggerExit2D(Collider2D collision)
     {
-        upTriger = false;
+        if (collision.CompareTag("PlayerLegs"))
+            upTriger = false;
     }
 }

@@ -19,13 +19,15 @@ public class Blood : MonoBehaviour
         if (rightOrLeft)
         {
             GameObject obj = Instantiate(BloodPrefab, RightBloodPos);
+            obj.transform.parent = null;
             //obj.transform.parent = RightBloodPos;
             obj.GetComponent<Animator>().SetInteger("bloodNumber", Random.Range(1, 4));
         }
         else if (!rightOrLeft)
         {
             GameObject obj = Instantiate(BloodPrefab, LeftBloodPos);
-           //obj.transform.parent = LeftBloodPos;
+            obj.transform.parent = null;
+            //obj.transform.parent = LeftBloodPos;
             obj.GetComponent<Animator>().SetInteger("bloodNumber", Random.Range(1, 4));
 
         }

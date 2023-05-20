@@ -49,6 +49,8 @@ public class M_AutomaticGun : MonoBehaviour
 
     void Update()
     {
+        var main = gameObject.transform.GetChild(1).gameObject.GetComponent<ParticleSystem>().main;
+
         if (gameObject.transform.parent != null)
         {
             player = transform.root.gameObject.GetComponent<M_Player>();
@@ -60,11 +62,10 @@ public class M_AutomaticGun : MonoBehaviour
                 OutText();
             }
 
-            var main = gameObject.transform.GetChild(1).gameObject.GetComponent<ParticleSystem>().main;
 
-            if (timeBtwShots <= 0 && currentAmmo > 0)
+            if (timeBtwShots <= 0 && currentAmmo > 0 )
             {
-                if (Input.GetMouseButton(0) && gameObject.transform.parent != null && transform.root.gameObject.GetComponent<M_Player>().IsItYou)
+                if (Input.GetMouseButton(0) && gameObject.transform.parent != null && transform.root.gameObject.GetComponent<M_Player>().IsItYou && !anim.GetBool("reloadAutoGun"))
                 {
                     SHOT = true;
                     //player.AnimTrueOrFalse("M_Fire_AutomaticGun", true);
@@ -112,13 +113,17 @@ public class M_AutomaticGun : MonoBehaviour
                 ParticalS.GetComponent<ParticleSystemRenderer>().lengthScale = 2;
             }
         }
-
+        else
+        {
+            main.startSpeed = 0;
+        }
 
         // ======================== Ammo ================================
 
-        if (Input.GetKeyDown(KeyCode.R) && M_Player.automaticGun_AllAmmo > 0)
+        if (Input.GetKeyDown(KeyCode.R) && M_Player.automaticGun_AllAmmo > 0 && currentAmmo < 35)
         {
-            Reload();
+            Debug.Log(currentAmmo);
+            anim.SetBool("reloadAutoGun", true);
         }
     }
 

@@ -7,6 +7,9 @@ public class FallingCheck : MonoBehaviour
     public GameObject Player;
     private Player player;
 
+    public Transform FallSmokePos;
+    public GameObject prefabFallAnimSmoke;
+
     void Start()
     {
         player = Player.GetComponent<Player>();
@@ -20,6 +23,10 @@ public class FallingCheck : MonoBehaviour
             player.FractureSound.Play();
         }
         if (collision.CompareTag("Ground") && player.rb.velocity.y < -1f)
+        {
             player.JumpSound.Play();
+            GameObject obj = Instantiate(prefabFallAnimSmoke);
+            obj.transform.position = FallSmokePos.position;
+        }
     }
 }

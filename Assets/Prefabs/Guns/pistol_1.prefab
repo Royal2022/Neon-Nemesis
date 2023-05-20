@@ -66,18 +66,6 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0.75
   m_Vertices:
-  - position: {x: 0.5, y: -0.5, z: 0}
-    color: {r: 0, g: 0, b: 0, a: 1}
-    uv: {x: 0, y: 0}
-  - position: {x: 0.024109904, y: 0.2309126, z: 0}
-    color: {r: 0, g: 0, b: 0, a: 1}
-    uv: {x: 0, y: 0}
-  - position: {x: 0.5, y: 0.5, z: 0}
-    color: {r: 0, g: 0, b: 0, a: 1}
-    uv: {x: 0, y: 0}
-  - position: {x: 0.019176532, y: -0.13115409, z: 0}
-    color: {r: 0, g: 0, b: 0, a: 1}
-    uv: {x: 0, y: 0}
   - position: {x: 0.019176532, y: -0.13115409, z: 0}
     color: {r: 0, g: 0, b: 0, a: 1}
     uv: {x: 0, y: 0}
@@ -90,118 +78,130 @@ MonoBehaviour:
   - position: {x: 0.024109904, y: 0.2309126, z: 0}
     color: {r: 0, g: 0, b: 0, a: 1}
     uv: {x: 0, y: 0}
-  - position: {x: -0.4809, y: -0.1242, z: 0}
+  - position: {x: 0.019176532, y: -0.13115409, z: 0}
+    color: {r: 0, g: 0, b: 0, a: 1}
+    uv: {x: 0, y: 0}
+  - position: {x: 0.5, y: -0.5, z: 0}
+    color: {r: 0, g: 0, b: 0, a: 1}
+    uv: {x: 0, y: 0}
+  - position: {x: 0.5, y: 0.5, z: 0}
+    color: {r: 0, g: 0, b: 0, a: 1}
+    uv: {x: 0, y: 0}
+  - position: {x: 0.024109904, y: 0.2309126, z: 0}
+    color: {r: 0, g: 0, b: 0, a: 1}
+    uv: {x: 0, y: 0}
+  - position: {x: -0.4727, y: -0.1304, z: 0}
     color: {r: 0, g: 0, b: 0, a: 0}
     uv: {x: 0, y: 0}
-  - position: {x: -0.4726, y: -0.2217, z: 0}
+  - position: {x: -0.4631, y: -0.2278, z: 0}
     color: {r: 0, g: 0, b: 0, a: 0}
     uv: {x: 0, y: 0}
-  - position: {x: -0.4456, y: -0.3158, z: 0}
+  - position: {x: -0.4348, y: -0.3215, z: 0}
     color: {r: 0, g: 0, b: 0, a: 0}
     uv: {x: 0, y: 0}
-  - position: {x: -0.4007, y: -0.4027, z: 0}
+  - position: {x: -0.3887, y: -0.4078, z: 0}
     color: {r: 0, g: 0, b: 0, a: 0}
     uv: {x: 0, y: 0}
-  - position: {x: -0.3397, y: -0.4793, z: 0}
+  - position: {x: -0.3267, y: -0.4835, z: 0}
     color: {r: 0, g: 0, b: 0, a: 0}
     uv: {x: 0, y: 0}
-  - position: {x: -0.2852, y: -0.5278, z: 0}
+  - position: {x: -0.2787, y: -0.5258, z: 0}
     color: {r: 0, g: 0, b: 0, a: 0}
     uv: {x: 0, y: 0}
-  - position: {x: 0.1957, y: -0.8967, z: 0}
+  - position: {x: 0.2035, y: -0.899, z: 0}
     color: {r: 0, g: 0, b: 0, a: 0}
     uv: {x: 0, y: 0}
-  - position: {x: 0.2788, y: -0.9484, z: 0}
+  - position: {x: 0.2864, y: -0.951, z: 0}
     color: {r: 0, g: 0, b: 0, a: 0}
     uv: {x: 0, y: 0}
-  - position: {x: 0.3704, y: -0.9829, z: 0}
+  - position: {x: 0.3778, y: -0.9859, z: 0}
     color: {r: 0, g: 0, b: 0, a: 0}
     uv: {x: 0, y: 0}
-  - position: {x: 0.4669, y: -0.9989, z: 0}
+  - position: {x: 0.4743, y: -1.0024, z: 0}
     color: {r: 0, g: 0, b: 0, a: 0}
     uv: {x: 0, y: 0}
-  - position: {x: 0.5647, y: -0.9958, z: 0}
+  - position: {x: 0.5721, y: -0.9997, z: 0}
     color: {r: 0, g: 0, b: 0, a: 0}
     uv: {x: 0, y: 0}
-  - position: {x: 0.66, y: -0.9737, z: 0}
+  - position: {x: 0.6675, y: -0.978, z: 0}
     color: {r: 0, g: 0, b: 0, a: 0}
     uv: {x: 0, y: 0}
-  - position: {x: 0.7493, y: -0.9334, z: 0}
+  - position: {x: 0.7569, y: -0.9381, z: 0}
     color: {r: 0, g: 0, b: 0, a: 0}
     uv: {x: 0, y: 0}
-  - position: {x: 0.8289, y: -0.8766, z: 0}
+  - position: {x: 0.8368, y: -0.8816, z: 0}
     color: {r: 0, g: 0, b: 0, a: 0}
     uv: {x: 0, y: 0}
-  - position: {x: 0.896, y: -0.8053, z: 0}
+  - position: {x: 0.9041, y: -0.8106, z: 0}
     color: {r: 0, g: 0, b: 0, a: 0}
     uv: {x: 0, y: 0}
-  - position: {x: 0.9478, y: -0.7223, z: 0}
+  - position: {x: 0.9564, y: -0.7279, z: 0}
     color: {r: 0, g: 0, b: 0, a: 0}
     uv: {x: 0, y: 0}
-  - position: {x: 0.9826, y: -0.6308, z: 0}
+  - position: {x: 0.9915, y: -0.6365, z: 0}
     color: {r: 0, g: 0, b: 0, a: 0}
     uv: {x: 0, y: 0}
-  - position: {x: 1, y: -0.5, z: 0}
+  - position: {x: 1.0095, y: -0.501, z: 0}
     color: {r: 0, g: 0, b: 0, a: 0}
     uv: {x: 0, y: 0}
-  - position: {x: 1, y: 0.5, z: 0}
+  - position: {x: 1.0042, y: 0.5086, z: 0}
     color: {r: 0, g: 0, b: 0, a: 0}
     uv: {x: 0, y: 0}
-  - position: {x: 0.9904, y: 0.5974, z: 0}
+  - position: {x: 0.9941, y: 0.606, z: 0}
     color: {r: 0, g: 0, b: 0, a: 0}
     uv: {x: 0, y: 0}
-  - position: {x: 0.9621, y: 0.6911, z: 0}
+  - position: {x: 0.9652, y: 0.6995, z: 0}
     color: {r: 0, g: 0, b: 0, a: 0}
     uv: {x: 0, y: 0}
-  - position: {x: 0.916, y: 0.7774, z: 0}
+  - position: {x: 0.9187, y: 0.7856, z: 0}
     color: {r: 0, g: 0, b: 0, a: 0}
     uv: {x: 0, y: 0}
-  - position: {x: 0.854, y: 0.8531, z: 0}
+  - position: {x: 0.8563, y: 0.861, z: 0}
     color: {r: 0, g: 0, b: 0, a: 0}
     uv: {x: 0, y: 0}
-  - position: {x: 0.7784, y: 0.9153, z: 0}
+  - position: {x: 0.7804, y: 0.9228, z: 0}
     color: {r: 0, g: 0, b: 0, a: 0}
     uv: {x: 0, y: 0}
-  - position: {x: 0.6922, y: 0.9616, z: 0}
+  - position: {x: 0.694, y: 0.9686, z: 0}
     color: {r: 0, g: 0, b: 0, a: 0}
     uv: {x: 0, y: 0}
-  - position: {x: 0.5986, y: 0.9902, z: 0}
+  - position: {x: 0.6002, y: 0.9967, z: 0}
     color: {r: 0, g: 0, b: 0, a: 0}
     uv: {x: 0, y: 0}
-  - position: {x: 0.5012, y: 1, z: 0}
+  - position: {x: 0.5028, y: 1.006, z: 0}
     color: {r: 0, g: 0, b: 0, a: 0}
     uv: {x: 0, y: 0}
-  - position: {x: 0.4038, y: 0.9907, z: 0}
+  - position: {x: 0.4055, y: 0.9962, z: 0}
     color: {r: 0, g: 0, b: 0, a: 0}
     uv: {x: 0, y: 0}
-  - position: {x: 0.3101, y: 0.9625, z: 0}
+  - position: {x: 0.3119, y: 0.9675, z: 0}
     color: {r: 0, g: 0, b: 0, a: 0}
     uv: {x: 0, y: 0}
-  - position: {x: 0.2539, y: 0.9352, z: 0}
+  - position: {x: 0.2608, y: 0.9428, z: 0}
     color: {r: 0, g: 0, b: 0, a: 0}
     uv: {x: 0, y: 0}
-  - position: {x: -0.222, y: 0.6661, z: 0}
+  - position: {x: -0.2161, y: 0.6771, z: 0}
     color: {r: 0, g: 0, b: 0, a: 0}
     uv: {x: 0, y: 0}
-  - position: {x: -0.3021, y: 0.6099, z: 0}
+  - position: {x: -0.2965, y: 0.6213, z: 0}
     color: {r: 0, g: 0, b: 0, a: 0}
     uv: {x: 0, y: 0}
-  - position: {x: -0.3696, y: 0.5391, z: 0}
+  - position: {x: -0.3645, y: 0.551, z: 0}
     color: {r: 0, g: 0, b: 0, a: 0}
     uv: {x: 0, y: 0}
-  - position: {x: -0.4221, y: 0.4565, z: 0}
+  - position: {x: -0.4175, y: 0.4687, z: 0}
     color: {r: 0, g: 0, b: 0, a: 0}
     uv: {x: 0, y: 0}
-  - position: {x: -0.4575, y: 0.3652, z: 0}
+  - position: {x: -0.4535, y: 0.3777, z: 0}
     color: {r: 0, g: 0, b: 0, a: 0}
     uv: {x: 0, y: 0}
-  - position: {x: -0.4759, y: 0.2378, z: 0}
+  - position: {x: -0.4727, y: 0.2403, z: 0}
     color: {r: 0, g: 0, b: 0, a: 0}
     uv: {x: 0, y: 0}
-  m_Triangles: 000001000200010000000300040008000800040008000900040009000a0004000a000b0004000b000c0004000c000d00040005000e0004000d000e0005000e000f0005000f001000050010001100050011001200050012001300050013001400050014001500050015001600050016001700050017001800050018001900050006001a00050019001a0006001a001b0006001b001c0006001c001d0006001d001e0006001e001f0006001f002000060020002100060021002200060022002300060023002400060024002500060007002600060025002600070026002700070027002800070028002900070029002a0007002a002b0008000400070008002b000700
+  m_Triangles: 000002000100000003000200040008000800040008000900040009000a0004000a000b0004000b000c0004000c000d00040005000e0004000d000e0005000e000f0005000f001000050010001100050011001200050012001300050013001400050014001500050015001600050016001700050017001800050018001900050006001a00050019001a0006001a001b0006001b001c0006001c001d0006001d001e0006001e001f0006001f002000060020002100060021002200060022002300060023002400060024002500060007002600060025002600070026002700070027002800070028002900070029002a0007002a002b0008000400070008002b000700
   m_LocalBounds:
-    m_Center: {x: 0.25955, y: 0.00055000186, z: 0}
-    m_Extent: {x: 0.74045, y: 0.99944997, z: 0}
+    m_Center: {x: 0.2684, y: 0.0018000007, z: 0}
+    m_Extent: {x: 0.7411, y: 1.0042, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
@@ -299,12 +299,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 8
-  m_Sprite: {fileID: -731218395, guid: f8d85ee1db2890641818bbb4b20a773e, type: 3}
+  m_Sprite: {fileID: 21300000, guid: f8d85ee1db2890641818bbb4b20a773e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.31428573, y: 0.2}
+  m_Size: {x: 0.36666667, y: 0.23333333}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -386,8 +386,8 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.39285713, y: 0.25}
-    newSize: {x: 0.31428573, y: 0.2}
+    oldSize: {x: 0.36666667, y: 0.23333333}
+    newSize: {x: 0.36666667, y: 0.23333333}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
@@ -458,8 +458,8 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.39285713, y: 0.25}
-    newSize: {x: 0.31428573, y: 0.2}
+    oldSize: {x: 0.36666667, y: 0.23333333}
+    newSize: {x: 0.36666667, y: 0.23333333}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0

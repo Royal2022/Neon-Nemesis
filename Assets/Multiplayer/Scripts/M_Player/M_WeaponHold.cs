@@ -49,8 +49,8 @@ public class M_WeaponHold : NetworkBehaviour
 
         if (hit.collider != null && hit.collider.tag == "Weapon" && holdPointPistol.GetChild(0).gameObject)
         {
-            wp.weaponSwitch = 0;
-            wp.SetActive(0);
+            wp.weaponSwitch = 1;
+            wp.SetActive(1);
 
             hold = true;
 
@@ -64,6 +64,7 @@ public class M_WeaponHold : NetworkBehaviour
             //FindObjectOfType<hands>().res();
             WeaponHands.gameObject.transform.GetChild(0).GetComponent<Transform>().rotation = Quaternion.Euler(0f, 0f, 0f);
             hit.collider.gameObject.transform.rotation = Quaternion.Euler(0f, 0f, 0.64f);
+            holdPointPistol.transform.rotation = Quaternion.Euler(0f, 0f, 0.64f);
             hit.collider.gameObject.transform.position = holdPointPistol.gameObject.transform.position;
             hit.transform.parent = holdPointPistol;
         }
@@ -71,8 +72,8 @@ public class M_WeaponHold : NetworkBehaviour
 
         if (hit.collider != null && hit.collider.tag == "AK" && holdPointAutomaticGun.GetChild(0).gameObject)
         {
-            wp.weaponSwitch = 1;
-            wp.SetActive(wp.weaponSwitch);
+            wp.weaponSwitch = 2;
+            wp.SetActive(2);
 
             hold = true;
 
@@ -85,6 +86,7 @@ public class M_WeaponHold : NetworkBehaviour
 
             WeaponHands.gameObject.transform.GetChild(1).GetComponent<Transform>().rotation = Quaternion.Euler(0f, 0f, 0f);
             hit.collider.gameObject.transform.rotation = Quaternion.Euler(0f, 0f, 0.64f);
+            holdPointAutomaticGun.transform.rotation = Quaternion.Euler(0f, 0f, 0.64f);
             hit.collider.gameObject.transform.position = holdPointAutomaticGun.gameObject.transform.position;
             hit.transform.parent = holdPointAutomaticGun;
         }

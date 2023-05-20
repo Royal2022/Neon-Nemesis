@@ -179,7 +179,7 @@ MonoBehaviour:
   distanceRayCast: 0.1
   whatIsSolid:
     serializedVersion: 2
-    m_Bits: 17043776
+    m_Bits: 18092352
 --- !u!96 &6852744581285009917
 TrailRenderer:
   serializedVersion: 3
