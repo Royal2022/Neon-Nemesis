@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Mirror;
 using Cinemachine;
+using UnityEngine.Rendering.Universal;
 
 
 
@@ -69,8 +70,12 @@ public class M_Player : NetworkBehaviour
     public Slider healthSlider;
     public Slider armorSlider;
 
+
+    public M_PostProcessing PostProcessing;
+
     private void Start()
     {
+        PostProcessing = FindObjectOfType<M_PostProcessing>();
         MyId = netId;
         lobbymanager = FindObjectOfType<LobbyManager>();
         transform.GetChild(3).gameObject.SetActive(false);
@@ -86,6 +91,10 @@ public class M_Player : NetworkBehaviour
 
 
         DisabledAllChildrenAndParent();
+
+        spriteRend = GetComponent<SpriteRenderer>();
+        matBlink = Resources.Load("EnemyBlink1", typeof(Material)) as Material;
+        matDefault = spriteRend.material;
 
         if (!isLocalPlayer) return;
         {
@@ -155,28 +164,6 @@ public class M_Player : NetworkBehaviour
     }
 
 
-    //private bool BoolPlayerListingName;
-    //[ClientRpc]
-    //private void RpcPlayerListingSetName()
-    //{
-    //    if (!BoolPlayerListingName && TextName.text != "Nick")
-    //    {
-    //        //FindObjectOfType<LobbyManager>().CreatePlayerListing(TextName.text);
-    //        BoolPlayerListingName = true;
-    //    }
-    //}
-    //[Command]
-    //public void CmdPlayerListingSetName()
-    //{
-    //    RpcPlayerListingSetName();
-    //}
-    //public void PlayerListingSetName()
-    //{
-    //    if (isServer)
-    //        RpcPlayerListingSetName();
-    //    else if (isClient)
-    //        CmdPlayerListingSetName();
-    //}
 
     private void Update()
     {
@@ -418,9 +405,17 @@ public class M_Player : NetworkBehaviour
         Armor = armor;
     }
 
-    [Server]
-    public void TakeDamage(int damage)
+    /*============Red_Flicker============*/
+    private Material matBlink;
+    private Material matDefault;
+    private SpriteRenderer spriteRend;
+    public SpriteRenderer hold_P;
+    public SpriteRenderer hold_A;
+    /*===================================*/
+    [ClientRpc]
+    private void RpcTakeDamage(int damage)
     {
+        if (!isLocalPlayer) return;
         if (Armor <= 0)
         {
             if (Health != 0)
@@ -430,19 +425,79 @@ public class M_Player : NetworkBehaviour
         }
         else
             Armor -= damage;
+
+        Blink();
+        StartCoroutine(PostProcessing.Dawn());
+    }
+    [Command]
+    private void CmdTakeDamage(int damage)
+    {
+        if (!isLocalPlayer) return;
+        RpcTakeDamage(damage);
+    }
+    public void TakeDamage(int damage)
+    {
+        if (isServer)
+            RpcTakeDamage(damage);
+        else if (isClient)
+            CmdTakeDamage(damage);
     }
 
-    [Command]
-    public void CmdTakeDamage(int damage)
+
+    public void StartStun()
     {
-        TakeDamage(damage);
+        if (!isLocalPlayer) return;
+        StartCoroutine(PostProcessing.StunDawn());
+        StartCoroutine(PostProcessing.AberrationDawn());
     }
-    /*=========================================================================================*/
+
+    /*================ Ёффект получение урона ======================*/
+    [ClientRpc]
+    private void RpcBlink()
+    {
+        spriteRend.material = matBlink;
+        hold_P.material = matBlink;
+        hold_A.material = matBlink;
+        Invoke("ResetMaterial", 0.1f);
+    }
+    [Command]
+    private void CmdBlink()
+    {
+        RpcBlink();
+    }
+    private void Blink()
+    {
+        if (isServer)
+            RpcBlink();
+        else if (isClient)
+            CmdBlink();
+    }
+
+    [ClientRpc]
+    private void RpcResetMaterial()
+    { 
+        spriteRend.material = matDefault;
+        hold_P.material = matDefault;
+        hold_A.material = matDefault;
+    }
+    [Command(requiresAuthority = false)]
+    private void CmdResetMaterial()
+    {
+        RpcResetMaterial();
+    }
+    private void ResetMaterial()
+    {
+        if (isServer)
+            RpcResetMaterial();
+        else if (isClient)
+            CmdResetMaterial();
+    }
+    /*=============================================================*/
 
 
 
     /*====================================== Ѕлижн€€ јтака ========================================*/
-    public float distance = 0.7f;
+    public float distance = 1;
     public LayerMask whatIsSolid;
     public int HandDamage = 1;
 
@@ -676,8 +731,6 @@ public class M_Player : NetworkBehaviour
             CmdCreateChildObj();
     }
     /*=========================================================================================*/
-
-
 }
 
 

@@ -38,8 +38,10 @@ public class OutsideOfTheFrame : MonoBehaviour
         _Player.health = 30;
         player.SetActive(true);
         _ThrowGrenade.WeaponHands.SetActive(true);
+        _ThrowGrenade.WeaponHands.GetComponent<WeaponSwitch>().SelectWeapon(0);
         _Player.death = false;
         _Player.DeathCanvas.SetActive(false);
         _Player.rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+        _Player.transform.rotation = Quaternion.Euler(0, 0, 0);
     }
 }

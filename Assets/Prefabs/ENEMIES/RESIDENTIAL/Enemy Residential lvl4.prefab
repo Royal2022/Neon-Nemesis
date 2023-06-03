@@ -110,10 +110,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   distance: 0.6
-  Enemy: {fileID: 3294124698909468653}
-  whatIsGround:
-    serializedVersion: 2
-    m_Bits: 64
 --- !u!1 &3294124698636134797
 GameObject:
   m_ObjectHideFlags: 0
@@ -425,6 +421,8 @@ MonoBehaviour:
   DamagSound: {fileID: 547465287105262486}
   DeathSound: {fileID: 4668462133552647005}
   MyZoneControl: {fileID: 0}
+  DeathDissolve: {fileID: 0}
+  fade: 0
 --- !u!114 &3979506793606711422
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -559,7 +557,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 6403398861188313430, guid: 61f6a78dc42c3e14296c214c5e185d8e, type: 2}
   m_audioClip: {fileID: 8300000, guid: de675d9baddfe3846a39b92e46876208, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.7
+  m_Volume: 0.5
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -707,9 +705,9 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 6403398861188313430, guid: 61f6a78dc42c3e14296c214c5e185d8e, type: 2}
-  m_audioClip: {fileID: 8300000, guid: 5c26290981568e84b8fcbb6f208a6f77, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 4a6b303f975380d47be1ecab82afa87d, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.4
   m_Pitch: 1
   Loop: 1
   Mute: 0

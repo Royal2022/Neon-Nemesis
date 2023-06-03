@@ -85,6 +85,8 @@ public class Player : MonoBehaviour
         spriteRend = GetComponent<SpriteRenderer>();
         matBlink = Resources.Load("EnemyBlink1", typeof(Material)) as Material;
         matDefault = spriteRend.material;
+        facingRight = true;
+
     }
 
 
@@ -119,6 +121,7 @@ public class Player : MonoBehaviour
 
     public Animator LegsAnim;
 
+
     public void Update()
     {
         if (!PlayingOrNotAnim("dropGrenade") && !PlayingOrNotAnim("idle_dropGrenade") && health > 0 && !PlayingOrNotAnim("ZipLine") && !PlayingOrNotAnim("idleZipLine") && !death)
@@ -136,7 +139,7 @@ public class Player : MonoBehaviour
             anim.SetBool("player_run", true);
         }
 
-        if (anim.GetBool("player_run") && isGround && !runSound)
+        if (anim.GetBool("player_run") && isGround && !runSound && !PlayingOrNotAnim("ladder_up") && !PlayingOrNotAnim("stop_ladder"))
         {
             //RunSound.volume = 0.5f;
             RunSound.Play();
@@ -219,7 +222,7 @@ public class Player : MonoBehaviour
                 anim.SetTrigger("takeOf");
                 doubleJump = false;
             }
-            else if (!doubleJump && anim.GetFloat("Blend") == 0 && !PlayingOrNotAnim("ZipLine"))
+            else if (!doubleJump && anim.GetFloat("Blend") == 0 && !PlayingOrNotAnim("ZipLine") && !PlayingOrNotAnim("ladder_up") && !PlayingOrNotAnim("stop_ladder"))
             {
                 doubleJump = true;
                 rb.velocity = Vector2.up * jumpForce;
@@ -252,31 +255,6 @@ public class Player : MonoBehaviour
             }
         }
         /*===========================================*/
-
-
-
-        /*=========Grenade==========*/
-        //if (Input.GetKey(KeyCode.G) && !PlayingOrNotAnim("Run")
-        //    && !PlayingOrNotAnim("jump") && !PlayingOrNotAnim("sault")
-        //    && !PlayingOrNotAnim("run_attack") && !PlayingOrNotAnim("attack") && !anim.GetBool("player_jump") && NumberOfGrenades > 0 && !PlayingOrNotAnim("dropGrenade") && !anim.GetBool("throwGrenade"))
-        //{
-        //    //gameObject.GetComponent<Animator>().runtimeAnimatorController = nogunanim;
-        //    //gameObject.GetComponent<Animator>().applyRootMotion = false;
-
-        //    PowerThrow += 0.2f;
-        //    if (PowerThrow > 15)
-        //        PowerThrow = 15;
-
-        //    anim.SetTrigger("throwGrenadeTrigger");
-        //    if (PlayingOrNotAnim("idle_dropGrenade"))
-        //    {
-        //        WeaponHands.SetActive(false);
-        //        HandPoint.SetActive(true);
-        //    }
-        //}
-        //else if (PlayingOrNotAnim("idle_dropGrenade") && !anim.GetBool("throwGrenade"))
-        //    anim.SetBool("throwGrenade", true);
-        /*==========================*/
     }
 
     public bool PlayingOrNotAnim(string name)

@@ -6,6 +6,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text.RegularExpressions;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class CreatRoomManager : MonoBehaviour
@@ -17,6 +18,13 @@ public class CreatRoomManager : MonoBehaviour
 
     public Slider SkinNumber;
     public Text SkinNumberOut;
+
+
+
+    public Slider LoadingValue;
+    public GameObject LoadingScreenCanvas;
+    public GameObject Networkmanager;
+
 
     private void Start()
     {
@@ -37,6 +45,8 @@ public class CreatRoomManager : MonoBehaviour
         if (NickNameInput.text.Length >= 4 && NickNameInput.text.Length <= 12)
         {
             NetworkManager.singleton.StartHost();
+            StartCoroutine(LoadAsync());
+            StartCoroutine(LoadingSlider());
             M_PlayerInfoSave.HostRoomCode = CreateRoomCode(GetIP4Address());
         }
         else
@@ -55,30 +65,24 @@ public class CreatRoomManager : MonoBehaviour
             M_PlayerInfoSave.HostRoomCode = RoomCodeInput.text;
             NetworkManager.singleton.networkAddress = "192.168." + RoomCodeInput.text;
             NetworkManager.singleton.StartClient();
-
-            if (!NetworkClient.isConnected)
-                WarningLog("Не удалось подключиться! Проверьте корректно ли введен код комнаты.");
-                //Нажатая кнопка: UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject
+            Invoke("ConnectedOrNot", 1);
         }
         else
             WarningLog("Длина никнейма должно быть не менее 4 и не более 12 символов!");
     }
+    private void ConnectedOrNot()
+    {
+        if (NetworkClient.isConnected)
+        {
+            StartCoroutine(LocalLoadAsync());
+            StartCoroutine(LoadingSlider());
+        }
+        else
+        {
+            WarningLog("Не удалось подключиться! Проверьте корректно ли введен код комнаты.");
+        }
+    } 
 
-
-    //public string GetLocalIPv4Address()
-    //{
-    //    string strIP = "";
-    //    IPHostEntry host = Dns.GetHostEntry(Dns.GetHostName());
-    //    foreach (IPAddress ip in host.AddressList)
-    //    {
-    //        if (ip.AddressFamily == AddressFamily.InterNetwork && !IPAddress.IsLoopback(ip))
-    //        {
-    //            strIP = ip.ToString();
-    //            break;
-    //        }
-    //    }
-    //    return strIP;
-    //}
     public static string GetIP4Address()
     {
         string IP4Address = String.Empty;
@@ -106,4 +110,65 @@ public class CreatRoomManager : MonoBehaviour
     {
         Warning.text = text;
     }
+
+
+
+
+
+
+    IEnumerator LoadAsync()
+    {
+        LoadingScreenCanvas.SetActive(true);
+        AsyncOperation loadAsync = NetworkManager.loadingSceneAsync;
+        loadAsync.allowSceneActivation = false;
+
+
+        while (!loadAsync.isDone)
+        {
+            LoadingValue.value = loadAsync.progress;
+
+            if (loadAsync.progress >= .9f && !loadAsync.allowSceneActivation)
+            {
+                yield return new WaitForSeconds(1f);
+                loadAsync.allowSceneActivation = true;
+            }
+            yield return new WaitForSeconds(2.2f);
+        }
+    }
+
+
+    IEnumerator LocalLoadAsync()
+    {
+        LoadingScreenCanvas.SetActive(true);
+        AsyncOperation loadAsync = SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().name);
+        loadAsync.allowSceneActivation = false;
+
+
+        while (!loadAsync.isDone)
+        {
+            LoadingValue.value = loadAsync.progress;
+
+            if (loadAsync.progress >= .9f && !loadAsync.allowSceneActivation)
+            {
+                yield return new WaitForSeconds(1f);
+                Destroy(Networkmanager.GetComponent<SceneInterestManagement>());
+                loadAsync.allowSceneActivation = true;
+            }
+            yield return new WaitForSeconds(2.2f);
+        }
+    }
+
+    IEnumerator LoadingSlider()
+    {
+        while (LoadingValue.value <= 0.7)
+        {
+            yield return new WaitForSeconds(.5f);
+            LoadingValue.value += .1f;
+        }
+    }
+
+
+
+
+
 }

@@ -38,9 +38,9 @@ public class ThrowGrenade : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.G) && player.isGround && !PlayingOrNotAnim("dropGrenade") && !player.anim.GetBool("throwGrenade")
             && !PlayingOrNotAnim("Run")
-            && !PlayingOrNotAnim("jump") && !PlayingOrNotAnim("sault")
+            && !PlayingOrNotAnim("Jump") && !PlayingOrNotAnim("sault")
             && !PlayingOrNotAnim("run_attack") && !PlayingOrNotAnim("attack") && !player.anim.GetBool("player_jump")
-            && !PlayingOrNotAnim("ZipLine") && !PlayingOrNotAnim("idleZipLine")
+            && !PlayingOrNotAnim("ZipLine") && !PlayingOrNotAnim("IdleZipLine")
             && !weaponHold.HandsAnim.GetBool("reload") && !weaponHold.AutomaticGunHandsAnim.GetBool("reload"))
             {
                 player.anim.SetTrigger("throwGrenadeTrigger");

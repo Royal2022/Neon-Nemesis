@@ -146,9 +146,9 @@ TextureImporter:
       name: Biker_idle_0
       rect:
         serializedVersion: 2
-        x: 4
+        x: 3
         y: 0
-        width: 19
+        width: 20
         height: 34
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -209,9 +209,9 @@ TextureImporter:
       name: Biker_idle_3
       rect:
         serializedVersion: 2
-        x: 148
+        x: 147
         y: 0
-        width: 19
+        width: 20
         height: 34
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -241,6 +241,7 @@ TextureImporter:
       Biker_idle_1: 420169102
       Biker_idle_2: -1804479335
       Biker_idle_3: 251920146
+      Biker_idle_4: -592025880
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -71,6 +71,9 @@ public class Enemy : MonoBehaviour
 
     private float SaveSpeed;
 
+
+    public Material DeathDissolve;
+
     private void Start()
     {
         SaveSpeed = speed;
@@ -233,6 +236,19 @@ public class Enemy : MonoBehaviour
 
     public void death()
     {
+        //Destroy(gameObject);
+        //spriteRend.material = DeathDissolve;
+        StartCoroutine(Dissolve());
+    }
+    public float fade;
+    IEnumerator Dissolve()
+    {
+        while (spriteRend.material.GetFloat("_Fade") > 0)
+        {
+            fade = spriteRend.material.GetFloat("_Fade") - .05f;
+            spriteRend.material.SetFloat("_Fade", fade);
+            yield return new WaitForSeconds(.05f);
+        }
         Destroy(gameObject);
     }
 

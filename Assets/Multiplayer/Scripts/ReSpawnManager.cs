@@ -84,7 +84,7 @@ public class ReSpawnManager : NetworkBehaviour
             }
         }
     }
-    [Command]
+    [Command(requiresAuthority = false)]
     public void CmdWin()
     {
         RpcWin();

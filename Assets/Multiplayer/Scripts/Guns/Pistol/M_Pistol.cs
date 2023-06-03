@@ -2,8 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
-public class M_Pistol : MonoBehaviour
+public class M_Pistol : NetworkBehaviour
 {
     public float offset;
     [SerializeField] private GameObject bullet;
@@ -20,6 +21,7 @@ public class M_Pistol : MonoBehaviour
 
     public GameObject ammo;
 
+    [SyncVar]
     public int currentAmmo = 15;
 
     public int full = 45;
@@ -69,7 +71,9 @@ public class M_Pistol : MonoBehaviour
                     
                     OutText();
                     timeBtwShots = startTimeBtwShots;
-                    currentAmmo -= 1;
+                    //currentAmmo -= 1;
+                    ChangeTheValueAmmo(currentAmmo -= 1);
+                    FlashShoot();
                 }
                 else
                 {
@@ -86,7 +90,7 @@ public class M_Pistol : MonoBehaviour
 
 
             // ======================== Ammo ================================
-
+            if (!player.isLocalPlayer) return;
             if (Input.GetKeyDown(KeyCode.R) && M_Player.pistol_AllAmmo > 0 && currentAmmo < 15)
             {
                 anim.SetBool("reloadPistol", true);
@@ -109,17 +113,17 @@ public class M_Pistol : MonoBehaviour
             if (M_Player.pistol_AllAmmo >= reason)
             {
                 M_Player.pistol_AllAmmo -= reason;
-                currentAmmo = 15;
+                //currentAmmo = 15;
+                ChangeTheValueAmmo(15);
             }
             else
             {
-                currentAmmo = currentAmmo + M_Player.pistol_AllAmmo;
+                //currentAmmo = currentAmmo + M_Player.pistol_AllAmmo;
+                ChangeTheValueAmmo(currentAmmo + M_Player.pistol_AllAmmo);
                 M_Player.pistol_AllAmmo = 0;
             }
         }
     }
-
-
 
 
     public void OutText()
@@ -127,5 +131,56 @@ public class M_Pistol : MonoBehaviour
         if (player.isLocalPlayer)
           FindObjectOfType<OutPlayerInfo>().AmmoInfo(currentAmmo, M_Player.pistol_AllAmmo);
     }
+
+
+
+    [ClientRpc]
+    private void RpcFlashShoot()
+    {
+        if (gameObject.activeSelf)
+        {
+            shotPoint.GetComponent<Light2D>().intensity = 10;
+            Invoke("offLight", 0.05f);
+        }
+    }
+    [Command(requiresAuthority = false)]
+    private void CmdFlashShoot()
+    {
+        RpcFlashShoot();
+    }
+    public void FlashShoot()
+    {
+        if (player.isServer)
+            RpcFlashShoot();
+        else if (player.isClient)
+            CmdFlashShoot();
+    }
+    public void offLight()
+    {
+        shotPoint.GetComponent<Light2D>().intensity = 0;
+    }
+
+
+
+
+    [ClientRpc]
+    private void RpcChangeTheValueAmmo(int value)
+    {
+        currentAmmo = value;
+    }
+    [Command(requiresAuthority = false)]
+    private void CmdChangeTheValueAmmo(int value)
+    {
+        RpcChangeTheValueAmmo(value);
+    }
+    private void ChangeTheValueAmmo(int value)
+    {
+        if (player.isServer)
+            RpcChangeTheValueAmmo(value);
+        else if (player.isClient)
+            CmdChangeTheValueAmmo(value);
+    }
+
+
 
 }

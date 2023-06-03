@@ -134,9 +134,9 @@ TextureImporter:
       name: Biker_idle2_1
       rect:
         serializedVersion: 2
-        x: 4
+        x: 51
         y: 0
-        width: 19
+        width: 20
         height: 34
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -147,6 +147,69 @@ TextureImporter:
       bones: []
       spriteID: 290b29ce465d69746b62b263a0c213b0
       internalID: -2057958358
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Biker_idle2_0
+      rect:
+        serializedVersion: 2
+        x: 3
+        y: 0
+        width: 20
+        height: 34
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 38164fd924e864847a9fc90c0f5b74da
+      internalID: -772272038
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Biker_idle2_2
+      rect:
+        serializedVersion: 2
+        x: 99
+        y: 0
+        width: 20
+        height: 34
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 33db251b1c0144e4588c5784a8de618c
+      internalID: 89574204
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Biker_idle2_3
+      rect:
+        serializedVersion: 2
+        x: 147
+        y: 0
+        width: 20
+        height: 34
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7aff3575cc4af4f49b7ddbc8149b71b7
+      internalID: -1920089810
       vertices: []
       indices: 
       edges: []
@@ -162,10 +225,10 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Biker_idle2_3: -1920089810
-      Biker_idle2_2: 89574204
       Biker_idle2_0: -772272038
       Biker_idle2_1: -2057958358
+      Biker_idle2_2: 89574204
+      Biker_idle2_3: -1920089810
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

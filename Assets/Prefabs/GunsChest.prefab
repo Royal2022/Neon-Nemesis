@@ -231,10 +231,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ffc0b988b75bad44fbc3b8cb0b2aeebc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  anim: {fileID: 2863331577192654710}
   ItemPrefab: {fileID: 4481165228527904009, guid: 803c2ea0e4dafe84abd28ec3fca5f2a9, type: 3}
   ItemSpawnPosition: {fileID: 2605620044946594083}
   ThrowObject: 1
   ChestSoundOpen: {fileID: 1916206086598039069}
+  OpenOrClosed: 0
 --- !u!82 &1916206086598039069
 AudioSource:
   m_ObjectHideFlags: 0
@@ -244,7 +246,7 @@ AudioSource:
   m_GameObject: {fileID: 1759647898982334947}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -7533057206779128446, guid: 61f6a78dc42c3e14296c214c5e185d8e, type: 2}
   m_audioClip: {fileID: 8300000, guid: 6a34c981a43038b4981f2871dec2dcc8, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1

@@ -29,13 +29,13 @@ public class M_BomsEffects : MonoBehaviour
                         {
                             Explode(rb2, explosionForce / 2);
                             col.GetComponent<M_Player>().TakeDamage(Damege/*, true, transform.position*/);
-                            //col.GetComponent<M_Player>().StartStun();
+                            col.GetComponent<M_Player>().StartStun();
                         }
                         else
                         {
                             Explode(rb2, explosionForce);
                             col.GetComponent<M_Player>().TakeDamage(Damege/*, true, transform.position*/);
-                            //col.GetComponent<M_Player>().StartStun();
+                            col.GetComponent<M_Player>().StartStun();
                         }
                     }
                     col.GetComponent<M_Player>().ImInGrenadeRadius = true;

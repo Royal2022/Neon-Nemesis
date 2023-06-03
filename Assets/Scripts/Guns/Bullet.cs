@@ -96,6 +96,7 @@ public class Bullet : MonoBehaviour
                 if (hit.collider.GetComponent<Light2D>().enabled)
                 {
                     hit.collider.GetComponent<AudioSource>().Play();
+                    Destroy(hit.collider.transform.GetChild(0).gameObject);
                     Destroy(gameObject);
                 }
                 hit.collider.GetComponent<Light2D>().enabled = false;

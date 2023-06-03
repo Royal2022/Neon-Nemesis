@@ -73,8 +73,9 @@ public class ExplosionAttackEnemy : MonoBehaviour
         else
         {
             enemy.anim.SetBool("attack_enemy", false);
-            enemy.playerNoticed = false;
             enemy.speed = SaveSpeed;
+            if (!enemy.anim.GetBool("attack_enemy"))
+                enemy.playerNoticed = false;
         }
     }
 

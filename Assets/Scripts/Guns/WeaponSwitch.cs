@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,117 +12,116 @@ public class WeaponSwitch : MonoBehaviour
 
     public int weaponSwitch = 0;
 
-    
-    public int weaponOpened = 1;
-    //public bool akPickeUp = false;
-
     public Animator PlayerAnim;
 
     public Text ammoCount;
 
+    public bool[] handIsNotEmpty = new bool[] { true, true, true };
+
     void Start()
     {
         Hands = FindObjectOfType<hands>();
-
-        SelectWeapon();
+        SelectWeapon(0);
     }
 
     public void Update()
     {
         if (Time.timeScale != 0)
         {
-            int currentWeapon = weaponSwitch;
-
             if (!player.PlayingOrNotAnim("sault"))
             {
                 if (Input.GetAxis("Mouse ScrollWheel") > 0f)
                 {
-                    if (weaponSwitch >= transform.childCount - weaponOpened)
-                    {
-                        weaponSwitch = 0;
-                    }
-                    else
-                    {
-                        weaponSwitch++;
-                    }
+                    SelectWeapon(SelectWeaponNext((weaponSwitch + 1 == 3) ? 0 : weaponSwitch + 1));
                 }
                 if (Input.GetAxis("Mouse ScrollWheel") < 0f)
                 {
-                    if (weaponSwitch <= 0)
-                    {
-                        weaponSwitch = transform.childCount - weaponOpened;
-                    }
-                    else
-                    {
-                        weaponSwitch--;
-                    }
+                    SelectWeapon(SelectWeaponBack((weaponSwitch - 1 == -1) ? 2 : weaponSwitch - 1));
                 }
 
 
                 if (Input.GetKeyDown(KeyCode.Alpha1))
                 {
-                    weaponSwitch = 0;
-                    Hands.res();
+                    SelectWeapon(0);
                 }
-                if (Input.GetKeyDown(KeyCode.Alpha2) && transform.childCount >= 2)
+                if (Input.GetKeyDown(KeyCode.Alpha2))
                 {
-                    weaponSwitch = 1;
-                    Hands.res();
+                    SelectWeapon(1);
                 }
-                if (Input.GetKeyDown(KeyCode.Alpha3) /*&& akPickeUp == true*/)
+                if (Input.GetKeyDown(KeyCode.Alpha3))
                 {
-                    weaponSwitch = 2;
-                    Hands.res();
+                    SelectWeapon(2);
                 }
-            }
 
-
-
-
-            if (currentWeapon != weaponSwitch)
-            {
-                SelectWeapon();
-            }
-
-
-
-
-            if (weaponSwitch == 0)
-            {
-                PlayerAnim.SetFloat("Blend", 0);
-                OutText();
-            }
-            else if (weaponSwitch == 1)
-            {
-                PlayerAnim.SetFloat("Blend", 1);
-            }
-            else if (weaponSwitch == 2)
-            {
-                PlayerAnim.SetFloat("Blend", 2);
             }
         }
     }
 
 
 
-    public void SelectWeapon()
+    private int SelectWeaponNext(int a)
     {
-        Hands.res();
-        int i = 0;
-        foreach (Transform weapon in transform)
+        if (handIsNotEmpty.Count(b => b) > 1)
         {
-            if (i == weaponSwitch)
-            {            
-             weapon.gameObject.SetActive(true); 
-            }
-            else
+            for (int i = 0; i <= transform.childCount - 1; i++)
             {
-             weapon.gameObject.SetActive(false);
+                if (i == a && handIsNotEmpty[a])
+                {
+                    weaponSwitch = i;
+                    return weaponSwitch;
+                }
+                else if (i == a && !handIsNotEmpty[a])
+                {
+                    weaponSwitch = (a + 1 == 3) ? 0 : a + 1;
+                    return weaponSwitch;
+                }
             }
-            i++;
+            return 0;
         }
+        else return 0;
+    }
+    private int SelectWeaponBack(int a)
+    {
+        if (handIsNotEmpty.Count(b => b) > 1)
+        {
+            for (int i = 0; i <= transform.childCount - 1; i++)
+            {
+                if (i == a && handIsNotEmpty[a])
+                {
+                    weaponSwitch = i;
+                    return weaponSwitch;
+                }
+                else if (i == a && !handIsNotEmpty[a])
+                {
+                    weaponSwitch = (a - 1 == -1) ? 2 : a - 1;
+                    return weaponSwitch;
+                }
+            }
+            return 0;
+        }
+        else return 0;
+    }
 
-        
+
+    public void SelectWeapon(int a)
+    {
+        int k = (a + 1 == 3) ? 0 : a + 1;
+
+        int d = (a - 1 == -1) ? 2 : a - 1;
+
+        if (((handIsNotEmpty[k] || handIsNotEmpty[d]) && handIsNotEmpty[a]) || (!handIsNotEmpty[k] && !handIsNotEmpty[d] && handIsNotEmpty[a]))
+        {
+            for (int i = 0; i <= transform.childCount - 1; i++)
+            {
+                transform.GetChild(i).gameObject.SetActive(false);
+                if (i == a)
+                {
+                    transform.GetChild(i).gameObject.SetActive(true);
+                    PlayerAnim.SetFloat("Blend", i);
+                    weaponSwitch = i;
+                }
+            }
+        }
     }
 
     public void OutText()

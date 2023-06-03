@@ -48,8 +48,6 @@ public class AutomaticGun : MonoBehaviour
     {
         if (Time.timeScale != 0)
         {
-            var main = gameObject.transform.GetChild(1).gameObject.GetComponent<ParticleSystem>().main;
-
             if (gameObject.transform.parent != null)
             {
                 GetGunSound.enabled = true;
@@ -66,8 +64,6 @@ public class AutomaticGun : MonoBehaviour
                     if (Input.GetMouseButton(0) && gameObject.transform.parent != null && !anim.GetBool("reload"))
                     {
                         ShotSound.Play();
-                        main.startSpeed = 1;
-
                         Quaternion bulletrot = transform.rotation;
 
 
@@ -78,8 +74,6 @@ public class AutomaticGun : MonoBehaviour
                         else if (timerOverheating >= StartTimeOverheating)
                         {
                             anim.SetBool("Overheating", true);
-                            //float randomRot = transform.rotation.z + Random.Range(0, 20);
-                            //bulletrot = Quaternion.Euler(new Vector3(0, 0, randomRot));
                         }
 
 
@@ -87,18 +81,14 @@ public class AutomaticGun : MonoBehaviour
                         timeBtwShots = startTimeBtwShots;
                         currentAmmo -= 1;
                         anim.SetBool("Shot", true);
-                        shotPoint.GetComponent<Light2D>().intensity = 2.5f;
+                        shotPoint.GetComponent<Light2D>().intensity = 10;
                         Invoke("offLight", 0.05f);
-
-
-
                     }
                     else
                     {
                         timerOverheating = 0;
                         anim.SetBool("Overheating", false);
 
-                        main.startSpeed = 0;
                         anim.SetBool("Shot", false);
                     }
                 }
@@ -109,7 +99,6 @@ public class AutomaticGun : MonoBehaviour
 
                 if (currentAmmo == 0)
                 {
-                    main.startSpeed = 0;
                     anim.SetBool("Shot", false);
                 }
 
@@ -125,21 +114,6 @@ public class AutomaticGun : MonoBehaviour
             else
             {
                 GetGunSound.enabled = false;
-                main.startSpeed = 0;
-            }
-
-
-
-
-            if (Player.facingRight)
-            {
-                gameObject.transform.GetChild(1).gameObject.transform.localScale = new Vector3(1, 1, 1);
-                gameObject.transform.GetChild(1).gameObject.GetComponent<ParticleSystemRenderer>().lengthScale = -2;
-            }
-            else if (!Player.facingRight)
-            {
-                gameObject.transform.GetChild(1).gameObject.transform.localScale = new Vector3(-1, 1, 1);
-                gameObject.transform.GetChild(1).gameObject.GetComponent<ParticleSystemRenderer>().lengthScale = 2;
             }
 
         }

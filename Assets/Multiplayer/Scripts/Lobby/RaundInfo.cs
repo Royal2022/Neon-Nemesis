@@ -28,15 +28,18 @@ public class RaundInfo : NetworkBehaviour
         RaundNumber.text = NumberOfRounds.ToString();
         ReSpawnManager.NumberOfRounds = NumberOfRounds;
 
-        if (NumberOfRounds == 1)
-            ButtonRemoveRaund.SetActive(false);
-        else
-            ButtonRemoveRaund.SetActive(true);
+        if (isServer)
+        {
+            if (NumberOfRounds == 1)
+                ButtonRemoveRaund.SetActive(false);
+            else
+                ButtonRemoveRaund.SetActive(true);
 
-        if (NumberOfRounds == 8)
-            ButtonAddRaund.SetActive(false);
-        else
-            ButtonAddRaund.SetActive(true);
+            if (NumberOfRounds == 8)
+                ButtonAddRaund.SetActive(false);
+            else
+                ButtonAddRaund.SetActive(true);
+        }
     }
 
     public void ClickAddRaund()

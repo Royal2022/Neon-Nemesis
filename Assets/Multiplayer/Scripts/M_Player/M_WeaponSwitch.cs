@@ -2,11 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
+using System.Linq;
+using Unity.VisualScripting;
 
 public class M_WeaponSwitch : NetworkBehaviour
 {
     public GameObject WSwitch;
-    //public GameObject arm;
 
     [SyncVar(hook = nameof(SyncWeaponSwitch))]
     public int weaponSwitch = 0;
@@ -16,7 +17,7 @@ public class M_WeaponSwitch : NetworkBehaviour
     public M_Player player;
     public Animator playerAnim;
 
-
+    public bool[] handIsNotEmpty = new bool[] { true, false, false};
 
     public void Start()
     {
@@ -31,26 +32,11 @@ public class M_WeaponSwitch : NetworkBehaviour
         {
             if (Input.GetAxis("Mouse ScrollWheel") > 0f)
             {
-                if (weaponSwitch >= WSwitch.transform.childCount - weaponOpened)
-                {
-                    SetActive(0);
-                }
-                else
-                {
-                    SetActive(weaponSwitch++);
-                }
+                SetActive(SelectWeaponNext((weaponSwitch + 1 == 3) ? 0 : weaponSwitch + 1));
             }
             if (Input.GetAxis("Mouse ScrollWheel") < 0f)
             {
-                if (weaponSwitch <= 0)
-                {
-                    SetActive(weaponSwitch = WSwitch.transform.childCount - weaponOpened);
-
-                }
-                else
-                {
-                    SetActive(weaponSwitch--);
-                }
+                SetActive(SelectWeaponBack((weaponSwitch - 1 == -1) ? 2 : weaponSwitch - 1));
             }
 
             if (!isLocalPlayer) return;
@@ -58,7 +44,7 @@ public class M_WeaponSwitch : NetworkBehaviour
             {
                 SetActive(0);
             }
-            if (Input.GetKeyDown(KeyCode.Alpha2) && transform.childCount >= 2)
+            if (Input.GetKeyDown(KeyCode.Alpha2) && WSwitch.transform.childCount >= 2)
             {
                 SetActive(1);
             }
@@ -84,46 +70,68 @@ public class M_WeaponSwitch : NetworkBehaviour
 
 
 
+    private int SelectWeaponNext(int a)
+    {
+        if (handIsNotEmpty.Count(b => b) > 1)
+        {
+            for (int i = 0; i <= transform.childCount - 1; i++)
+            {
+                if (i == a && handIsNotEmpty[a])
+                {
+                    weaponSwitch = i;
+                    return weaponSwitch;
+                }
+                else if (i == a && !handIsNotEmpty[a])
+                {
+                    weaponSwitch = (a + 1 == 3) ? 0 : a + 1;
+                    return weaponSwitch;
+                }
+            }
+            return 0;
+        }
+        else return 0;
+    }
+    private int SelectWeaponBack(int a)
+    {
+        if (handIsNotEmpty.Count(b => b) > 1)
+        {
+            for (int i = 0; i <= transform.childCount - 1; i++)
+            {
+                if (i == a && handIsNotEmpty[a])
+                {
+                    weaponSwitch = i;
+                    return weaponSwitch;
+                }
+                else if (i == a && !handIsNotEmpty[a])
+                {
+                    weaponSwitch = (a - 1 == -1) ? 2 : a - 1;
+                    return weaponSwitch;
+                }
+            }
+            return 0;
+        }
+        else return 0;
+    }
+
 
     [ClientRpc]
     public void RpcSetActive(int a)
     {
-        if (a == 0)
-        {
-            //M_Player.GetComponent<Animator>().runtimeAnimatorController = pistolanim;
-            //M_Player.GetComponent<Animator>().applyRootMotion = true;
-            playerAnim.SetFloat("Blend", 0);
-        }
-        else if (a == 1)
-        {
-            //M_Player.GetComponent<Animator>().runtimeAnimatorController = gunanim;
-            //M_Player.GetComponent<Animator>().applyRootMotion = true;
-            playerAnim.SetFloat("Blend", 1);
-        }
-        else if (a == 2)
-        {
-            //M_Player.GetComponent<Animator>().runtimeAnimatorController = gunanim;
-            //M_Player.GetComponent<Animator>().applyRootMotion = true;
-            playerAnim.SetFloat("Blend", 2);
-        }
+        int k = (a + 1 == 3) ? 0 : a + 1;
 
+        int d = (a - 1 == -1) ? 2 : a - 1;
 
-
-
-        if (WSwitch != null)
+        if (((handIsNotEmpty[k] || handIsNotEmpty[d]) && handIsNotEmpty[a]) || (!handIsNotEmpty[k] && !handIsNotEmpty[d] && handIsNotEmpty[a]))
         {
-            int i = 0;
-            foreach (Transform weapon in WSwitch.transform)
+            for (int i = 0; i <= WSwitch.transform.childCount - 1; i++)
             {
+                WSwitch.transform.GetChild(i).gameObject.SetActive(false);
                 if (i == a)
                 {
-                    weapon.gameObject.SetActive(true);
+                    WSwitch.transform.GetChild(i).gameObject.SetActive(true);
+                    playerAnim.SetFloat("Blend", i);
+                    weaponSwitch = i;
                 }
-                else
-                {
-                    weapon.gameObject.SetActive(false);
-                }
-                i++;
             }
         }
     }

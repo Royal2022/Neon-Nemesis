@@ -398,6 +398,7 @@ MonoBehaviour:
   player: {fileID: 8589079344986245502}
   offset: -4
   sensitivity: 15
+  Gun: {fileID: 0}
 --- !u!95 &1412666859799998651
 Animator:
   serializedVersion: 5
@@ -953,7 +954,6 @@ GameObject:
   - component: {fileID: 1642790755144058386}
   - component: {fileID: 4290827824315881555}
   - component: {fileID: 1406792809027937057}
-  - component: {fileID: 5939474870243878195}
   m_Layer: 9
   m_Name: Player
   m_TagString: Player
@@ -1098,7 +1098,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.95, y: 1.7}
+    oldSize: {x: 1, y: 1.7}
     newSize: {x: 0.95, y: 1.7}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -1174,6 +1174,7 @@ MonoBehaviour:
   ImInGrenadeRadius: 0
   hold_P: {fileID: 4902785965962732402}
   hold_A: {fileID: 1250798336568187553}
+  death: 0
   LegsAnim: {fileID: 6596451030362826437}
   distance: 1
   whatIsSolid:
@@ -1211,7 +1212,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 716c6a8aff202724294a4d66dd91eebb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hold: 0
   distance: 1.5
   holdPointPistol: {fileID: 5916285088894119663}
   holdPointAutomaticGun: {fileID: 3948195475489045125}
@@ -2046,23 +2046,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &5939474870243878195
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8589079344986245502}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 172515602e62fb746b5d573b38a5fe58, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_IsGlobal: 1
-  priority: 0
-  blendDistance: 0
-  weight: 1
-  sharedProfile: {fileID: 11400000, guid: 3e2ab0d1aa1ac1144bba326ce2f201be, type: 2}
 --- !u!1 &9062758487311512003
 GameObject:
   m_ObjectHideFlags: 0

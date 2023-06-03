@@ -92,7 +92,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: gun _hands/hand_P/holdPointPistol
+    path: gun_hands/hand_P/holdPointPistol
   m_PositionCurves: []
   m_ScaleCurves: []
   m_FloatCurves: []
@@ -105,7 +105,7 @@ AnimationClip:
   m_ClipBindingConstant:
     genericBindings:
     - serializedVersion: 2
-      path: 1923176772
+      path: 774108349
       attribute: 4
       script: {fileID: 0}
       typeID: 4
@@ -215,7 +215,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.x
-    path: gun _hands/hand_P/holdPointPistol
+    path: gun_hands/hand_P/holdPointPistol
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -299,7 +299,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.y
-    path: gun _hands/hand_P/holdPointPistol
+    path: gun_hands/hand_P/holdPointPistol
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -383,7 +383,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.z
-    path: gun _hands/hand_P/holdPointPistol
+    path: gun_hands/hand_P/holdPointPistol
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -396,7 +396,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.x
-    path: gun _hands/hand_P/holdPointPistol
+    path: gun_hands/hand_P/holdPointPistol
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -408,7 +408,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.y
-    path: gun _hands/hand_P/holdPointPistol
+    path: gun_hands/hand_P/holdPointPistol
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -420,7 +420,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.z
-    path: gun _hands/hand_P/holdPointPistol
+    path: gun_hands/hand_P/holdPointPistol
     classID: 4
     script: {fileID: 0}
     flags: 0

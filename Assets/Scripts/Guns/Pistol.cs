@@ -59,13 +59,12 @@ public class Pistol : MonoBehaviour
                     if (Input.GetMouseButtonDown(0) && gameObject.transform.parent != null && !anim.GetBool("reload"))
                     {
                         ShotSound.Play();
-                        gameObject.transform.GetChild(1).gameObject.GetComponent<ParticleSystem>().Play();
                         Instantiate(bullet, shotPoint.position, transform.rotation);
                         timeBtwShots = startTimeBtwShots;
                         currentAmmo -= 1;
                         OutText();
                         anim.SetBool("fire", true);
-                        shotPoint.GetComponent<Light2D>().intensity = 2.5f;
+                        shotPoint.GetComponent<Light2D>().intensity = 10;
                         Invoke("offLight", 0.05f);
                     }
                 }
@@ -73,19 +72,6 @@ public class Pistol : MonoBehaviour
                 {
                     timeBtwShots -= Time.deltaTime;
                     anim.SetBool("fire", false);
-                }
-
-
-
-                if (Player.facingRight)
-                {
-                    gameObject.transform.GetChild(1).gameObject.transform.localScale = new Vector3(1, 1, 1);
-                    gameObject.transform.GetChild(1).gameObject.GetComponent<ParticleSystemRenderer>().lengthScale = -2;
-                }
-                else if (!Player.facingRight)
-                {
-                    gameObject.transform.GetChild(1).gameObject.transform.localScale = new Vector3(-1, 1, 1);
-                    gameObject.transform.GetChild(1).gameObject.GetComponent<ParticleSystemRenderer>().lengthScale = 2;
                 }
 
 

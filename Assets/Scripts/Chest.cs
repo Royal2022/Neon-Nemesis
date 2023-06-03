@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class Chest : MonoBehaviour
 {
-    private Animator anim;
+    public Animator anim;
     public GameObject ItemPrefab;
     public Transform ItemSpawnPosition;
     public float ThrowObject = 1;
     public AudioSource ChestSoundOpen;
-    private bool OpenOrClosed = false;
+    public bool OpenOrClosed = false;
     private LayerMask WhatLayerPlayer;
 
     void Start()
