@@ -81,6 +81,9 @@ public class PauseMenu : MonoBehaviour
         ItemsExistLoad(data.ItemsExist);
         StreetLampExistLoad(data.StreetLampExist);
         AllChastLoad(data.ChestOpen);
+        WeaponsLoad(data.Weapons);
+        player.weaponSwitch.handIsNotEmpty = data.HandIsNotEmpty;
+        AllFirePlugsLoad(data.FirePlugsDestroy);
     }
 
     private void EnemyLiveLoad(bool[] EnemyAlive)
@@ -138,6 +141,44 @@ public class PauseMenu : MonoBehaviour
             }
         }
     }
+    public GameObject[] AllPistolPrefab;
+    public GameObject[] AllAutoGunPrefab;
+    private void WeaponsLoad(SaveData.DataWeapon[] Weapons)
+    {
+        GameObject player = GameObject.Find("Player");
+
+        GameObject PistolParent = player.GetComponent<WeaponHold>().holdPointPistol.gameObject;
+        GameObject AutoGunParent = player.GetComponent<WeaponHold>().holdPointAutomaticGun.gameObject;
+
+        for (int i = 0; i < AllPistolPrefab.Length; i++)
+        {
+            if (Weapons[0].WeaponTag == AllPistolPrefab[i].tag && Weapons[0].WeaponID == AllPistolPrefab[i].GetComponent<Pistol>().ID)
+            {
+                GameObject obj = Instantiate(AllPistolPrefab[i], PistolParent.transform.GetChild(0));
+                obj.GetComponent<Rigidbody2D>().simulated = false;
+                obj.GetComponent<Pistol>().currentAmmo = Weapons[0].WeaponAmmoCount;
+            }
+        }
+        for (int i = 0; i < AllAutoGunPrefab.Length; i++)
+        {
+            if (Weapons[1].WeaponTag == AllAutoGunPrefab[i].tag && Weapons[1].WeaponID == AllAutoGunPrefab[i].GetComponent<AutomaticGun>().ID)
+            {
+                GameObject obj = Instantiate(AllAutoGunPrefab[i], AutoGunParent.transform.GetChild(0));
+                obj.GetComponent<Rigidbody2D>().simulated = false;
+                obj.GetComponent<AutomaticGun>().currentAmmo = Weapons[1].WeaponAmmoCount;
+            }
+        }
+    }
+    public void AllFirePlugsLoad(bool[] AllFireplugsStatus)
+    {
+        GameObject AllFirePlugs = GameObject.Find("AllFirePlugs");
+        for (int i = 0; i < AllFirePlugs.transform.childCount; i++)
+        {
+            AllFirePlugs.transform.GetChild(i).GetComponent<Fireplugs>().FirePlugsDestroy = AllFireplugsStatus[i];
+        }
+    }
+
+
 
 
     private Button buttonSave;
@@ -172,6 +213,9 @@ public class PauseMenu : MonoBehaviour
             ItemsExist = ItemsExistSave(),
             StreetLampExist = StreetLampExistSave(),
             ChestOpen = AllChastSave(),
+            Weapons = SaveWeapons(),
+            HandIsNotEmpty = player.weaponSwitch.handIsNotEmpty,
+            FirePlugsDestroy = SaveAllFirePlugs(),
         };
         return data;
     }
@@ -189,7 +233,6 @@ public class PauseMenu : MonoBehaviour
         }
         return EnemyAlive;
     }
-    public SaveData.DataItems[] a;
     private SaveData.DataItems[] ItemsExistSave()
     {
         GameObject AllItems = GameObject.Find("All Items");
@@ -201,7 +244,6 @@ public class PauseMenu : MonoBehaviour
             item.ItemPosition = AllItems.transform.GetChild(i).position;
             Items[i] = item;
         }
-        a = Items;
         return Items;
     }
     private bool[] StreetLampExistSave()
@@ -227,5 +269,44 @@ public class PauseMenu : MonoBehaviour
                 AllChestOpen[i] = true;
         }
         return AllChestOpen;
+    }
+    public SaveData.DataWeapon[] a;
+    public SaveData.DataWeapon[] SaveWeapons()
+    {
+        GameObject player = GameObject.Find("Player");
+
+        GameObject PistolParent = player.GetComponent<WeaponHold>().holdPointPistol.gameObject;
+        GameObject AutoGunParent = player.GetComponent<WeaponHold>().holdPointAutomaticGun.gameObject;
+        SaveData.DataWeapon[] Weapons = new SaveData.DataWeapon[2];
+
+        if (PistolParent.transform.GetChild(0).childCount == 1)
+        {
+            SaveData.DataWeapon Pistol = new SaveData.DataWeapon();
+            Pistol.WeaponTag = PistolParent.transform.GetChild(0).GetChild(0).tag;
+            Pistol.WeaponID = PistolParent.transform.GetChild(0).GetChild(0).GetComponent<Pistol>().ID;
+            Pistol.WeaponAmmoCount = PistolParent.transform.GetChild(0).GetChild(0).GetComponent<Pistol>().currentAmmo;
+            Weapons[0] = Pistol;
+        }
+        if (AutoGunParent.transform.GetChild(0).childCount == 1)
+        {
+            SaveData.DataWeapon AutoGun = new SaveData.DataWeapon();
+            AutoGun.WeaponTag = AutoGunParent.transform.GetChild(0).GetChild(0).tag;
+            AutoGun.WeaponID = AutoGunParent.transform.GetChild(0).GetChild(0).GetComponent<AutomaticGun>().ID;
+            AutoGun.WeaponAmmoCount = AutoGunParent.transform.GetChild(0).GetChild(0).GetComponent<AutomaticGun>().currentAmmo;
+            Weapons[1] = AutoGun;
+        }
+        a = Weapons;
+        return Weapons;
+    }
+    public bool[] SaveAllFirePlugs()
+    {
+        GameObject AllFirePlugs= GameObject.Find("AllFirePlugs");
+        bool[] AllFirePlugsStatus = new bool[AllFirePlugs.transform.childCount];
+        for (int i = 0; i < AllFirePlugs.transform.childCount; i++)
+        {
+            if (AllFirePlugs.transform.GetChild(i).GetComponent<Fireplugs>().FirePlugsDestroy)
+                AllFirePlugsStatus[i] = true;
+        }
+        return AllFirePlugsStatus;
     }
 }

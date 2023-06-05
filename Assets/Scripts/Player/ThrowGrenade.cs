@@ -41,7 +41,9 @@ public class ThrowGrenade : MonoBehaviour
             && !PlayingOrNotAnim("Jump") && !PlayingOrNotAnim("sault")
             && !PlayingOrNotAnim("run_attack") && !PlayingOrNotAnim("attack") && !player.anim.GetBool("player_jump")
             && !PlayingOrNotAnim("ZipLine") && !PlayingOrNotAnim("IdleZipLine")
-            && !weaponHold.HandsAnim.GetBool("reload") && !weaponHold.AutomaticGunHandsAnim.GetBool("reload"))
+            /*&& !weaponHold.HandsAnim.GetBool("reload") && !weaponHold.AutomaticGunHandsAnim.GetBool("reload")*/
+            && ((weaponHold.Hands.activeSelf ? !weaponHold.HandsAnim.GetBool("reload") : true) 
+            && (weaponHold.AutomaticGunHands.activeSelf ? !weaponHold.AutomaticGunHandsAnim.GetBool("reload") : true)))
             {
                 player.anim.SetTrigger("throwGrenadeTrigger");
                 player.anim.Play("idle_dropGrenade");

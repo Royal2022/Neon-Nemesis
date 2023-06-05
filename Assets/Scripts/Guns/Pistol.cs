@@ -8,6 +8,7 @@ using UnityEngine.UI;
 
 public class Pistol : MonoBehaviour
 {
+    public uint ID;
     public float offset;
     public GameObject bullet;
     public Transform shotPoint;
@@ -47,8 +48,9 @@ public class Pistol : MonoBehaviour
             if (gameObject.transform.parent != null)
             {
                 GetGunSound.enabled = true;
-                anim = gameObject.transform.parent.gameObject.transform.parent.gameObject.transform.parent.gameObject.transform.parent.GetComponent<Animator>();
-
+                 GameObject ParentHands = gameObject.transform.parent.gameObject.transform.parent.gameObject.transform.parent.gameObject.transform.parent.gameObject;
+                anim = ParentHands.GetComponent<Animator>();
+                ammoCount = ParentHands.GetComponent<hands>().AmmoCountText;
 
                 OutText();
 

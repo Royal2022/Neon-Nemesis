@@ -40,7 +40,7 @@ Transform:
   m_Children:
   - {fileID: 3644961616600288000}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &3644961616254582409
 SpriteRenderer:
@@ -172,6 +172,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbd20d4208441444ba76057c81feed68, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ID: 1
   offset: 0
   bullet: {fileID: 1669126192366538561, guid: 35d4f7d4504362c418a71f51a91c22da, type: 3}
   shotPoint: {fileID: 3644961616600288000}

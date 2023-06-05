@@ -5,6 +5,7 @@ using UnityEngine.UIElements;
 
 public class AutomaticGun : MonoBehaviour
 {
+    public uint ID;
     public float offset;
     public GameObject bullet;
     public Transform shotPoint;

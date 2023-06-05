@@ -40,7 +40,7 @@ public class Player : MonoBehaviour
     public Slider healthSlider;
     public Slider armorSlider;
 
-    [SerializeField] private WeaponSwitch WS;
+    public WeaponSwitch weaponSwitch;
 
     public int hand_damage = 1;
 
@@ -80,7 +80,6 @@ public class Player : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
-        WS = FindObjectOfType<WeaponSwitch>();
 
         spriteRend = GetComponent<SpriteRenderer>();
         matBlink = Resources.Load("EnemyBlink1", typeof(Material)) as Material;

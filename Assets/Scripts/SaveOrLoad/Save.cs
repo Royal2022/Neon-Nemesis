@@ -10,6 +10,13 @@ namespace SaveData
         public string ItemTag;
         public Vector3 ItemPosition;
     }
+    [System.Serializable]
+    public class DataWeapon
+    {
+        public string WeaponTag;
+        public uint WeaponID;
+        public int WeaponAmmoCount;
+    }
 
     [System.Serializable]
     public class Save
@@ -21,11 +28,14 @@ namespace SaveData
         public int AutoGunAmmo;
         public int GranadeCount;
         public Vector3 PlayerPosition;
+        public bool[] HandIsNotEmpty;
+        public DataWeapon[] Weapons;
 
         public bool[] EnemyAlive;
         public DataItems[] ItemsExist;
         public bool[] StreetLampExist;
         public bool[] ChestOpen;
+        public bool[] FirePlugsDestroy;
     }
 }
 

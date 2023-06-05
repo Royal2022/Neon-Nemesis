@@ -19,18 +19,20 @@ public class LoadingScreen : MonoBehaviour
     public void NewGame()
     {
         PlayerPrefs.DeleteKey("MainSave");
-        Loading();
+        gameObject.SetActive(true);
+        StartCoroutine(LoadAsync(5));
+        StartCoroutine(LoadingSlider());
     }
 
     public void Loading()
     {
         gameObject.SetActive(true);
-        StartCoroutine(LoadAsync());
+        StartCoroutine(LoadAsync(SceneID));
         StartCoroutine(LoadingSlider());
     }
-    IEnumerator LoadAsync()
+    IEnumerator LoadAsync(int Id)
     {
-        AsyncOperation loadAsync = SceneManager.LoadSceneAsync(SceneID);
+        AsyncOperation loadAsync = SceneManager.LoadSceneAsync(Id);
         loadAsync.allowSceneActivation = false;
 
 

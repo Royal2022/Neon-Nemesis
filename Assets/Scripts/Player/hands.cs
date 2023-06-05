@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class hands : MonoBehaviour
 {
@@ -11,6 +12,8 @@ public class hands : MonoBehaviour
     public float offset;
 
     public int sensitivity = 20;
+
+    public Text AmmoCountText;
 
     void Update()
     {

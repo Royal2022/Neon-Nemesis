@@ -22,7 +22,7 @@ public class Chest : MonoBehaviour
     {
         if (!OpenOrClosed)
         {
-            Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, 1.5f, WhatLayerPlayer);
+            Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, .5f, WhatLayerPlayer);
             foreach (Collider2D col in colliders)
             {
                 if (col.CompareTag("Player"))

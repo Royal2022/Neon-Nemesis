@@ -7,7 +7,6 @@ using UnityEngine.UI;
 
 public class WeaponSwitch : MonoBehaviour
 {
-    [SerializeField] private hands Hands;
     [SerializeField] private Player player;
 
     public int weaponSwitch = 0;
@@ -20,7 +19,6 @@ public class WeaponSwitch : MonoBehaviour
 
     void Start()
     {
-        Hands = FindObjectOfType<hands>();
         SelectWeapon(0);
     }
 

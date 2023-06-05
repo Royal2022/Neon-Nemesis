@@ -20,4 +20,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Multiplayer/Scenes/CreateRoom.unity
     guid: 9b1a95abfaa0b9746b34a5690fcc77e9
+  - enabled: 1
+    path: Assets/Scenes/Teaching.unity
+    guid: fddfc0cd8297f264a8a774799c47d0b2
   m_configObjects: {}
