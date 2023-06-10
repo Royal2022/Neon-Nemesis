@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class money : MonoBehaviour
 {
-    public int MoneyAmount = 5;
+    public int MoneyAmount;
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Player"))

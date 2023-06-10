@@ -12,11 +12,14 @@ public class M_Armor : NetworkBehaviour
             M_Player player = collision.gameObject.GetComponent<M_Player>();
 
             player.Armor += 10;
+            collision.gameObject.GetComponent<M_SoundPlayer>().JointSoundPlay(2);
 
             if (player.Armor > collision.gameObject.GetComponent<M_Player>().OutText.armorSlider.maxValue)
             {
                 if (collision.gameObject.GetComponent<M_Player>().IsItYou)
+                {
                     player.Armor = (int)collision.gameObject.GetComponent<M_Player>().OutText.armorSlider.maxValue;
+                }
             }
 
             NetworkServer.Destroy(gameObject);

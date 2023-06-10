@@ -190,9 +190,20 @@ public class Bosses : MonoBehaviour
 
     public void death()
     {
+        //Destroy(gameObject);
+        StartCoroutine(Dissolve());
+    }
+    public float fade;
+    IEnumerator Dissolve()
+    {
+        while (spriteRend.material.GetFloat("_Fade") > 0)
+        {
+            fade = spriteRend.material.GetFloat("_Fade") - .05f;
+            spriteRend.material.SetFloat("_Fade", fade);
+            yield return new WaitForSeconds(.05f);
+        }
         Destroy(gameObject);
     }
-
     private void OnDrawGizmos()
     {
         if (HitLineBackHeader != null && HitLineBackBody != null && HitLineBackFoot != null)

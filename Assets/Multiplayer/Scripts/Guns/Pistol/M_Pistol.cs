@@ -35,22 +35,23 @@ public class M_Pistol : NetworkBehaviour
     public Animator anim;
 
 
-    //public M_hands hands;
+    public AudioSource[] AllSound;
+
+    public AudioSource GetGunSound;
 
     private void Start()
     {
         sr = GetComponent<SpriteRenderer>();
         ws = FindObjectOfType<WeaponSwitch>();
-        //hands = FindObjectOfType<M_hands>();
-
     }
 
 
-
-    void Update()
+    private void Update()
     {
         if (gameObject.transform.parent != null)
         {
+            SoundPlaySetActive(true);
+
             player = transform.root.gameObject.GetComponent<M_Player>();
 
             anim = gameObject.transform.parent.gameObject.transform.parent.gameObject.transform.parent.gameObject.transform.parent.GetComponent<Animator>();
@@ -65,7 +66,7 @@ public class M_Pistol : NetworkBehaviour
             {
                 if (Input.GetMouseButtonDown(0) && gameObject.transform.parent != null && player.isLocalPlayer/*&& transform.root.gameObject.GetComponent<M_Player>().IsItYou*/)
                 {
-                    //hands.anim.Play("M_fire");
+                    JointSoundPlay(1);
                     anim.Play("PistolShot");
                     player.CallSpawnBullet(player.netId, shotPoint.position, transform.rotation);
                     
@@ -94,14 +95,54 @@ public class M_Pistol : NetworkBehaviour
             if (Input.GetKeyDown(KeyCode.R) && M_Player.pistol_AllAmmo > 0 && currentAmmo < 15)
             {
                 anim.SetBool("reloadPistol", true);
+                JointSoundPlay(0);
             }
         }
-
-
-  
+        else
+        {
+            SoundPlaySetActive(false);
+        }
     }
 
 
+
+    /*=================== Звуки ====================*/
+    [ClientRpc]
+    private void RpcJointSoundPlay(int index)
+    {
+        AllSound[index].Play();
+    }
+    [Command(requiresAuthority = false)]
+    void CmdJointSoundPlay(int index)
+    {
+        RpcJointSoundPlay(index);
+    }
+    public void JointSoundPlay(int index)
+    {
+        if (isServer)
+            RpcJointSoundPlay(index);
+        else if (isClient)
+            CmdJointSoundPlay(index);
+    }
+
+    [ClientRpc]
+    private void RpcSoundPlaySetActive(bool index)
+    {
+        GetGunSound.enabled = index;
+    }
+    [Command(requiresAuthority = false)]
+    void CmdSoundPlaySetActive(bool index)
+    {
+        RpcSoundPlaySetActive(index);
+    }
+    public void SoundPlaySetActive(bool index)
+    {
+        if (isServer)
+            RpcSoundPlaySetActive(index);
+        else if (isClient)
+            CmdSoundPlaySetActive(index);
+    }
+    /*==============================================*/
 
 
 

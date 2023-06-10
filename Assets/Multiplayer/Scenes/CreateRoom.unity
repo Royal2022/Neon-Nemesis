@@ -485,7 +485,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 70
-  m_Text: Name
+  m_Text: "\u0418\u043C\u044F"
 --- !u!222 &412309493
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -726,7 +726,7 @@ MonoBehaviour:
   networkAddress: localhost
   maxConnections: 2
   authenticator: {fileID: 0}
-  playerPrefab: {fileID: 4998478706037770049, guid: 6b733b793db0a43439bf0e5469afbc6c, type: 3}
+  playerPrefab: {fileID: 786291322522164183, guid: 6b733b793db0a43439bf0e5469afbc6c, type: 3}
   autoCreatePlayer: 0
   playerSpawnMethod: 0
   spawnPrefabs:
@@ -738,12 +738,16 @@ MonoBehaviour:
   - {fileID: 7059591218043056081, guid: bcedae744d383ea44b7fb5680f9e70a9, type: 3}
   - {fileID: 4795657712874764704, guid: 2212093d4e36b0a499e63f0e438ccb2b, type: 3}
   - {fileID: 1512748680714430087, guid: 54f9217b1b3e09a4c9c48f26d0ee8564, type: 3}
-  - {fileID: 3146148733958043151, guid: bf6c263caed227c4fbcb0294dbe24c28, type: 3}
+  - {fileID: 5436771781759574509, guid: bf6c263caed227c4fbcb0294dbe24c28, type: 3}
   - {fileID: 4194296675724463164, guid: 9e4370ffbad980a44b10195d6227bb6f, type: 3}
   - {fileID: 784602990810991127, guid: c77ba83470ba6a443848a7108daef29c, type: 3}
+  - {fileID: 889847701459519244, guid: 5b0911f0a65b1c94ebffc1e2fe7240c1, type: 3}
+  - {fileID: 1125390523126875866, guid: b49bf71bbc079de41a0f86686609b4bb, type: 3}
+  - {fileID: 60684584002522593, guid: 0671baaed9052224c92b779d0070ac16, type: 3}
+  - {fileID: 4840118126400978690, guid: ad68ed34bb4c966439c02cf4c5d39ea2, type: 3}
   timeInterpolationGui: 0
   player:
-  - {fileID: 4998478706037770049, guid: 6b733b793db0a43439bf0e5469afbc6c, type: 3}
+  - {fileID: 786291322522164183, guid: 6b733b793db0a43439bf0e5469afbc6c, type: 3}
   - {fileID: 715161000776070815, guid: 2ca01efc8f03aca4f8865968cee0624a, type: 3}
 --- !u!4 &665089438
 Transform:
@@ -1087,7 +1091,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 70
-  m_Text: Room Code
+  m_Text: "\u041A\u043E\u0434 \u043A\u043E\u043C\u043D\u0430\u0442\u044B"
 --- !u!222 &760446843
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2787,10 +2791,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 1920, y: 1080}
   m_ScreenMatchMode: 0
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
@@ -2869,6 +2873,7 @@ MonoBehaviour:
   LoadingValue: {fileID: 3762062492048499830}
   LoadingScreenCanvas: {fileID: 8475954165219378940}
   Networkmanager: {fileID: 665089432}
+  Join: {fileID: 1650143974}
 --- !u!1 &1924872521
 GameObject:
   m_ObjectHideFlags: 0
@@ -3177,6 +3182,14 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 1198593049}
+    - target: {fileID: 5023345560750834440, guid: 4c793d2e30ad97e42892867adf4a5721, type: 3}
+      propertyPath: m_ReferenceResolution.x
+      value: 1920
+      objectReference: {fileID: 0}
+    - target: {fileID: 5023345560750834440, guid: 4c793d2e30ad97e42892867adf4a5721, type: 3}
+      propertyPath: m_ReferenceResolution.y
+      value: 1080
+      objectReference: {fileID: 0}
     - target: {fileID: 5048076018787883461, guid: 4c793d2e30ad97e42892867adf4a5721, type: 3}
       propertyPath: m_AnchorMax.y
       value: 1

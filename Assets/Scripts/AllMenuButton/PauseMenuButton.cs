@@ -184,6 +184,7 @@ public class PauseMenu : MonoBehaviour
     private Button buttonSave;
     public void ClickSave(Button button)
     {
+        PlayerPrefs.SetInt("SaveMyScene", SceneManager.GetActiveScene().buildIndex);
         SaveManager.Save(SaveKey, GetSaveSnapshot());
         if (button != null)
         {

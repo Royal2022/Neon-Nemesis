@@ -18,6 +18,7 @@ public class M_FirstAid : NetworkBehaviour
             if (collision.gameObject.GetComponent<M_Player>().Health > collision.gameObject.GetComponent<M_Player>().healthSlider.maxValue)
             {
                 collision.gameObject.GetComponent<M_Player>().Health = (int)collision.gameObject.GetComponent<M_Player>().healthSlider.maxValue;
+                collision.gameObject.GetComponent<M_SoundPlayer>().JointSoundPlay(3);
             }
             NetworkServer.Destroy(gameObject);
         }

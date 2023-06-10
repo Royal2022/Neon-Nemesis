@@ -16,19 +16,13 @@ public class Bullet : MonoBehaviour
     public float RadiusRayCast = 0.05f;
     public LayerMask whatIsSolid;
 
-    private SpriteRenderer sr;
-
     private void Start()
     {
-        sr = GetComponent<SpriteRenderer>();
-        if (Player.facingRight == false)
-            sr.flipX = true;
-
-        if (Player.facingRight == true)
+        if (Player.facingRight)
         {
             rb.velocity = transform.right * speed;
         }
-        else if (Player.facingRight == false)
+        else if (!Player.facingRight)
         {
             rb.velocity = (transform.right * -1) * speed;
         }

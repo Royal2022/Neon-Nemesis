@@ -15,9 +15,15 @@ public class VolumeSettings : MonoBehaviour
     public Slider TotalVolume;
     public Slider GameVolume;
     public Slider MusicVolume;
+
+
     void Start()
     {
         float indexMaster, indexGame, indexMusic;
+        Master.audioMixer.SetFloat("MasterVolume", PlayerPrefs.GetFloat("MasterVolume"));
+        Master.audioMixer.SetFloat("GameVolume", PlayerPrefs.GetFloat("GameVolume"));
+        Master.audioMixer.SetFloat("MusicVolume", PlayerPrefs.GetFloat("MusicVolume"));
+
         Master.audioMixer.GetFloat("MasterVolume",out indexMaster);
         TotalVolume.value = indexMaster;
         VolumeGame.audioMixer.GetFloat("GameVolume", out indexGame);
@@ -30,13 +36,16 @@ public class VolumeSettings : MonoBehaviour
     public void ChangeMaster(float index)
     {
         Master.audioMixer.SetFloat("MasterVolume", index);
+        PlayerPrefs.SetFloat("MasterVolume", index);
     }
     public void ChangeVolumeGame(float index)
     {
         VolumeGame.audioMixer.SetFloat("GameVolume", index);
+        PlayerPrefs.SetFloat("GameVolume", index);
     }
     public void ChangeMusic(float index)
     {
         Music.audioMixer.SetFloat("MusicVolume", index);
+        PlayerPrefs.SetFloat("MusicVolume", index);
     }
 }

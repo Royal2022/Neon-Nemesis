@@ -41,7 +41,7 @@ public class Pistol : MonoBehaviour
         sr = GetComponent<SpriteRenderer>();
     }
 
-    void Update()
+    private void Update()
     {    
         if (Time.timeScale != 0)
         {

@@ -52,5 +52,55 @@ public class M_SoundPlayer : NetworkBehaviour
         else if (isClient)
             CmdVolumeControl(value);
     }
+
+
+
+    public AudioSource HandsAttack;
+
+    [ClientRpc]
+    void RpcHandsAttackSound()
+    {
+        HandsAttack.Play();
+    }
+    [Command(requiresAuthority = false)]
+    void CmdHandsAttackSound()
+    {
+        RpcHandsAttackSound();
+    }
+    public void HandsAttackSound()
+    {
+        if (isServer)
+            RpcHandsAttackSound();
+        else if (isClient)
+            CmdHandsAttackSound();
+    }
+
+
+    //public AudioSource JumpSound;
+    //public AudioSource AmmoSound;
+    //public AudioSource ArmorSound;
+    //public AudioSource FirstAidSound;
+    //public AudioSource FractureSound;
+
+    public AudioSource[] AllSound;
+
+    [ClientRpc]
+    private void RpcJointSoundPlay(int index)
+    {
+        AllSound[index].Play();
+    }
+    [Command(requiresAuthority = false)]
+    void CmdJointSoundPlay(int index)
+    {
+        RpcJointSoundPlay(index);
+    }
+    public void JointSoundPlay(int index)
+    {
+        if (isServer)
+            RpcJointSoundPlay(index);
+        else if (isClient)
+            CmdJointSoundPlay(index);
+    }
+
     /*=========================================================================================*/
 }

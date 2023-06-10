@@ -172,10 +172,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 25
-  damage: 2
+  damage: 1.5
   rb: {fileID: -2017589998821130032}
   distanceRayCast: 0.1
   whatIsSolid:
     serializedVersion: 2
     m_Bits: 512
-  Direction: -1
+  Direction: 1

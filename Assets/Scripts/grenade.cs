@@ -33,10 +33,6 @@ public class grenade : MonoBehaviour
         Invoke("Explosion", explosionTime);
     }
 
-    void Update()
-    {
-
-    }
     private void FixedUpdate()
     {
         isGround = Physics2D.OverlapCircle(transform.position, checkRaduis, whatIsGround);

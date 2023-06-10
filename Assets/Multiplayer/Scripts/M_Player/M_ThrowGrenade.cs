@@ -28,14 +28,14 @@ public class M_ThrowGrenade : NetworkBehaviour
 
     private OutPlayerInfo OutGranadeInfo;
 
-    void Start()
+    private void Start()
     {
         player = GetComponent<M_Player>();
         OutGranadeInfo = FindObjectOfType<OutPlayerInfo>();
-        OutGranadeInfo.GranadeText.text = NumberOfGrenades.ToString();
+        OutTextInfo();
     }
 
-    void Update()
+    private void Update()
     {
         /*=========Grenade==========*/
         if (!isLocalPlayer) return;
@@ -201,6 +201,11 @@ public class M_ThrowGrenade : NetworkBehaviour
         if (!isLocalPlayer) return;
         SpawnGranadde();
         NumberOfGrenades -= 1;
+        OutTextInfo();
+    }
+
+    public void OutTextInfo()
+    {
         OutGranadeInfo.GranadeText.text = NumberOfGrenades.ToString();
     }
 

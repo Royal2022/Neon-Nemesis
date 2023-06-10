@@ -23,4 +23,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Teaching.unity
     guid: fddfc0cd8297f264a8a774799c47d0b2
+  - enabled: 1
+    path: Assets/Scenes/CatScene.unity
+    guid: 63420357fe2fa2c40a883c3e6bbb6bb1
+  - enabled: 1
+    path: Assets/Scenes/Level_2.unity
+    guid: ed7fd1974c33a884a97b8dc747414ebe
   m_configObjects: {}

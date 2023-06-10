@@ -1,6 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.UI;
 
 public class GraphicsSettings : MonoBehaviour
@@ -16,6 +19,8 @@ public class GraphicsSettings : MonoBehaviour
     public bool TemporarySaveScreen;
     public int TemporarySaveVSync;
     public Resolution TemporarySaveScreenResolution;
+    public float renderScale;
+    public bool HDR;
 
 
     public Resolution[] resolutions;
@@ -24,10 +29,7 @@ public class GraphicsSettings : MonoBehaviour
     {
         resolutions = Screen.resolutions;
         List<string> options = new List<string>();
-        //foreach (Resolution item in resolutions)
-        //{
-        //    options.Add(item.ToString());
-        //}
+
         for (int i = 0; i < resolutions.Length; i++)
         {
             options.Add(resolutions[i].ToString());
@@ -56,8 +58,27 @@ public class GraphicsSettings : MonoBehaviour
     public void SetQuality(int qualityindex)
     {
         applySettings.ChangWithoutConfirmation = true;
-        //QualitySettings.SetQualityLevel(qualityindex);
         TemporarySaveQuality = qualityindex;
+        if (qualityindex == 0)
+        {
+            renderScale = 0.8f;
+            HDR = false;
+        }
+        else if (qualityindex == 1 || qualityindex == 2)
+        {
+            renderScale = 1;
+            HDR = true;
+        }
+        else if (qualityindex == 3)
+        {
+            renderScale = 1.5f;
+            HDR = true;
+        }
+        else if (qualityindex >= 4)
+        {
+            renderScale = 2;
+            HDR = true;
+        }
     }
     public void SetFullScreenMode(bool index)
     {

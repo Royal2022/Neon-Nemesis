@@ -9,6 +9,11 @@ public class TeacihgPauseMenu : MonoBehaviour
 {
     public GameObject PauseCanvs;
 
+    private void Start()
+    {
+        Player.NumberOfGrenades = 1;
+    }
+
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))

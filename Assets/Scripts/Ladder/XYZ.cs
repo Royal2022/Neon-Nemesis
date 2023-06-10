@@ -16,7 +16,7 @@ public class XYZ : MonoBehaviour
         if (collision.CompareTag("Player"))
         {
             ladder.touchedLadder = true;
-            if ((Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S)) && !Input.GetKey(KeyCode.Space))
+            if ((Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S)) && !Input.GetKey(KeyCode.Space) && !LadderUP.upTriger)
             {
                 collision.GetComponent<Player>().anim.SetBool("touched_ground", false);
 

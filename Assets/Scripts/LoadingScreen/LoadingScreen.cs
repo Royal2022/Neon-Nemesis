@@ -38,7 +38,6 @@ public class LoadingScreen : MonoBehaviour
 
         while (!loadAsync.isDone)
         {
-            float progress = Mathf.Clamp01(loadAsync.progress / .9f);
             LoadingValue.value = loadAsync.progress;
 
             if (loadAsync.progress >= .9f && !loadAsync.allowSceneActivation)

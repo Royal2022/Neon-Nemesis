@@ -31,7 +31,7 @@ public class ZipLine : MonoBehaviour
     }
 
 
-    IEnumerator Zipline(LineRenderer line, Rigidbody2D rb, GameObject player)
+    public IEnumerator Zipline(LineRenderer line, Rigidbody2D rb, GameObject player)
     {
         Vector3 start = line.GetPosition(0) + new Vector3(0, -1f, 0);
         Vector3 des = line.GetPosition(1) + new Vector3(0, -1f, 0);

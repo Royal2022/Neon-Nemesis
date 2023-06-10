@@ -194,10 +194,6 @@ public class M_Player : NetworkBehaviour
 
 
 
-        if (!isLocalPlayer) return;
-        if (Input.GetKeyDown(KeyCode.X))
-            Health = 0;
-
         isGround = Physics2D.OverlapCircle(feetPos.position, checkRaduis, whatIsGround);
 
         if (!isLocalPlayer) return;
@@ -363,7 +359,7 @@ public class M_Player : NetworkBehaviour
 
     public void StaminFunc()
     {
-        if (Input.GetKey(KeyCode.LeftShift) && OutText.stamine.value > 0 && (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D)))
+        if (Input.GetKey(KeyCode.LeftShift) && OutText.stamine.value > 0 && (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D)) && isGround)
         {
             OutText.stamine.value -= 0.6f;
         }
@@ -515,7 +511,7 @@ public class M_Player : NetworkBehaviour
                     if (MyId != hitInfo.collider.GetComponent<M_Player>().netId)
                     {
                         hitInfo.collider.GetComponent<M_Player>().TakeDamage(HandDamage);
-                        Debug.Log(hitInfo.collider);
+                        GetComponent<M_SoundPlayer>().HandsAttackSound();
                     }
                 }
             }

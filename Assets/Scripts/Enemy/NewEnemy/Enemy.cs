@@ -108,9 +108,6 @@ public class Enemy : MonoBehaviour
                 Flip();
         }
 
-
-
-
         if (health <= 0 && isGround)
         {
             anim.Play("death");
@@ -241,6 +238,7 @@ public class Enemy : MonoBehaviour
         StartCoroutine(Dissolve());
     }
     public float fade;
+    public GameObject MoneyPrefab;
     IEnumerator Dissolve()
     {
         while (spriteRend.material.GetFloat("_Fade") > 0)
@@ -248,6 +246,11 @@ public class Enemy : MonoBehaviour
             fade = spriteRend.material.GetFloat("_Fade") - .05f;
             spriteRend.material.SetFloat("_Fade", fade);
             yield return new WaitForSeconds(.05f);
+        }
+        for (int i = 0; i < Random.Range(1, 5); i++)
+        {
+            GameObject obj = Instantiate(MoneyPrefab);
+            obj.transform.position = new Vector3(Random.Range(transform.position.x-1, transform.position.x+1), transform.position.y, transform.position.z);
         }
         Destroy(gameObject);
     }

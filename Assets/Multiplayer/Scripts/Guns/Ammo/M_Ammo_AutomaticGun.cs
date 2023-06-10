@@ -13,6 +13,7 @@ public class M_Ammo_AutomaticGun : NetworkBehaviour
             if (collision.transform.root.gameObject.GetComponent<M_Player>().IsItYou)
             {
                 M_Player.automaticGun_AllAmmo += quantityAmmo;
+                collision.GetComponent<M_SoundPlayer>().JointSoundPlay(1);
             }
 
             NetworkServer.Destroy(gameObject);

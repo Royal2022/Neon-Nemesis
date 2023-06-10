@@ -35,7 +35,7 @@ public class OutsideOfTheFrame : MonoBehaviour
     public void OnClickReplay()
     {
         player.transform.position = SpawnPoint.position;
-        _Player.health = 30;
+        _Player.health = 20;
         player.SetActive(true);
         _ThrowGrenade.WeaponHands.SetActive(true);
         _ThrowGrenade.WeaponHands.GetComponent<WeaponSwitch>().SelectWeapon(0);

@@ -25,6 +25,7 @@ public class CreatRoomManager : MonoBehaviour
     public GameObject LoadingScreenCanvas;
     public GameObject Networkmanager;
 
+    public Button Join;
 
     private void Start()
     {
@@ -37,6 +38,10 @@ public class CreatRoomManager : MonoBehaviour
         M_PlayerInfoSave.PlayerNickName = PlayerPrefs.GetString("Name");
         //M_PlayerInfoSave.SkinNumber = (int)SkinNumber.value;
         //SkinNumberOut.text = SkinNumber.value.ToString();
+        if (RoomCodeInput.text.Length <= 0)
+            Join.interactable = false;
+        else 
+            Join.interactable = true;
     }
 
 

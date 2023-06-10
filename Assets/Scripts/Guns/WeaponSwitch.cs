@@ -22,7 +22,7 @@ public class WeaponSwitch : MonoBehaviour
         SelectWeapon(0);
     }
 
-    public void Update()
+    private void Update()
     {
         if (Time.timeScale != 0)
         {

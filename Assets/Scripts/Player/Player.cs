@@ -27,10 +27,10 @@ public class Player : MonoBehaviour
 
     public static bool facingRight = true;
 
-    public static int money = 500;
+    public static int money = 0;
     public Text MoneyText;
 
-    public static int NumberOfGrenades = 3;
+    public static int NumberOfGrenades = 0;
     public Text NumberOfGrenadesText;
 
     public float health = 10;
@@ -60,6 +60,7 @@ public class Player : MonoBehaviour
     public AudioSource FirstAidSound;
     public AudioSource MoneySound;
     public AudioSource FractureSound;
+    public AudioSource HandsAttackSound;
     /*==========================*/
 
     public GameObject DeathCanvas;
@@ -76,7 +77,7 @@ public class Player : MonoBehaviour
 
     public bool death;
 
-    void Start()
+    private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
@@ -85,28 +86,21 @@ public class Player : MonoBehaviour
         matBlink = Resources.Load("EnemyBlink1", typeof(Material)) as Material;
         matDefault = spriteRend.material;
         facingRight = true;
-
     }
 
 
-    public void FixedUpdate()
+    private void FixedUpdate()
     {
-
         StaminFunc();
-       
 
         if (facingRight == false && moveInput > 0 && !PlayingOrNotAnim("ZipLine") && !PlayingOrNotAnim("idleZipLine"))
         {
             Flip();
-            //Debug.Log("right");
         }
         else if (facingRight == true && moveInput < 0 && !PlayingOrNotAnim("ZipLine") && !PlayingOrNotAnim("idleZipLine"))
         {
             Flip();
-            //Debug.Log("left");
         }
-
-
     }
 
     public void Flip()
@@ -121,7 +115,7 @@ public class Player : MonoBehaviour
     public Animator LegsAnim;
 
 
-    public void Update()
+    private void Update()
     {
         if (!PlayingOrNotAnim("dropGrenade") && !PlayingOrNotAnim("idle_dropGrenade") && health > 0 && !PlayingOrNotAnim("ZipLine") && !PlayingOrNotAnim("idleZipLine") && !death)
         {
@@ -163,6 +157,7 @@ public class Player : MonoBehaviour
             death = true;
             anim.Play("death");
             transform.Find("weapon_hands").gameObject.SetActive(false);
+            rb.constraints = RigidbodyConstraints2D.FreezePositionX;
         }
 
         if (health >= 0)
@@ -218,7 +213,6 @@ public class Player : MonoBehaviour
             if (isGround)
             {
                 rb.velocity = Vector2.up * jumpForce;
-                anim.SetTrigger("takeOf");
                 doubleJump = false;
             }
             else if (!doubleJump && anim.GetFloat("Blend") == 0 && !PlayingOrNotAnim("ZipLine") && !PlayingOrNotAnim("ladder_up") && !PlayingOrNotAnim("stop_ladder"))
@@ -270,7 +264,7 @@ public class Player : MonoBehaviour
 
     public void StaminFunc()
     {
-        if (Input.GetKey(KeyCode.LeftShift) && stamine.value > 0 && (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D)))
+        if (Input.GetKey(KeyCode.LeftShift) && stamine.value > 0 && (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D)) && isGround)
         {
             stamine.value -= 0.6f;
         }
@@ -308,6 +302,7 @@ public class Player : MonoBehaviour
             if (hitInfo.collider.CompareTag("Enemy"))
             {
                 hitInfo.collider.GetComponent<Enemy>().TakeDamage(hand_damage);
+                HandsAttackSound.Play();
             }
         }
     }

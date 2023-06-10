@@ -25,13 +25,13 @@ public class ThrowGrenade : MonoBehaviour
 
     private WeaponHold weaponHold;
 
-    void Start()
+    private void Start()
     {
         player = GetComponent<Player>();
         weaponHold = GetComponent<WeaponHold>();
     }
 
-    void Update()
+    private void Update()
     {
         /*=========Grenade==========*/
         if (timeDropGranade <= 0 && Player.NumberOfGrenades > 0)
@@ -41,7 +41,6 @@ public class ThrowGrenade : MonoBehaviour
             && !PlayingOrNotAnim("Jump") && !PlayingOrNotAnim("sault")
             && !PlayingOrNotAnim("run_attack") && !PlayingOrNotAnim("attack") && !player.anim.GetBool("player_jump")
             && !PlayingOrNotAnim("ZipLine") && !PlayingOrNotAnim("IdleZipLine")
-            /*&& !weaponHold.HandsAnim.GetBool("reload") && !weaponHold.AutomaticGunHandsAnim.GetBool("reload")*/
             && ((weaponHold.Hands.activeSelf ? !weaponHold.HandsAnim.GetBool("reload") : true) 
             && (weaponHold.AutomaticGunHands.activeSelf ? !weaponHold.AutomaticGunHandsAnim.GetBool("reload") : true)))
             {

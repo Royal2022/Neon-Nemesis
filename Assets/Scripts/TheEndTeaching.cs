@@ -15,4 +15,9 @@ public class TheEndTeaching : MonoBehaviour
             loadingScreen.Loading();
         }
     }
+    public void SkipTeaching()
+    {
+        MainCamera.GetComponent<AudioSource>().enabled = false;
+        loadingScreen.Loading();
+    }
 }

@@ -220,7 +220,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: 6894979158337914ea4ce7c4fba94344, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -291,7 +291,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e70ea39bf386bc4785439cda9113926, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 10
+  health: 5
   speed: 3
   distanceBack: 2.5
   rb: {fileID: 0}
@@ -325,6 +325,7 @@ MonoBehaviour:
   MyZoneControl: {fileID: 0}
   DeathDissolve: {fileID: 0}
   fade: 0
+  MoneyPrefab: {fileID: 2687045712308100945, guid: 11417a0978803b5429696014175ce39f, type: 3}
 --- !u!114 &882459248185420106
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -351,7 +352,7 @@ MonoBehaviour:
   PrfabSparks: {fileID: 0}
   PosSpawnSparks: {fileID: 0}
   LengthAttackHit: 1.1
-  damage: 2
+  damage: 1
 --- !u!61 &1456222376552445599
 BoxCollider2D:
   m_ObjectHideFlags: 0
